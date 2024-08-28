@@ -1,22 +1,46 @@
 ﻿#import C# zip tools
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
-#global variables
-$mc_ver = "1.5.2"
-$mcp_ver = "mcp751"
+#Change this mc release version between 1.1 through 1.5.2
+$mc_ver = "1.5"
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
 $temp = "$mcp_dir\tmp"
-#URLS
-$mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.2/$mcp_ver.zip"
-$forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-src.zip"
-$forge_lib_url = "https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
-$mc_url = "https://launcher.mojang.com/v1/objects/465378c9dc2f779ae1d6e8046ebc46fb53a57968/client.jar"
-$mc_server_url = "https://launcher.mojang.com/v1/objects/f9ae3f651319151ce99a0bfad6b34fa16eb6775f/server.jar"
+#URLS 1.5.2
+if ($mc_ver -eq "1.5.2")
+{
+    $mcp_ver = "mcp751"
+    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.2/$mcp_ver.zip"
+    $mcp_srg_url = "https://web.archive.org/web/20150324115021id_/https://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.2.zip"
+    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-src.zip"
+    $mc_url = "https://launcher.mojang.com/v1/objects/465378c9dc2f779ae1d6e8046ebc46fb53a57968/client.jar"
+    $mc_server_url = "https://launcher.mojang.com/v1/objects/f9ae3f651319151ce99a0bfad6b34fa16eb6775f/server.jar"
+    $forge_lib_url = "https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+}
+elseif ($mc_ver -eq "1.5.1")
+{
+    $mcp_ver = "mcp744"
+    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.1/mcp744.zip"
+    $mcp_srg_url = "https://web.archive.org/web/20160306034852if_/http://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.1.zip"
+    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.1-7.7.2.682/forge-1.5.1-7.7.2.682-src.zip"
+    $mc_url = "https://launcher.mojang.com/v1/objects/047136381a552f34b1963c43304a1ad4dc0d2d8e/client.jar"
+    $mc_server_url = "https://launcher.mojang.com/v1/objects/d07c71ee2767dabb79fb32dad8162e1b854d5324/server.jar"
+    $forge_lib_url = "https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+}
+elseif ($mc_ver -eq "1.5")
+{
+    $mcp_ver = "mcp742"
+    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5/mcp742.zip"
+    $mcp_srg_url = "https://web.archive.org/web/20140720003820if_/http://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.zip"
+    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5-7.7.0.598/forge-1.5-7.7.0.598-src.zip"
+    $mc_url = "https://launcher.mojang.com/v1/objects/a3da981fc9b875a51975d8f8100cc0c201c2ce54/client.jar"
+    $mc_server_url = "https://launcher.mojang.com/v1/objects/aedad5159ef56d69c5bcf77ed141f53430af43c3/server.jar"
+    $forge_lib_url = "https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+}
+
 $argo_url = "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar"
 $asm_url = "https://web.archive.org/web/20160305133607id_/https://files.minecraftforge.net/fmllibs/asm-all-4.1.jar"
 $bcprov_url = "https://web.archive.org/web/20130708220724id_/http://files.minecraftforge.net/fmllibs/bcprov-jdk15on-148.jar"
-$mcp_srg_url = "https://web.archive.org/web/20150324115021id_/https://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.2.zip"
 $guava_url = "https://web.archive.org/web/20150324120717id_/https://files.minecraftforge.net/fmllibs/guava-14.0-rc3.jar"
 $scala_lib_url = "https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
 $jinput_url = "https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
@@ -26,6 +50,8 @@ $win_natives_url = "https://libraries.minecraft.net/net/java/jinput/jinput-platf
 $win_natives_url2 = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
 $legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $resources_url = "https://resources.download.minecraft.net/"
+#DIRS 1.5.2
+
 
 #cleanup previous installation attempts
 if ([System.IO.Directory]::Exists("$mcp_dir"))
@@ -59,7 +85,7 @@ Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
 Invoke-WebRequest -Uri "$argo_url" -OutFile "$mcp_dir/jars/lib/argo-small-3.2.jar"
 Invoke-WebRequest -Uri "$asm_url" -OutFile "$mcp_dir/jars/lib/asm-all-4.1.jar"
 Invoke-WebRequest -Uri "$bcprov_url" -OutFile "$mcp_dir/jars/lib/bcprov-jdk15on-148.jar"
-Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile "$mcp_dir/jars/lib/deobfuscation_data_1.5.2.zip"
+Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile "$mcp_dir/jars/lib/deobfuscation_data_$mc_ver.zip"
 Invoke-WebRequest -Uri "$guava_url" -OutFile "$mcp_dir/jars/lib/guava-14.0-rc3.jar"
 Invoke-WebRequest -Uri "$scala_lib_url" -OutFile "$mcp_dir/jars/lib/scala-library.jar"
 
@@ -84,9 +110,9 @@ Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$m
 
 #Download Minecraft Resources
 $progress_org = "$ProgressPreference"
+$ProgressPreference = 'SilentlyContinue'
 try
 {
-    $ProgressPreference = 'SilentlyContinue'
     $jsonFile = "$temp/assets.json"
     Invoke-WebRequest -Uri "$legacy_assets_url" -OutFile "$jsonFile"
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
