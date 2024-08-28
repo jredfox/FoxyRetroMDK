@@ -45,7 +45,7 @@ New-Item -Path "$mcp_dir/jars/bin/natives" -ItemType "directory" -Force | out-nu
 
 #Download & Extract MCP
 Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", $mcp_dir)
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", "$mcp_dir")
 
 #Download & Extract Forge Source
 Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
