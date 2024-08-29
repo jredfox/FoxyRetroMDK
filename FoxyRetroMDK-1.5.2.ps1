@@ -66,6 +66,12 @@ elseif ($mc_ver -eq "1.4.2")
     $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
+    $patch_21 = "true"
+}
+else
+{
+    Write-Error "Invalid or Unsupported MC Version $mc_ver"
+    exit -1
 }
 #1.3.2 requires java 7 get path dynamically and if not found ask user for correct java (java 8 for 1.3-1.5.2 & java 7 for 1.1-1.3.2)
 
@@ -142,6 +148,21 @@ Invoke-WebRequest -Uri "$win_natives_url2" -OutFile "$temp/win_natives2.jar"
 Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$mcp_dir/jars/bin/natives/macosx_natives.jar" -Force | out-null # Creates new Dummy Files to prevent forge install from crashing trying to extract other
 Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$mcp_dir/jars/bin/natives/linux_natives.jar" -Force | out-null
 
+#Make MCP & Forge 1.4x compile with java 7 or higher
+if ($patch_21 -eq "true")
+{
+    Write-Host "Patching Forge's RenderPlayer.java.patch"
+    $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
+    try
+    {
+        (Get-Content "$patch_file").replace("for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)") | Set-Content "$patch_file"
+    }
+    catch
+    {
+        Write-Error "Failed to patch $patch_file"
+    }
+}
+
 #Download Minecraft Resources
 $progress_org = "$ProgressPreference"
 $ProgressPreference = 'SilentlyContinue'
@@ -164,7 +185,7 @@ try
 }
 catch
 {
-    Write-Host An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mcp_dir\jars\resources
+    Write-Error An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mcp_dir\jars\resources
 }
 $ProgressPreference = "$progress_org"
 
