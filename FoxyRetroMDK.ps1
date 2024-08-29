@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4.4" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.4.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -53,6 +53,15 @@ elseif ($mc_ver -eq "1.5")
 }
 elseif ($mc_ver.StartsWith("1.4"))
 {
+    if ($mc_ver -eq "1.4.5")
+    {
+        $mcp_ver = "mcp723"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.5/mcp723.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.5-6.4.2.448/forge-1.4.5-6.4.2.448-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
+        $bcprov_dev = "true" #Makes it so forge compile time libraries works
+    }
     if ($mc_ver -eq "1.4.4")
     {
         $mcp_ver = "mcp721"
@@ -109,7 +118,7 @@ else
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     exit -1
 }
-#1.3.2 requires java 7 get path dynamically and if not found ask user for correct java (java 8 for 1.3-1.5.2 & java 7 for 1.1-1.3.2)
+#1.3.2-1.4.1 requires java 7 jars else forge's ASM library will throw a fit and crash
 
 #1.2.5 latest is same steps as 1.4 without the libs folder
 #1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
@@ -144,6 +153,10 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge_lib.zip", "$mcp_dir/lib")
+if ($bcprov_dev -eq "true")
+{
+    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mcp_dir/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
+}
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if ($argo_url -ne "") {
@@ -189,6 +202,10 @@ if ($patch_21 -eq "true")
 {
     Write-Host "Patching Forge's RenderPlayer.java.patch"
     $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
+    if (-Not [System.IO.Directory]::Exists("$patch_file"))
+    {
+        $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
+    }
     try
     {
         (Get-Content "$patch_file").replace("for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)").replace("for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)") | Set-Content "$patch_file"
