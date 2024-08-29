@@ -2,6 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
+#NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
 $mc_ver = "1.3.2" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
@@ -153,7 +154,6 @@ else
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     exit -1
 }
-#NOTE: 1.3.2-1.4.1 requires java 7 jars else forge's ASM library will throw a fit and crash
 
 #1.2.5 latest is same steps as 1.4 without the libs folder
 #1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
