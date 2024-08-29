@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4"
+$mc_ver = "1.4.3" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -51,56 +51,50 @@ elseif ($mc_ver -eq "1.5")
     $mc_server_url = "https://launcher.mojang.com/v1/objects/aedad5159ef56d69c5bcf77ed141f53430af43c3/server.jar"
     $forge_lib_url = "https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
 }
-elseif ($mc_ver -eq "1.4.2")
+elseif ($mc_ver.StartsWith("1.4"))
 {
-    $mcp_ver = "mcp719"
-    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
-    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.2-6.0.1.355/forge-1.4.2-6.0.1.355-src.zip"
-    $mc_url = "https://launcher.mojang.com/v1/objects/42d6744cfbbd2958f9e6688dd6e78d86d658d0d4/client.jar"
-    $mc_server_url = "https://launcher.mojang.com/v1/objects/5be700523a729bb78ef99206fb480a63dcd09825/server.jar"
+    if ($mc_ver -eq "1.4.3")
+    {
+        $mcp_ver = "mcp721"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.3-6.2.1.358/forge-1.4.3-6.2.1.358-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/f7274b201219b5729055bf85683eb6ef4f8024b4/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/9be68adf6e80721975df12f2445fa24617328d18/server.jar"
+    }
+    if ($mc_ver -eq "1.4.2")
+    {
+        $mcp_ver = "mcp719"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.2-6.0.1.355/forge-1.4.2-6.0.1.355-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/42d6744cfbbd2958f9e6688dd6e78d86d658d0d4/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/5be700523a729bb78ef99206fb480a63dcd09825/server.jar"
+    }
+    elseif ($mc_ver -eq "1.4.1")
+    {
+        $mcp_ver = "mcp719"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.1-6.0.0.329/forge-1.4.1-6.0.0.329-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/67604a9c206697032165fc067b6255e333e06275/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/baa4e4a7adc3dc9fbfc5ea36f0777b68c9eb7f4a/server.jar"
+    }
+    elseif ($mc_ver -eq "1.4")
+    {
+        $mcp_ver = "mcp719"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.0-5.0.0.326/forge-1.4.0-5.0.0.326-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
+    }
+    
+    $patch_21 = "true" #patch forge's code to compile using java 7 or newer
     $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
-    #Older then 1.5 Forge Uses Older Libraries
+    #Older then 1.5 Forge Uses Older Runtime Libraries
     $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
     $asm_url = "https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
     $bcprov_url = "https://web.archive.org/web/20130322004354if_/http://files.minecraftforge.net:80/fmllibs/bcprov-jdk15on-147.jar"
     $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
-    $patch_21 = "true"
-}
-elseif ($mc_ver -eq "1.4.1")
-{
-    $mcp_ver = "mcp719"
-    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
-    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.1-6.0.0.329/forge-1.4.1-6.0.0.329-src.zip"
-    $mc_url = "https://launcher.mojang.com/v1/objects/67604a9c206697032165fc067b6255e333e06275/client.jar"
-    $mc_server_url = "https://launcher.mojang.com/v1/objects/baa4e4a7adc3dc9fbfc5ea36f0777b68c9eb7f4a/server.jar"
-    $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
-    #Older then 1.5 Forge Uses Older Libraries
-    $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
-    $asm_url = "https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
-    $bcprov_url = "https://web.archive.org/web/20130322004354if_/http://files.minecraftforge.net:80/fmllibs/bcprov-jdk15on-147.jar"
-    $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
-    $scala_lib_url = ""
-    $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
-    $patch_21 = "true"
-}
-elseif ($mc_ver -eq "1.4")
-{
-    $mcp_ver = "mcp719"
-    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
-    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.0-5.0.0.326/forge-1.4.0-5.0.0.326-src.zip"
-    $mc_url = "https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
-    $mc_server_url = "https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
-    $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
-    #Older then 1.5 Forge Uses Older Libraries
-    $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
-    $asm_url = "https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
-    $bcprov_url = "https://web.archive.org/web/20130322004354if_/http://files.minecraftforge.net:80/fmllibs/bcprov-jdk15on-147.jar"
-    $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
-    $scala_lib_url = ""
-    $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
-    $patch_21 = "true"
 }
 else
 {
@@ -156,10 +150,10 @@ if ($bcprov_url -ne "") {
 if ($mcp_srg_url -ne "") {
     Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
 }
-if ($guava_url -ne "") { 
+if ($guava_url -ne "") {
     Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$guava_url"))
 }
-if ($scala_lib_url -ne "") { 
+if ($scala_lib_url -ne "") {
     Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$scala_lib_url"))
 }
 
@@ -189,7 +183,7 @@ if ($patch_21 -eq "true")
     $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
     try
     {
-        (Get-Content "$patch_file").replace("for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)") | Set-Content "$patch_file"
+        (Get-Content "$patch_file").replace("for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)").replace("for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)") | Set-Content "$patch_file"
     }
     catch
     {
