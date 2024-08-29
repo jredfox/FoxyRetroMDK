@@ -1,2 +1,2 @@
 # FoxyRetroMDK
- 1.5.2 Forge MDK Setup Working in 2024
+ Setup MCP + Forge Legacy MDK Versions 1.5.2 and below (WIP) Working in 2024
