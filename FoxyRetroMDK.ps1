@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4.6" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.4.7" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -53,7 +53,16 @@ elseif ($mc_ver -eq "1.5")
 }
 elseif ($mc_ver.StartsWith("1.4"))
 {
-    if ($mc_ver -eq "1.4.6")
+    if ($mc_ver -eq "1.4.7")
+    {
+        $mcp_ver = "mcp726a"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.7/mcp726a.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.7-6.6.2.534/forge-1.4.7-6.6.2.534-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/53ed4b9d5c358ecfff2d8b846b4427b888287028/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/2f0ec8efddd2f2c674c77be9ddb370b727dec676/server.jar"
+        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
+    }
+    elseif ($mc_ver -eq "1.4.6")
     {
         $mcp_ver = "mcp725"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.6/mcp725.zip"
@@ -62,7 +71,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_server_url = "https://launcher.mojang.com/v1/objects/a0aeb5709af5f2c3058c1cf0dc6b110a7a61278c/server.jar"
         $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
     }
-    if ($mc_ver -eq "1.4.5")
+    elseif ($mc_ver -eq "1.4.5")
     {
         $mcp_ver = "mcp723"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.5/mcp723.zip"
@@ -71,7 +80,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_server_url = "https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
         $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
     }
-    if ($mc_ver -eq "1.4.4")
+    elseif ($mc_ver -eq "1.4.4")
     {
         $mcp_ver = "mcp721"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
