@@ -60,7 +60,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.5-6.4.2.448/forge-1.4.5-6.4.2.448-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
-        $bcprov_dev = "true" #Makes it so forge compile time libraries works
+        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
     }
     if ($mc_ver -eq "1.4.4")
     {
