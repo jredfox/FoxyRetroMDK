@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.4.6" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -53,6 +53,15 @@ elseif ($mc_ver -eq "1.5")
 }
 elseif ($mc_ver.StartsWith("1.4"))
 {
+    if ($mc_ver -eq "1.4.6")
+    {
+        $mcp_ver = "mcp725"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.6/mcp725.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.6-6.5.0.489/forge-1.4.6-6.5.0.489-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/116758f41b32e8d1a71a4ad6236579acd724bca7/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/a0aeb5709af5f2c3058c1cf0dc6b110a7a61278c/server.jar"
+        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
+    }
     if ($mc_ver -eq "1.4.5")
     {
         $mcp_ver = "mcp723"
