@@ -67,6 +67,11 @@ elseif ($mc_ver -eq "1.4.2")
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
 }
+#1.3.2 requires java 7 get path dynamically and if not found ask user for correct java (java 8 for 1.3-1.5.2 & java 7 for 1.1-1.3.2)
+
+#1.2.5 latest is same steps as 1.4 without the libs folder
+#1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
+
 #DIRS 1.5.2
 
 
