@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4.7" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.3.2" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -60,7 +60,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.7-6.6.2.534/forge-1.4.7-6.6.2.534-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/53ed4b9d5c358ecfff2d8b846b4427b888287028/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/2f0ec8efddd2f2c674c77be9ddb370b727dec676/server.jar"
-        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
+        $bcprov_dev = "T" #Adds bcprov_dev to forge's compile time libraries
     }
     elseif ($mc_ver -eq "1.4.6")
     {
@@ -69,7 +69,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.6-6.5.0.489/forge-1.4.6-6.5.0.489-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/116758f41b32e8d1a71a4ad6236579acd724bca7/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/a0aeb5709af5f2c3058c1cf0dc6b110a7a61278c/server.jar"
-        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
+        $bcprov_dev = "T" #Adds bcprov_dev to forge's compile time libraries
     }
     elseif ($mc_ver -eq "1.4.5")
     {
@@ -78,7 +78,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.5-6.4.2.448/forge-1.4.5-6.4.2.448-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
-        $bcprov_dev = "true" #Adds bcprov_dev to forge's compile time libraries
+        $bcprov_dev = "T" #Adds bcprov_dev to forge's compile time libraries
     }
     elseif ($mc_ver -eq "1.4.4")
     {
@@ -121,7 +121,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_server_url = "https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
     }
     
-    $patch_21 = "true" #patch forge's code to compile using java 7 or newer
+    $patch_21 = "T" #patch forge's code to compile using java 7 or newer
     $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
     #Older then 1.5 Forge Uses Older Runtime Libraries
     $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
@@ -131,12 +131,29 @@ elseif ($mc_ver.StartsWith("1.4"))
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
 }
+elseif ($mc_ver -eq "1.3.2")
+{
+    $mcp_ver = "mcp72"
+    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
+    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.3.2-4.3.5.318/forge-1.3.2-4.3.5.318-src.zip"
+    $mc_url = "https://launcher.mojang.com/v1/objects/c2efd57c7001ddf505ca534e54abf3d006e48309/client.jar"
+    $mc_server_url = "https://launcher.mojang.com/v1/objects/3de2ae6c488135596e073a9589842800c9f53bfe/server.jar"
+    $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    
+    #Older then 1.5 Forge Uses Older Runtime Libraries
+    $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
+    $asm_url = "https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
+    $bcprov_url = "" #not required below 1.4
+    $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
+    $scala_lib_url = ""
+    $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
+}
 else
 {
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     exit -1
 }
-#1.3.2-1.4.1 requires java 7 jars else forge's ASM library will throw a fit and crash
+#NOTE: 1.3.2-1.4.1 requires java 7 jars else forge's ASM library will throw a fit and crash
 
 #1.2.5 latest is same steps as 1.4 without the libs folder
 #1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
@@ -171,7 +188,7 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge_lib.zip", "$mcp_dir/lib")
-if ($bcprov_dev -eq "true")
+if ($bcprov_dev -eq "T")
 {
     Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mcp_dir/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
@@ -216,7 +233,7 @@ Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$m
 Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$mcp_dir/jars/bin/natives/linux_natives.jar" -Force | out-null
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
-if ($patch_21 -eq "true")
+if ($patch_21 -eq "T")
 {
     Write-Host "Patching Forge's RenderPlayer.java.patch"
     $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
