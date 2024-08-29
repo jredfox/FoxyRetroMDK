@@ -3,7 +3,7 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.3.2" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.4.7" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -149,6 +149,26 @@ elseif ($mc_ver -eq "1.3.2")
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
 }
+elseif ($mc_ver.StartsWith("1.2"))
+{
+    if ($mc_ver -eq "1.2.5")
+    {
+        $mcp_ver = "mcp62"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.5/mcp62.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
+        $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    }
+    
+    #1.2.5 and below Require no Forge Runtime Libraries
+    $argo_url = ""
+    $asm_url = ""
+    $bcprov_url = ""
+    $guava_url = ""
+    $scala_lib_url = ""
+    $mcp_srg_url = ""
+}
 else
 {
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
@@ -157,8 +177,6 @@ else
 
 #1.2.5 latest is same steps as 1.4 without the libs folder
 #1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
-
-#DIRS 1.5.2
 
 
 #cleanup previous installation attempts
