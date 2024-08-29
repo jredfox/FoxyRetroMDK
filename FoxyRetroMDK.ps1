@@ -2,7 +2,7 @@
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
-$mc_ver = "1.4.3" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.4.4" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -53,7 +53,15 @@ elseif ($mc_ver -eq "1.5")
 }
 elseif ($mc_ver.StartsWith("1.4"))
 {
-    if ($mc_ver -eq "1.4.3")
+    if ($mc_ver -eq "1.4.4")
+    {
+        $mcp_ver = "mcp721"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.4-6.3.0.378/forge-1.4.4-6.3.0.378-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/b9b2a9e9adf1bc834647febc93a4222b4fd6e403/client.jar"
+        $mc_server_url = "https://launcher.mojang.com/v1/objects/4215dcadb706508bf9d6d64209a0080b9cee9e71/server.jar"
+    }
+    elseif ($mc_ver -eq "1.4.3")
     {
         $mcp_ver = "mcp721"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
@@ -61,7 +69,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_url = "https://launcher.mojang.com/v1/objects/f7274b201219b5729055bf85683eb6ef4f8024b4/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/9be68adf6e80721975df12f2445fa24617328d18/server.jar"
     }
-    if ($mc_ver -eq "1.4.2")
+    elseif ($mc_ver -eq "1.4.2")
     {
         $mcp_ver = "mcp719"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
