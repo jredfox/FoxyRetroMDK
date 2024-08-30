@@ -5,7 +5,7 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.2.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.5.2" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -254,7 +254,6 @@ if ($scala_lib_url -ne "") {
 #Download minecraft.jar & minecraft_server.jar and Install it
 Invoke-WebRequest -Uri "$mc_url" -OutFile "$mcp_dir/jars/bin/minecraft.jar"
 if (-Not $server_skip -eq "T" ) {
-    Write-Host "Downloading Server: $mc_server_url"
     Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
 }
 
