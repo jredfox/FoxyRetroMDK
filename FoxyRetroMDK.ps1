@@ -1,9 +1,11 @@
 ﻿#import C# zip tools
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
+& {
+
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.4.7" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.2.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -151,6 +153,7 @@ elseif ($mc_ver -eq "1.3.2")
 }
 elseif ($mc_ver.StartsWith("1.2"))
 {
+    #Works Mc Forge 1.2.5-3.2.5.125+ Older versions require an older method that involves also downloading mod loader
     if ($mc_ver -eq "1.2.5")
     {
         $mcp_ver = "mcp62"
@@ -158,24 +161,33 @@ elseif ($mc_ver.StartsWith("1.2"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
-        $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    }
+    elseif ($mc_ver -eq "1.2.4")
+    {
+        $mcp_ver = "mcp61"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.4/mcp61.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.4-2.0.0.68/forge-1.2.4-2.0.0.68-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/ad6d1fe7455857269d4185cb8f24e62cc0241aaf/client.jar"
+        $mc_server_url = "https://assets.minecraft.net/1_2_5/minecraft_server.jar"
     }
     
-    #1.2.5 and below Require no Forge Runtime Libraries
+    #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
+    $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
     $argo_url = ""
     $asm_url = ""
     $bcprov_url = ""
     $guava_url = ""
     $scala_lib_url = ""
     $mcp_srg_url = ""
+
+    $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
+    $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
 }
 else
 {
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     exit -1
 }
-
-#1.2.5 latest is same steps as 1.4 without the libs folder
 #1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
 
 
@@ -183,11 +195,12 @@ else
 if ([System.IO.Directory]::Exists("$mcp_dir"))
 {
     $shouldStop = Read-Host "The folder '$mcp_dir' already exists. Do you want to delete it and continue? (Y/N)"
-    if ($shouldStop.StartsWith('N') -or $shouldStop.StartsWith('n')) 
-    {
+    if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
+        [System.IO.Directory]::Delete("$mcp_dir", $true)
+    }
+    else {
         exit 0
     }
-    [System.IO.Directory]::Delete("$mcp_dir", $true)
 }
 
 #Create Directories
@@ -198,6 +211,13 @@ New-Item -Path "$mcp_dir/jars/bin/natives" -ItemType "directory" -Force | out-nu
 #Download & Extract MCP
 Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", "$mcp_dir")
+#Download FernFlower for MCP 1.1-1.2.5 Forge
+if ($fernflower_dl -eq "T")
+{
+    Invoke-WebRequest -Uri "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip" -OutFile "$temp\mcp72.zip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\mcp72.zip", "$temp\mcp72")
+    Copy-Item -Path "$temp\mcp72\runtime\bin\fernflower.jar" -Destination "$mcp_dir\runtime\bin\fernflower.jar" -Force | out-null
+}
 
 #Download & Extract Forge Source
 Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
@@ -233,7 +253,10 @@ if ($scala_lib_url -ne "") {
 
 #Download minecraft.jar & minecraft_server.jar and Install it
 Invoke-WebRequest -Uri "$mc_url" -OutFile "$mcp_dir/jars/bin/minecraft.jar"
-Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
+if (-Not $server_skip -eq "T" ) {
+    Write-Host "Downloading Server: $mc_server_url"
+    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
+}
 
 #Download Minecraft Bin Libs
 Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mcp_dir/jars/bin/jinput.jar"
@@ -298,3 +321,4 @@ $ProgressPreference = "$progress_org"
 #Run Forge's Install Script
 Set-Location -Path "$mcp_dir\forge"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
+}
