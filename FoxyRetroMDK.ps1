@@ -5,11 +5,61 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.5.2" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.2.4" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
 $temp = "$mcp_dir\tmp"
+
+################# Functions Start #################
+
+#Author jredfox
+#This Download-Mediafire function is free to use, copy, and distribute free of charge
+function Download-Mediafire {
+    param (
+        [string]$mediafire_url,         # The URL to download from
+        [string]$mediafire_file     # The local file path to save the file
+    )
+
+    # Initialize variables
+    $inDownloadDiv = $false
+    $inputFound = $false
+    $downloadLink = ""
+    $mediafire_html = "$mediafire_file.html"
+
+    #Download the temp HTML file
+    Invoke-WebRequest -Uri "$mediafire_url" -OutFile "$mediafire_html"
+    $lines = Get-Content "$mediafire_html" #Parse Lines
+
+    # Loop through each line of the file
+    foreach ($line in $lines) {
+        # Check if the line contains the <div class="download_link">
+        if ($line -match '<div class="download_link') {
+            $inDownloadDiv = $true
+        }
+
+        # If we are inside the <div> block, check for <a class="input" (with possible additional class names)
+        if ($inDownloadDiv -and $line -match '<a class="[^"]*input[^"]*"') {
+            $inputFound = $true
+        }
+
+        # Extract the link from href value using a regular expression
+        if ($inDownloadDiv -and $inputFound -and $line -match 'href="([^"]+)"') {
+            $downloadLink = $matches[1]
+            break # Exit the loop once the download link is found
+        }
+    }
+
+    # Output the download link
+    Write-Output "Download file:$downloadLink"
+    Invoke-WebRequest -Uri "$downloadLink" -OutFile "$mediafire_file"
+
+    # Delete temp HTML file
+    Remove-Item -Path "$mediafire_html" -Force -ErrorAction SilentlyContinue
+ }
+
+################# End Functions   #################
+
 #URL Start
 $argo_url = "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar"
 $asm_url = "https://web.archive.org/web/20160305133607id_/https://files.minecraftforge.net/fmllibs/asm-all-4.1.jar"
@@ -170,6 +220,7 @@ elseif ($mc_ver.StartsWith("1.2"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.4-2.0.0.68/forge-1.2.4-2.0.0.68-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/ad6d1fe7455857269d4185cb8f24e62cc0241aaf/client.jar"
         $mc_server_url = "https://assets.minecraft.net/1_2_5/minecraft_server.jar"
+        $modloader_url = "https://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip"
     }
     
     #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
@@ -255,6 +306,12 @@ if ($scala_lib_url -ne "") {
 Invoke-WebRequest -Uri "$mc_url" -OutFile "$mcp_dir/jars/bin/minecraft.jar"
 if (-Not $server_skip -eq "T" ) {
     Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
+}
+
+#Download and install Modloader for 1.1-1.2.4 as Forge requires Modloader in these versions
+if ($modloader_url -ne "") {
+    Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp/modloader.zip"
+    #WIP CODE. Only downloads Modloader doesn't install it into the minecraft.jar's as of yet
 }
 
 #Download Minecraft Bin Libs
