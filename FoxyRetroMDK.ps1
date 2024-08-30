@@ -308,10 +308,16 @@ if (-Not $server_skip -eq "T" ) {
     Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
 }
 
-#Download and install Modloader for 1.1-1.2.4 as Forge requires Modloader in these versions
+#Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
 if ($modloader_url -ne "") {
     Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp/modloader.zip"
-    #WIP CODE. Only downloads Modloader doesn't install it into the minecraft.jar's as of yet
+    #Install Mod Loader now
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir\jars\bin\minecraft.jar", "$temp\minecraft")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\modloader.zip", "$temp\modloader")
+    Copy-Item -Force -Recurse -Path "$temp\modloader\*" -Destination "$temp\minecraft"
+    [System.IO.Directory]::Delete("$temp\minecraft\META-INF", $true)
+    Remove-Item -Path "$mcp_dir/jars/bin/minecraft.jar" -Force -ErrorAction SilentlyContinue
+    [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/minecraft", "$mcp_dir/jars/bin/minecraft.jar")
 }
 
 #Download Minecraft Bin Libs
