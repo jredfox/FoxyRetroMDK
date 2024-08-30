@@ -71,6 +71,11 @@ function Create-Jar {
     Set-Location "$temp_cd"
 }
 
+function Unsupported-Version {
+    Write-Error "Invalid or Unsupported MC Version $mc_ver"
+    exit -1
+}
+
 ################# End Functions   #################
 
 #URL Start
@@ -186,6 +191,10 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_url = "https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
     }
+    else
+    {
+        Unsupported-Version
+    }
     
     $patch_21 = "T" #patch forge's code to compile using java 7 or newer
     $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
@@ -243,6 +252,10 @@ elseif ($mc_ver.StartsWith("1.2"))
         $mc_server_url = "http://files.betacraft.uk/server-archive/release/1.2/1.2.3.jar"
         $modloader_url = "https://www.mediafire.com/file/t93tjpkjae5u7if/ModLoader+1.2.3.zip"
     }
+    else
+    {
+        Unsupported-Version
+    }
     
     #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
     $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
@@ -258,8 +271,7 @@ elseif ($mc_ver.StartsWith("1.2"))
 }
 else
 {
-    Write-Error "Invalid or Unsupported MC Version $mc_ver"
-    exit -1
+    Unsupported-Version
 }
 
 Write-Host "Creating Forge MDK for $mc_ver"
