@@ -314,7 +314,7 @@ try
 }
 catch
 {
-    Write-Error An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mcp_dir\jars\resources
+    Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mcp_dir\jars\resources"
 }
 $ProgressPreference = "$progress_org"
 
