@@ -1,14 +1,30 @@
+param(
+	[Parameter(Mandatory=$false)]
+	$mc_ver,
+	
+	[Parameter(Mandatory=$false)]
+    $mcp_dir
+)
+
 #import C# zip tools
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 & {
 
-#Change this mc release version between 1.1 through 1.5.2
+#Change this MC Release Version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.1" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+if ([string]::IsNullOrEmpty($mc_ver)) 
+{
+    $mc_ver = "1.5.2"
+}
+
+#Set the mcp(MDK) dir
+if ([string]::IsNullOrEmpty($mcp_dir)) 
+{
+    $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
+}
 
 #Temp Files
-$mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
 $temp = "$mcp_dir\tmp"
 
 ################# Functions Start #################
