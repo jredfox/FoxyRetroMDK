@@ -5,7 +5,7 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.2.3" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.2.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -332,7 +332,7 @@ if (-Not $server_skip -eq "T" ) {
 }
 
 #Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
-if ($modloader_url -ne "") {
+if (-Not [string]::IsNullOrEmpty($modloader_url)) {
     Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp/modloader.zip"
     #Install Mod Loader now
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir\jars\bin\minecraft.jar", "$temp\minecraft")
