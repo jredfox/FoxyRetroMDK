@@ -16,7 +16,7 @@ $asm_url = "https://web.archive.org/web/20160305133607id_/https://files.minecraf
 $bcprov_url = "https://web.archive.org/web/20130708220724id_/http://files.minecraftforge.net/fmllibs/bcprov-jdk15on-148.jar"
 $guava_url = "https://web.archive.org/web/20150324120717id_/https://files.minecraftforge.net/fmllibs/guava-14.0-rc3.jar"
 $scala_lib_url = "https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
-$jinput_url = "https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
+$jinput_url = "https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
 $lwjgl_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar"
 $lwjgl_util_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar"
 $win_natives_url = "https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
@@ -163,7 +163,6 @@ elseif ($mc_ver.StartsWith("1.2"))
         $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
     }
     #TODO get mod loader installed into minecraft.jar & delete META-INF
-    #TODO 1.2X get LWJGL updated and merging jars as a hack and delete META-INF so it can run without exceptions
     elseif ($mc_ver -eq "1.2.4")
     {
         $mcp_ver = "mcp61"
