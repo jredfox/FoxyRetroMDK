@@ -404,8 +404,8 @@ catch
 $ProgressPreference = "$progress_org"
 
 #Run Forge's Install Script
-Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mcp_dir\forge"
+Write-Host "Running Forge install.cmd"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
 
 }
