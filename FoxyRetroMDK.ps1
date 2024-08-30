@@ -5,7 +5,7 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 #Change this mc release version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.2.5" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+$mc_ver = "1.1" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -14,7 +14,7 @@ $temp = "$mcp_dir\tmp"
 ################# Functions Start #################
 
 #Author jredfox
-#This Download-Mediafire function is free to use, copy, and distribute free of charge
+#This Download-Mediafire function is free to use, copy, and distribute
 function Download-Mediafire {
     param (
         [string]$mediafire_url,         # The URL to download from
@@ -269,6 +269,28 @@ elseif ($mc_ver.StartsWith("1.2"))
     $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
 }
+elseif ($mc_ver -eq "1.1")
+{
+    $mcp_ver = "mcp56"
+    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
+    $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
+    $mc_url = "https://launcher.mojang.com/v1/objects/f690d4136b0026d452163538495b9b0e8513d718/client.jar"
+    $mc_server_url = "http://files.betacraft.uk/server-archive/release/1.1/1.1.jar"
+    #Mod loader is a dep of forge for 1.1
+    $modloader_url = "https://www.mediafire.com/file/wby6ddco9velug4/ModLoader+1.1.zip"
+
+    #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
+    $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    $argo_url = ""
+    $asm_url = ""
+    $bcprov_url = ""
+    $guava_url = ""
+    $scala_lib_url = ""
+    $mcp_srg_url = ""
+
+    $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
+    $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+}
 else
 {
     Unsupported-Version
@@ -419,4 +441,5 @@ $ProgressPreference = "$progress_org"
 Set-Location -Path "$mcp_dir\forge"
 Write-Host "Running Forge install.cmd"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
+Write-Host "Forge MDK Installation Completed"
 }
