@@ -162,6 +162,8 @@ elseif ($mc_ver.StartsWith("1.2"))
         $mc_url = "https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
     }
+    #TODO get mod loader installed into minecraft.jar & delete META-INF
+    #TODO 1.2X get LWJGL updated and merging jars as a hack and delete META-INF so it can run without exceptions
     elseif ($mc_ver -eq "1.2.4")
     {
         $mcp_ver = "mcp61"
@@ -188,7 +190,6 @@ else
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     exit -1
 }
-#1.1-1.2.4 same steps as 1.2.5 plus adding mod loader and fernflower manually :(
 
 
 #cleanup previous installation attempts
