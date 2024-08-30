@@ -4,8 +4,8 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 & {
 
 #Change this mc release version between 1.1 through 1.5.2
-#NOTE: 1.3.2-1.4.7 requires java 7 jars else forge's ASM library will throw a fit and crash
-$mc_ver = "1.2.4" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
+#NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
+$mc_ver = "1.2.3" #TODO: change this to if ($mc_ver is null or empty) change it to 1.5.2
 
 #Temp Files
 $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
@@ -225,15 +225,23 @@ elseif ($mc_ver.StartsWith("1.2"))
         $mc_url = "https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
     }
-    #TODO get mod loader installed into minecraft.jar & delete META-INF
     elseif ($mc_ver -eq "1.2.4")
     {
         $mcp_ver = "mcp61"
         $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.4/mcp61.zip"
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.4-2.0.0.68/forge-1.2.4-2.0.0.68-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/ad6d1fe7455857269d4185cb8f24e62cc0241aaf/client.jar"
-        $mc_server_url = "https://assets.minecraft.net/1_2_5/minecraft_server.jar"
+        $mc_server_url = "http://files.betacraft.uk/server-archive/release/1.2/1.2.4.jar"
         $modloader_url = "https://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip"
+    }
+    elseif ($mc_ver -eq "1.2.3")
+    {
+        $mcp_ver = "mcp60"
+        $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.3/mcp60.zip"
+        $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.4.1.64/forge-1.2.3-1.4.1.64-src.zip"
+        $mc_url = "https://launcher.mojang.com/v1/objects/5134e433afeba375c00bbdcd8aead1d3222813ee/client.jar"
+        $mc_server_url = "http://files.betacraft.uk/server-archive/release/1.2/1.2.3.jar"
+        $modloader_url = "https://www.mediafire.com/file/t93tjpkjae5u7if/ModLoader+1.2.3.zip"
     }
     
     #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
@@ -396,6 +404,7 @@ catch
 $ProgressPreference = "$progress_org"
 
 #Run Forge's Install Script
+Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mcp_dir\forge"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
 
