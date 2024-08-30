@@ -58,6 +58,19 @@ function Download-Mediafire {
     Remove-Item -Path "$mediafire_html" -Force -ErrorAction SilentlyContinue
  }
 
+function Create-Jar {
+    param (
+        [string]$Path,         # The Path of the root directory of the classes
+        [string]$Jar     # The Path of the Jar file to save it as.
+    )
+
+    $temp_cd = Get-Location
+    Set-Location "$Path"
+    Write-Host "Creating Jar $Jar"
+    & "jar" cvf "$Jar" "."
+    Set-Location "$temp_cd"
+}
+
 ################# End Functions   #################
 
 #URL Start
@@ -241,6 +254,8 @@ else
     exit -1
 }
 
+Write-Host "Creating Forge MDK for $mc_ver"
+
 
 #cleanup previous installation attempts
 if ([System.IO.Directory]::Exists("$mcp_dir"))
@@ -317,7 +332,7 @@ if ($modloader_url -ne "") {
     Copy-Item -Force -Recurse -Path "$temp\modloader\*" -Destination "$temp\minecraft"
     [System.IO.Directory]::Delete("$temp\minecraft\META-INF", $true)
     Remove-Item -Path "$mcp_dir/jars/bin/minecraft.jar" -Force -ErrorAction SilentlyContinue
-    [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/minecraft", "$mcp_dir/jars/bin/minecraft.jar")
+    Create-Jar -Path "$temp/minecraft" -Jar "$mcp_dir/jars/bin/minecraft.jar"
 }
 
 #Download Minecraft Bin Libs
@@ -383,4 +398,5 @@ $ProgressPreference = "$progress_org"
 #Run Forge's Install Script
 Set-Location -Path "$mcp_dir\forge"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
+
 }
