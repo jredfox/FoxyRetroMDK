@@ -1,4 +1,4 @@
-﻿#import C# zip tools
+#import C# zip tools
 Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 
 & {
@@ -407,5 +407,4 @@ $ProgressPreference = "$progress_org"
 Set-Location -Path "$mcp_dir\forge"
 Write-Host "Running Forge install.cmd"
 Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
-
 }
