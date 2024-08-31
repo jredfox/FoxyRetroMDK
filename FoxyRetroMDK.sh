@@ -30,7 +30,7 @@ temp="$mdk_dir/tmp"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
-Download-Mediafire () {
+function Download-Mediafire () {
 	local mediafire_url="$1"
 	local mediafire_file="$2"
 
@@ -71,5 +71,16 @@ Download-Mediafire () {
     rm -f "$mediafire_html"
 }
 
-Download-Mediafire "http://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip" "/Users/jredfox/Documents/GitHub/FoxyRetroMDK/Modloader.zip"
+function Create-Jar {
+    local Dir="$1"
+    local Jar="$2"
+
+    local temp_cd=$(pwd)
+    cd "$Path"
+    echo "Creating Jar $Jar"
+    jar cvf "$Jar" "."
+    cd "$temp_cd"
+}
+
+#Download-Mediafire "http://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip" "/Users/jredfox/Documents/GitHub/FoxyRetroMDK/Modloader.zip"
 
