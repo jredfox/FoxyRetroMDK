@@ -92,7 +92,126 @@ function Unsupported-Version {
     exit -1
 }
 
+function MDK-Cleanup {
+
+#cleanup previous installation attempts
+if ([System.IO.Directory]::Exists("$mcp_dir"))
+{
+    $shouldStop = Read-Host "The folder '$mcp_dir' already exists. Do you want to delete it and continue? (Y/N)"
+    if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
+        [System.IO.Directory]::Delete("$mcp_dir", $true)
+    }
+    else {
+        exit 0
+    }
+}
+
+}
+
+function Install-1.6x {
+    
+    #Start URL's
+    $assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
+	$assets_base_url="https://resources.download.minecraft.net"
+	$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+	$forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+
+	if($mc_ver -eq "1.6.4"){
+		$mcp_ver = "mcp8.11"
+		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
+		$forge_url="$forge_164_url"
+		$mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
+		$mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
+	}
+	elseif($mc_ver -eq "1.6.3"){
+		$mcp_ver = "mcp8.09"
+		$mcp_url="https://archive.org/download/mcp809/mcp809.zip"
+		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
+		$mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
+		$mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
+	}
+	elseif($mc_ver -eq "1.6.2"){
+		$mcp_ver = "mcp8.04"
+		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
+		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
+		$mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
+		$mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
+	}
+	elseif($mc_ver -eq "1.6.1"){
+		$mcp_ver = "mcp8.03"
+		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
+		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
+		$mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
+		$mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
+	}
+    else {
+        Unsupported-Version
+    }
+
+    #Cleanup Previous MDK installation
+    MDK-Cleanup
+    #Notify the User of Starting Forge MDK Installation
+    Write-Host "Creating Forge MDK for $mc_ver"
+
+    #Create Dirs
+    New-Item -Path "$temp\forge164" -ItemType "directory" -Force | out-null
+    New-Item -Path "$mcp_dir\mcp\jars\versions\$mc_ver" -ItemType "directory" -Force | out-null
+
+    #Download & Extract Forge
+    Invoke-WebRequest "$forge_url" -OutFile "$temp\forge.zip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", $temp)
+    Move-Item -Path "$temp\forge\*" -Destination "$mcp_dir" -Force | out-null
+
+    #Patch fml.py for version 1.6-1.6.3
+    if($mc_ver -ne "1.6.4")
+    {
+        Invoke-WebRequest "$forge_164_url" -OutFile "$temp\forge164.zip"
+		[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge164.zip", "$temp\forge164")
+        Remove-Item -Path "$mcp_dir\fml\fml.py" -Force | out-null
+		Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mcp_dir\fml\fml.py" -Force | out-null
+    }
+
+    #Download & Extract MCP into forge
+    Invoke-WebRequest "$mcp_url" -OutFile "$mcp_dir\fml\$mcp_ver.zip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir\fml\$mcp_ver.zip", "$mcp_dir\mcp")
+
+    #Download & Install minecraft.jar & minecraft_server.jar
+    Invoke-WebRequest "$mc_client_url" -OutFile "$mcp_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
+    Invoke-WebRequest "$mc_server_url" -OutFile "$mcp_dir\mcp\jars\minecraft_server.$mc_ver.jar"
+
+    #Patch fml.json
+    (Get-Content "$mcp_dir\fml\fml.json") -replace "http:", "https:" | Set-Content "$mcp_dir\fml\fml.json"
+    
+    #Patch fml.py
+	(Get-Content "$mcp_dir\fml\fml.py") -replace "http://resources.download.minecraft.net", "$assets_base_url" | Set-Content "$mcp_dir\fml\fml.py"
+	(Get-Content "$mcp_dir\fml\fml.py") -replace "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url" | Set-Content "$mcp_dir\fml\fml.py"
+
+    #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
+	Remove-Item -Path "$mcp_dir\fml\python\*" -Force | out-null
+	Invoke-WebRequest "$python_url" -OutFile "$temp\python.msi"
+	Start-process msiexec -ArgumentList "/a `"$temp\python.msi`" /qn TARGETDIR=`"$temp\python`"" -Wait
+	Move-Item -Path "$temp\python\DLLs\*" -Destination "$mcp_dir\fml\python\" -Force | out-null
+	Move-Item -Path "$temp\python\python27.dll" -Destination "$mcp_dir\fml\python\" -Force | out-null
+	Move-Item -Path "$temp\python\python.exe" -Destination "$mcp_dir\fml\python\python_fml.exe" -Force | out-null
+	Compress-Archive -Path "$temp\python\Lib\*" -DestinationPath "$temp\python27.zip"
+	Move-Item -Path "$temp\python27.zip" -Destination "$mcp_dir\fml\python\" -Force | out-null
+
+    #Clear the Temp Folder
+	Remove-Item -Path "$temp" -Recurse -Force | out-null
+
+    #Start Forge install.cmd
+    Write-Host "Running Forge install.cmd"
+	Set-Location -Path "$mcp_dir"
+	Start-Process -FilePath "$mcp_dir\install.cmd" -Wait -NoNewWindow
+}
+
 ################# End Functions   #################
+
+if ($mc_ver.StartsWith("1.6")) 
+{
+    Install-1.6x
+    exit 0
+}
 
 #URL Start
 $argo_url = "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar"
@@ -314,18 +433,8 @@ else
 
 Write-Host "Creating Forge MDK for $mc_ver"
 
-
-#cleanup previous installation attempts
-if ([System.IO.Directory]::Exists("$mcp_dir"))
-{
-    $shouldStop = Read-Host "The folder '$mcp_dir' already exists. Do you want to delete it and continue? (Y/N)"
-    if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
-        [System.IO.Directory]::Delete("$mcp_dir", $true)
-    }
-    else {
-        exit 0
-    }
-}
+#Cleanup previous installations
+MDK-Cleanup
 
 #Create Directories
 New-Item -Path "$temp/natives" -ItemType "directory" -Force | out-null
