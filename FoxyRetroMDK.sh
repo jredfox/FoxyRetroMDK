@@ -65,7 +65,7 @@ function Download-Mediafire () {
 
     # Output the download link
     echo "Downloading file:$downloadLink"
-    curl -ss -o "$mediafire_file" "$downloadLink"
+    curl -ss -L -o "$mediafire_file" "$downloadLink"
 
     # Delete temp HTML file
     rm -f "$mediafire_html"
@@ -148,10 +148,25 @@ function Install-1.6x {
     mkdir -p "$mdk_dir/mcp/jars/versions/$mc_ver"
 
     #Download & Extract Forge
-    curl -o "$temp/forge.zip" "$forge_url"
-    unzip -o -q "$temp/forge.zip" -d "$temp"
+    curl -ss -L -o "$temp/forge.zip" "$forge_url"
+    unzip -q -o "$temp/forge.zip" -d "$temp"
     mv -f "$temp/forge/"* "$mdk_dir"
-    #Move-Item -Path "$temp\forge\*" -Destination "$mdk_dir" -Force | out-null
+
+    #Patch fml.py for version 1.6-1.6.3
+	if [[ "$mc_ver" != "1.6.4" ]]; then
+        curl -ss -L -o "$temp/forge164.zip" "$forge_164_url"
+        unzip -o -q "$temp/forge164.zip" -d "$temp/forge164"
+        rm -f "$mdk_dir/fml/fml.py"
+		cp -f "$temp/forge164/forge/fml/fml.py" "$mdk_dir/fml/fml.py"
+    fi
+
+    #Download & Extract MCP into forge
+    curl -ss -L -o "$mdk_dir/fml/$mcp_ver.zip" "$mcp_url"
+    unzip -q -o "$mdk_dir/fml/$mcp_ver.zip" -d "$mdk_dir/mcp"
+
+    #Download & Install minecraft.jar & minecraft_server.jar
+    curl -ss -L -o "$mdk_dir/mcp/jars/versions/$mc_ver/${mc_ver}.jar" "$mc_client_url"
+    curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
 }
 
 ################# End Functions   #################
