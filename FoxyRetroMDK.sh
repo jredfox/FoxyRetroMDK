@@ -89,6 +89,7 @@ function Unsupported-Version {
 
 #cleanup previous installation attempts
 function MDK-Cleanup {
+
 if [ -d "$mdk_dir" ]; then
 	read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
 	if [[ "$user_input" == "Y" || "$user_input" == "y" ]]; then
@@ -97,8 +98,18 @@ if [ -d "$mdk_dir" ]; then
     	exit 0
     fi
 fi
+
 }
 
-MDK-Cleanup
+function Install-1.6x {
+	echo Hello World
+}
+
+################# End Functions   #################
+
+if [[ "$mc_ver" == 1.6* ]]; then
+    Install-1.6x
+    exit 0
+fi
 #Download-Mediafire "http://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip" "/Users/jredfox/Documents/GitHub/FoxyRetroMDK/Modloader.zip"
 
