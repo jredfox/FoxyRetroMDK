@@ -24,6 +24,9 @@ if ([string]::IsNullOrEmpty($mdk_dir))
     $mdk_dir = "$PSScriptRoot\MDK-$mc_ver"
 }
 
+#Set the title
+$host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
+
 #Temp Files
 $temp = "$mdk_dir\tmp"
 
@@ -180,11 +183,10 @@ function Install-1.6x {
     Invoke-WebRequest "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
 
     #Patch fml.json
-    (Get-Content "$mdk_dir\fml\fml.json") -replace "http:", "https:" | Set-Content "$mdk_dir\fml\fml.json"
+    (Get-Content "$mdk_dir\fml\fml.json").replace("http:", "https:") | Set-Content "$mdk_dir\fml\fml.json"
     
     #Patch fml.py
-	(Get-Content "$mdk_dir\fml\fml.py") -replace "http://resources.download.minecraft.net", "$assets_base_url" | Set-Content "$mdk_dir\fml\fml.py"
-	(Get-Content "$mdk_dir\fml\fml.py") -replace "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url" | Set-Content "$mdk_dir\fml\fml.py"
+	(Get-Content "$mdk_dir\fml\fml.py").replace("http://resources.download.minecraft.net", "$assets_base_url").replace("https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url") | Set-Content "$mdk_dir\fml\fml.py"
 
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
