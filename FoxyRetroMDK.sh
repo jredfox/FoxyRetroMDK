@@ -102,7 +102,47 @@ fi
 }
 
 function Install-1.6x {
-	echo Hello World
+
+	#Start URL's
+	local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
+	local assets_base_url="https://resources.download.minecraft.net"
+	local python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+	local forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+
+	if [[ "$mc_ver" == "1.6.4" ]]; then
+		mcp_ver="mcp8.11"
+		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
+		forge_url="$forge_164_url"
+		mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
+		mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
+	elif [[ "$mc_ver" == "1.6.3" ]]; then
+		mcp_ver = "mcp8.09"
+		mcp_url="https://archive.org/download/mcp809/mcp809.zip"
+		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
+		mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
+		mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
+	elif [[ "$mc_ver" == "1.6.2" ]]; then
+		mcp_ver = "mcp8.04"
+		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
+		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
+		mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
+		mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
+	elif [[ "$mc_ver" == "1.6.1" ]]; then
+		mcp_ver = "mcp8.03"
+		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
+		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
+		mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
+		mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
+    else
+        Unsupported-Version
+    fi
+
+    #Cleanup Previous MDK installation
+    MDK-Cleanup
+
+    #Notify the User of Starting Forge MDK Installation
+    echo "Creating Forge MDK for $mc_ver"
+
 }
 
 ################# End Functions   #################
