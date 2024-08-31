@@ -174,6 +174,13 @@ function Install-1.6x {
 	# Patch fml.py
 	sed -i -e "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
 	sed -i -e "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
+
+	#Remove Temp Folder
+	rm -rf "$temp"
+
+	#echo "Running Forge install.cmd"
+	#cd "$mdk_dir"
+	#bash "$mdk_dir\install.cmd"
 }
 
 ################# End Functions   #################
