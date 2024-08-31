@@ -204,18 +204,21 @@ function Install-1.6x {
 	#Remove Temp Folder
 	rm -rf "$temp"
 
-	#TODO patch sh files to use python2.7 on macOS
+	#patch MCP & Forge python calls to python2.7 which enforces 2.7.9 python is called
+	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
+    	echo "Patching python call $file"
+    	sed -i -e 's/python/python2.7/g' "$file"
+	done
 
-	#echo "Running Forge install.cmd"
-	#cd "$mdk_dir"
-	#bash "$mdk_dir\install.cmd"
+	echo "Running Forge install.cmd"
+	cd "$mdk_dir"
+	bash "$mdk_dir/install.sh"
 }
 
 ################# End Functions   #################
 
 #Make sure python gets installed before continuing
 Check-Python
-exit 0
 
 if [[ "$mc_ver" == 1.6* ]]; then
     Install-1.6x
