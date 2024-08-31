@@ -3,7 +3,7 @@ param(
 	$mc_ver,
 	
 	[Parameter(Mandatory=$false)]
-    $mcp_dir
+    $mdk_dir
 )
 
 #import C# zip tools
@@ -19,13 +19,13 @@ if ([string]::IsNullOrEmpty($mc_ver))
 }
 
 #Set the mcp(MDK) dir
-if ([string]::IsNullOrEmpty($mcp_dir)) 
+if ([string]::IsNullOrEmpty($mdk_dir)) 
 {
-    $mcp_dir = "$PSScriptRoot\MDK-$mc_ver"
+    $mdk_dir = "$PSScriptRoot\MDK-$mc_ver"
 }
 
 #Temp Files
-$temp = "$mcp_dir\tmp"
+$temp = "$mdk_dir\tmp"
 
 ################# Functions Start #################
 
@@ -92,14 +92,13 @@ function Unsupported-Version {
     exit -1
 }
 
+#cleanup previous installation attempts
 function MDK-Cleanup {
 
-#cleanup previous installation attempts
-if ([System.IO.Directory]::Exists("$mcp_dir"))
-{
-    $shouldStop = Read-Host "The folder '$mcp_dir' already exists. Do you want to delete it and continue? (Y/N)"
+if ([System.IO.Directory]::Exists("$mdk_dir")) {
+    $shouldStop = Read-Host "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N)"
     if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
-        [System.IO.Directory]::Delete("$mcp_dir", $true)
+        [System.IO.Directory]::Delete("$mdk_dir", $true)
     }
     else {
         exit 0
@@ -156,55 +155,55 @@ function Install-1.6x {
 
     #Create Dirs
     New-Item -Path "$temp\forge164" -ItemType "directory" -Force | out-null
-    New-Item -Path "$mcp_dir\mcp\jars\versions\$mc_ver" -ItemType "directory" -Force | out-null
+    New-Item -Path "$mdk_dir\mcp\jars\versions\$mc_ver" -ItemType "directory" -Force | out-null
 
     #Download & Extract Forge
     Invoke-WebRequest "$forge_url" -OutFile "$temp\forge.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", $temp)
-    Move-Item -Path "$temp\forge\*" -Destination "$mcp_dir" -Force | out-null
+    Move-Item -Path "$temp\forge\*" -Destination "$mdk_dir" -Force | out-null
 
     #Patch fml.py for version 1.6-1.6.3
     if($mc_ver -ne "1.6.4")
     {
         Invoke-WebRequest "$forge_164_url" -OutFile "$temp\forge164.zip"
 		[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge164.zip", "$temp\forge164")
-        Remove-Item -Path "$mcp_dir\fml\fml.py" -Force | out-null
-		Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mcp_dir\fml\fml.py" -Force | out-null
+        Remove-Item -Path "$mdk_dir\fml\fml.py" -Force | out-null
+		Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mdk_dir\fml\fml.py" -Force | out-null
     }
 
     #Download & Extract MCP into forge
-    Invoke-WebRequest "$mcp_url" -OutFile "$mcp_dir\fml\$mcp_ver.zip"
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir\fml\$mcp_ver.zip", "$mcp_dir\mcp")
+    Invoke-WebRequest "$mcp_url" -OutFile "$mdk_dir\fml\$mcp_ver.zip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\fml\$mcp_ver.zip", "$mdk_dir\mcp")
 
     #Download & Install minecraft.jar & minecraft_server.jar
-    Invoke-WebRequest "$mc_client_url" -OutFile "$mcp_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
-    Invoke-WebRequest "$mc_server_url" -OutFile "$mcp_dir\mcp\jars\minecraft_server.$mc_ver.jar"
+    Invoke-WebRequest "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
+    Invoke-WebRequest "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
 
     #Patch fml.json
-    (Get-Content "$mcp_dir\fml\fml.json") -replace "http:", "https:" | Set-Content "$mcp_dir\fml\fml.json"
+    (Get-Content "$mdk_dir\fml\fml.json") -replace "http:", "https:" | Set-Content "$mdk_dir\fml\fml.json"
     
     #Patch fml.py
-	(Get-Content "$mcp_dir\fml\fml.py") -replace "http://resources.download.minecraft.net", "$assets_base_url" | Set-Content "$mcp_dir\fml\fml.py"
-	(Get-Content "$mcp_dir\fml\fml.py") -replace "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url" | Set-Content "$mcp_dir\fml\fml.py"
+	(Get-Content "$mdk_dir\fml\fml.py") -replace "http://resources.download.minecraft.net", "$assets_base_url" | Set-Content "$mdk_dir\fml\fml.py"
+	(Get-Content "$mdk_dir\fml\fml.py") -replace "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url" | Set-Content "$mdk_dir\fml\fml.py"
 
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
-	Remove-Item -Path "$mcp_dir\fml\python\*" -Force | out-null
+	Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
 	Invoke-WebRequest "$python_url" -OutFile "$temp\python.msi"
 	Start-process msiexec -ArgumentList "/a `"$temp\python.msi`" /qn TARGETDIR=`"$temp\python`"" -Wait
-	Move-Item -Path "$temp\python\DLLs\*" -Destination "$mcp_dir\fml\python\" -Force | out-null
-	Move-Item -Path "$temp\python\python27.dll" -Destination "$mcp_dir\fml\python\" -Force | out-null
-	Move-Item -Path "$temp\python\python.exe" -Destination "$mcp_dir\fml\python\python_fml.exe" -Force | out-null
+	Move-Item -Path "$temp\python\DLLs\*" -Destination "$mdk_dir\fml\python\" -Force | out-null
+	Move-Item -Path "$temp\python\python27.dll" -Destination "$mdk_dir\fml\python\" -Force | out-null
+	Move-Item -Path "$temp\python\python.exe" -Destination "$mdk_dir\fml\python\python_fml.exe" -Force | out-null
 	Compress-Archive -Path "$temp\python\Lib\*" -DestinationPath "$temp\python27.zip"
-	Move-Item -Path "$temp\python27.zip" -Destination "$mcp_dir\fml\python\" -Force | out-null
+	Move-Item -Path "$temp\python27.zip" -Destination "$mdk_dir\fml\python\" -Force | out-null
 
     #Clear the Temp Folder
 	Remove-Item -Path "$temp" -Recurse -Force | out-null
 
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
-	Set-Location -Path "$mcp_dir"
-	Start-Process -FilePath "$mcp_dir\install.cmd" -Wait -NoNewWindow
+	Set-Location -Path "$mdk_dir"
+	Start-Process -FilePath "$mdk_dir\install.cmd" -Wait -NoNewWindow
 }
 
 ################# End Functions   #################
@@ -440,93 +439,93 @@ MDK-Cleanup
 
 #Create Directories
 New-Item -Path "$temp/natives" -ItemType "directory" -Force | out-null
-New-Item -Path "$mcp_dir/jars/lib" -ItemType "directory" -Force | out-null
-New-Item -Path "$mcp_dir/jars/bin/natives" -ItemType "directory" -Force | out-null
+New-Item -Path "$mdk_dir/jars/lib" -ItemType "directory" -Force | out-null
+New-Item -Path "$mdk_dir/jars/bin/natives" -ItemType "directory" -Force | out-null
 
 #Download & Extract MCP
 Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", "$mcp_dir")
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", "$mdk_dir")
 #Download FernFlower for MCP 1.1-1.2.5 Forge
 if ($fernflower_dl -eq "T")
 {
     Invoke-WebRequest -Uri "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip" -OutFile "$temp\mcp72.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\mcp72.zip", "$temp\mcp72")
-    Copy-Item -Path "$temp\mcp72\runtime\bin\fernflower.jar" -Destination "$mcp_dir\runtime\bin\fernflower.jar" -Force | out-null
+    Copy-Item -Path "$temp\mcp72\runtime\bin\fernflower.jar" -Destination "$mdk_dir\runtime\bin\fernflower.jar" -Force | out-null
 }
 
 #Download & Extract Forge Source
 Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mcp_dir")
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mdk_dir")
 
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge_lib.zip", "$mcp_dir/lib")
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge_lib.zip", "$mdk_dir/lib")
 if ($bcprov_dev -eq "T")
 {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mcp_dir/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if ($argo_url -ne "") {
-    Invoke-WebRequest -Uri "$argo_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$argo_url"))
+    Invoke-WebRequest -Uri "$argo_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$argo_url"))
 }
 if ($asm_url -ne "") {
-    Invoke-WebRequest -Uri "$asm_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$asm_url"))
+    Invoke-WebRequest -Uri "$asm_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$asm_url"))
 }
 if ($bcprov_url -ne "") {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 if ($mcp_srg_url -ne "") {
-    Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
+    Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
 }
 if ($guava_url -ne "") {
-    Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$guava_url"))
+    Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$guava_url"))
 }
 if ($scala_lib_url -ne "") {
-    Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mcp_dir/jars/lib/" + [System.IO.Path]::GetFileName("$scala_lib_url"))
+    Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$scala_lib_url"))
 }
 
 #Download minecraft.jar & minecraft_server.jar and Install it
-Invoke-WebRequest -Uri "$mc_url" -OutFile "$mcp_dir/jars/bin/minecraft.jar"
+Invoke-WebRequest -Uri "$mc_url" -OutFile "$mdk_dir/jars/bin/minecraft.jar"
 if (-Not $server_skip -eq "T" ) {
-    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mcp_dir/jars/minecraft_server.jar"
+    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mdk_dir/jars/minecraft_server.jar"
 }
 
 #Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
 if (-Not [string]::IsNullOrEmpty($modloader_url)) {
     Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp/modloader.zip"
     #Install Mod Loader now
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir\jars\bin\minecraft.jar", "$temp\minecraft")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\minecraft.jar", "$temp\minecraft")
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\modloader.zip", "$temp\modloader")
     Copy-Item -Force -Recurse -Path "$temp\modloader\*" -Destination "$temp\minecraft"
     [System.IO.Directory]::Delete("$temp\minecraft\META-INF", $true)
-    Remove-Item -Path "$mcp_dir/jars/bin/minecraft.jar" -Force -ErrorAction SilentlyContinue
-    Create-Jar -Path "$temp/minecraft" -Jar "$mcp_dir/jars/bin/minecraft.jar"
+    Remove-Item -Path "$mdk_dir/jars/bin/minecraft.jar" -Force -ErrorAction SilentlyContinue
+    Create-Jar -Path "$temp/minecraft" -Jar "$mdk_dir/jars/bin/minecraft.jar"
 }
 
 #Download Minecraft Bin Libs
-Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mcp_dir/jars/bin/jinput.jar"
-Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mcp_dir/jars/bin/lwjgl.jar"
-Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mcp_dir/jars/bin/lwjgl_util.jar"
+Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir/jars/bin/jinput.jar"
+Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir/jars/bin/lwjgl.jar"
+Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir/jars/bin/lwjgl_util.jar"
 
 #Download Windows Natives & Extract then Install them (We are Powershell :( We can't support MacOs and Linux )
 Invoke-WebRequest -Uri "$win_natives_url" -OutFile "$temp/win_natives.jar"
 Invoke-WebRequest -Uri "$win_natives_url2" -OutFile "$temp/win_natives2.jar"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/win_natives.jar", "$temp/natives")
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/win_natives2.jar", "$temp/natives")
-[System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/natives", "$mcp_dir/jars/bin/natives/windows_natives.jar") # Re-Zips the natives and installs it to the correct location
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$mcp_dir/jars/bin/natives/windows_natives.jar", "$mcp_dir/jars/bin/natives") # Un-Zips all Windows Natives to the correct location
-Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$mcp_dir/jars/bin/natives/macosx_natives.jar" -Force | out-null # Creates new Dummy Files to prevent forge install from crashing trying to extract other
-Copy-Item -Path "$mcp_dir/jars/bin/natives/windows_natives.jar" -Destination "$mcp_dir/jars/bin/natives/linux_natives.jar" -Force | out-null
+[System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/natives", "$mdk_dir/jars/bin/natives/windows_natives.jar") # Re-Zips the natives and installs it to the correct location
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir/jars/bin/natives/windows_natives.jar", "$mdk_dir/jars/bin/natives") # Un-Zips all Windows Natives to the correct location
+Copy-Item -Path "$mdk_dir/jars/bin/natives/windows_natives.jar" -Destination "$mdk_dir/jars/bin/natives/macosx_natives.jar" -Force | out-null # Creates new Dummy Files to prevent forge install from crashing trying to extract other
+Copy-Item -Path "$mdk_dir/jars/bin/natives/windows_natives.jar" -Destination "$mdk_dir/jars/bin/natives/linux_natives.jar" -Force | out-null
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if ($patch_21 -eq "T")
 {
     Write-Host "Patching Forge's RenderPlayer.java.patch"
-    $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
+    $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
     if (-Not [System.IO.Directory]::Exists("$patch_file"))
     {
-        $patch_file = "$mcp_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
+        $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
     }
     try
     {
@@ -551,7 +550,7 @@ try
     {
         $hash = $objects.$key.hash
         $resource = $resources_url + $hash.Substring(0, 2) + "/$hash"
-        $resource_file = "$mcp_dir\jars\resources\$key"
+        $resource_file = "$mdk_dir\jars\resources\$key"
         Write-Output "Downloading Resource URL:$resource"
         $rd = Split-Path "$resource_file" -Parent #build resource directory path
         New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
@@ -560,13 +559,13 @@ try
 }
 catch
 {
-    Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mcp_dir\jars\resources"
+    Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mdk_dir\jars\resources"
 }
 $ProgressPreference = "$progress_org"
 
 #Run Forge's Install Script
-Set-Location -Path "$mcp_dir\forge"
+Set-Location -Path "$mdk_dir\forge"
 Write-Host "Running Forge install.cmd"
-Start-Process -FilePath "$mcp_dir\forge\install.cmd" -Wait -NoNewWindow
+Start-Process -FilePath "$mdk_dir\forge\install.cmd" -Wait -NoNewWindow
 Write-Host "Forge MDK Installation Completed"
 }
