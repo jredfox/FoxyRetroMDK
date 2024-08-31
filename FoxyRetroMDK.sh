@@ -41,7 +41,7 @@ Download-Mediafire () {
     local mediafire_html="$mediafire_file.html"
 
     #Download the temp HTML file
-    curl -o "$mediafire_html" "$mediafire_url"
+    curl -ss -o "$mediafire_html" "$mediafire_url"
 
     # Read the file line by line
 	while IFS= read -r line; do
@@ -58,14 +58,14 @@ Download-Mediafire () {
 	    # Extract the link from href value using a regular expression
 	    if $inDownloadDiv && $inputFound && [[ "$line" =~ href=\"([^\"]+)\" ]]; then
 	        downloadLink="${BASH_REMATCH[1]}"
-	        echo "Download link found: $downloadLink"
+	        #echo "Download link found: $downloadLink"
 	        break # Exit the loop once the download link is found
 	    fi
 	done < "$mediafire_html"
 
     # Output the download link
     echo "Downloading file:$downloadLink"
-    curl -o "$mediafire_file" "$downloadLink"
+    curl -ss -o "$mediafire_file" "$downloadLink"
 
     # Delete temp HTML file
     rm -f "$mediafire_html"
