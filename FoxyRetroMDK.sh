@@ -143,6 +143,15 @@ function Install-1.6x {
     #Notify the User of Starting Forge MDK Installation
     echo "Creating Forge MDK for $mc_ver"
 
+    #Create Dirs
+    mkdir -p "$temp/forge164"
+    mkdir -p "$mdk_dir/mcp/jars/versions/$mc_ver"
+
+    #Download & Extract Forge
+    curl -o "$temp/forge.zip" "$forge_url"
+    unzip -o -q "$temp/forge.zip" -d "$temp"
+    mv -f "$temp/forge/"* "$mdk_dir"
+    #Move-Item -Path "$temp\forge\*" -Destination "$mdk_dir" -Force | out-null
 }
 
 ################# End Functions   #################
