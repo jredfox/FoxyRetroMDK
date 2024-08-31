@@ -150,6 +150,7 @@ function Install-1.6x {
 
     #Cleanup Previous MDK installation
     MDK-Cleanup
+
     #Notify the User of Starting Forge MDK Installation
     Write-Host "Creating Forge MDK for $mc_ver"
 
@@ -187,6 +188,7 @@ function Install-1.6x {
 	(Get-Content "$mcp_dir\fml\fml.py") -replace "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url" | Set-Content "$mcp_dir\fml\fml.py"
 
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
+    Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
 	Remove-Item -Path "$mcp_dir\fml\python\*" -Force | out-null
 	Invoke-WebRequest "$python_url" -OutFile "$temp\python.msi"
 	Start-process msiexec -ArgumentList "/a `"$temp\python.msi`" /qn TARGETDIR=`"$temp\python`"" -Wait
