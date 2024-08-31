@@ -1,12 +1,11 @@
+#!/bin/bash
+
 #Take in Arguments
 mc_ver=$1
 mdk_dir=$2
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-# Define global boolean-like variables
-false_val=0
-true_val=1
 
 #Change this MC Release Version between 1.1 through 1.5.2
 #NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
@@ -25,8 +24,35 @@ echo -n -e "\033]0;Foxy Retro MDK - $mc_ver\007"
 
 #Temp Files
 temp="$mdk_dir/tmp"
+mkdir -p "$temp"
+
+#Flag if we are on mac or linux
+NAME_OS="$(uname)"
+isMac=false
+isLinux=false
+if [ "$NAME_OS" == "Darwin" ]; then
+	isMac=true
+else
+	isLinux=true
+fi
 
 ################# Functions Start #################
+
+function Check-Python () {
+	if $isMac
+	then
+		if ! command -v python2.7 &> /dev/null
+		then
+			echo "Python 2.7.9 Is Required to running MCP & Forge. Installing Python 2.7.9 ISA: x64"
+			curl -ss -L -o "$temp/python-2.7.9-macosx10.6.pkg" "https://www.python.org/ftp/python/2.7.9/python-2.7.9-macosx10.6.pkg"
+			open "$temp/python-2.7.9-macosx10.6.pkg"
+			echo "Please re-run the script once Python has been installed"
+			exit 0
+		fi
+	else
+		echo "WIP LINUX"
+	fi
+}
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
@@ -178,12 +204,18 @@ function Install-1.6x {
 	#Remove Temp Folder
 	rm -rf "$temp"
 
+	#TODO patch sh files to use python2.7 on macOS
+
 	#echo "Running Forge install.cmd"
 	#cd "$mdk_dir"
 	#bash "$mdk_dir\install.cmd"
 }
 
 ################# End Functions   #################
+
+#Make sure python gets installed before continuing
+Check-Python
+exit 0
 
 if [[ "$mc_ver" == 1.6* ]]; then
     Install-1.6x
