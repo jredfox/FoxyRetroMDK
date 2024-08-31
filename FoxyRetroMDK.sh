@@ -167,6 +167,13 @@ function Install-1.6x {
     #Download & Install minecraft.jar & minecraft_server.jar
     curl -ss -L -o "$mdk_dir/mcp/jars/versions/$mc_ver/${mc_ver}.jar" "$mc_client_url"
     curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
+
+    # Patch fml.json
+	sed -i -e 's|http:|https:|g' "$mdk_dir/fml/fml.json"
+
+	# Patch fml.py
+	sed -i -e "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
+	sed -i -e "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
 }
 
 ################# End Functions   #################
