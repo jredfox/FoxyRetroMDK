@@ -1,4 +1,5 @@
 #TODO: Fix not downloading other OS's natives
+#TODO: fix mcp72_url
 param(
 	[Parameter(Mandatory=$false)]
 	$mc_ver,
