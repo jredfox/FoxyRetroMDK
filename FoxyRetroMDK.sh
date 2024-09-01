@@ -206,7 +206,7 @@ function Install-1.6x {
 	#Remove Temp Folder
 	rm -rf "$temp"
 
-	#patch MCP & Forge python calls to python2.7 which enforces 2.7.9 python is called
+	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
 	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
     	echo "Patching python call $file"
     	sed -i -e 's/python/python2.7/g' "$file"
