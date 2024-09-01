@@ -470,3 +470,20 @@ curl -ss -L -o "$mdk_dir/jars/bin/minecraft.jar" "$mc_url"
 if [[ "$server_skip" != "T" ]]; then
     curl -ss -L -o "$mdk_dir/jars/minecraft_server.jar" "$mc_server_url"
 fi
+
+#Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
+if [ -n "$modloader_url" ]; then
+    Download-Mediafire "$modloader_url" "$temp/modloader.zip"
+    #Install Mod Loader now
+    unzip -q -o "$mdk_dir\jars\bin\minecraft.jar" -d "$temp\minecraft"
+    unzip -q -o "$temp\modloader.zip" -d "$temp\minecraft"
+    rm -rf "$temp\minecraft\META-INF"
+    rm -f "$mdk_dir/jars/bin/minecraft.jar"
+    Create-Jar "$temp/minecraft" "$mdk_dir/jars/bin/minecraft.jar"
+fi
+
+#Download Minecraft Bin Libs
+curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
+curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
+curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
+
