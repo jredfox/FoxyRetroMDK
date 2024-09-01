@@ -226,5 +226,214 @@ if [[ "$mc_ver" == 1.6* ]]; then
     Install-1.6x
     exit 0
 fi
-#Download-Mediafire "http://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip" "/Users/jredfox/Documents/GitHub/FoxyRetroMDK/Modloader.zip"
 
+#URL Start
+argo_url="https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar"
+asm_url="https://web.archive.org/web/20160305133607id_/https://files.minecraftforge.net/fmllibs/asm-all-4.1.jar"
+bcprov_url="https://web.archive.org/web/20130708220724id_/http://files.minecraftforge.net/fmllibs/bcprov-jdk15on-148.jar"
+guava_url="https://web.archive.org/web/20150324120717id_/https://files.minecraftforge.net/fmllibs/guava-14.0-rc3.jar"
+scala_lib_url="https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
+jinput_url="https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
+lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar"
+lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar"
+win_natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
+win_natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
+legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
+resources_url="https://resources.download.minecraft.net/"
+
+#URLS that change based upon MC Version
+if [[ "$mc_ver" == "1.5.2" ]]; then
+    mcp_ver="mcp751"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.2/$mcp_ver.zip"
+    mcp_srg_url="https://web.archive.org/web/20150324115021id_/https://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.2.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-src.zip"
+    mc_url="https://launcher.mojang.com/v1/objects/465378c9dc2f779ae1d6e8046ebc46fb53a57968/client.jar"
+    mc_server_url="https://launcher.mojang.com/v1/objects/f9ae3f651319151ce99a0bfad6b34fa16eb6775f/server.jar"
+    forge_lib_url="https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+
+elif [[ "$mc_ver" == "1.5.1" ]]; then
+    mcp_ver="mcp744"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.1/mcp744.zip"
+    mcp_srg_url="https://web.archive.org/web/20160306034852if_/http://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.1.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.1-7.7.2.682/forge-1.5.1-7.7.2.682-src.zip"
+    mc_url="https://launcher.mojang.com/v1/objects/047136381a552f34b1963c43304a1ad4dc0d2d8e/client.jar"
+    mc_server_url="https://launcher.mojang.com/v1/objects/d07c71ee2767dabb79fb32dad8162e1b854d5324/server.jar"
+    forge_lib_url="https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+
+elif [[ "$mc_ver" == "1.5" ]]; then
+    mcp_ver="mcp742"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5/mcp742.zip"
+    mcp_srg_url="https://web.archive.org/web/20140720003820if_/http://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.5-7.7.0.598/forge-1.5-7.7.0.598-src.zip"
+    mc_url="https://launcher.mojang.com/v1/objects/a3da981fc9b875a51975d8f8100cc0c201c2ce54/client.jar"
+    mc_server_url="https://launcher.mojang.com/v1/objects/aedad5159ef56d69c5bcf77ed141f53430af43c3/server.jar"
+    forge_lib_url="https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
+
+elif [[ "$mc_ver" == 1.4* ]]; then
+
+	if [[ "$mc_ver" == "1.4.7" ]]; then
+        mcp_ver="mcp726a"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.7/mcp726a.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.7-6.6.2.534/forge-1.4.7-6.6.2.534-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/53ed4b9d5c358ecfff2d8b846b4427b888287028/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/2f0ec8efddd2f2c674c77be9ddb370b727dec676/server.jar"
+        bcprov_dev="T" #Adds bcprov_dev to forge's compile time libraries
+    elif [[ "$mc_ver" == "1.4.6" ]]; then
+        mcp_ver="mcp725"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.6/mcp725.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.6-6.5.0.489/forge-1.4.6-6.5.0.489-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/116758f41b32e8d1a71a4ad6236579acd724bca7/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/a0aeb5709af5f2c3058c1cf0dc6b110a7a61278c/server.jar"
+        bcprov_dev="T" #Adds bcprov_dev to forge's compile time libraries
+    elif [[ "$mc_ver" == "1.4.5" ]]; then
+        mcp_ver="mcp723"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.5/mcp723.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.5-6.4.2.448/forge-1.4.5-6.4.2.448-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
+        bcprov_dev="T" #Adds bcprov_dev to forge's compile time libraries
+    elif [[ "$mc_ver" == "1.4.4" ]]; then
+        mcp_ver="mcp721"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.4-6.3.0.378/forge-1.4.4-6.3.0.378-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/b9b2a9e9adf1bc834647febc93a4222b4fd6e403/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/4215dcadb706508bf9d6d64209a0080b9cee9e71/server.jar"
+    elif [[ "$mc_ver" == "1.4.3" ]]; then
+        mcp_ver="mcp721"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.3-6.2.1.358/forge-1.4.3-6.2.1.358-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/f7274b201219b5729055bf85683eb6ef4f8024b4/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/9be68adf6e80721975df12f2445fa24617328d18/server.jar"
+    elif [[ "$mc_ver" == "1.4.2" ]]; then
+        mcp_ver="mcp719"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.2-6.0.1.355/forge-1.4.2-6.0.1.355-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/42d6744cfbbd2958f9e6688dd6e78d86d658d0d4/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/5be700523a729bb78ef99206fb480a63dcd09825/server.jar"
+    elif [[ "$mc_ver" == "1.4.1" ]]; then
+        mcp_ver="mcp719"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.1-6.0.0.329/forge-1.4.1-6.0.0.329-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/67604a9c206697032165fc067b6255e333e06275/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/baa4e4a7adc3dc9fbfc5ea36f0777b68c9eb7f4a/server.jar"
+    elif [[ "$mc_ver" == "1.4" ]]; then
+        mcp_ver="mcp719"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.0-5.0.0.326/forge-1.4.0-5.0.0.326-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
+    else
+        Unsupported-Version
+    fi
+
+    patch_21="T" #patch forge's code to compile using java 7 or newer
+    forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    #Older then 1.5 Forge Uses Older Runtime Libraries
+    argo_url="https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
+    asm_url="https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
+    bcprov_url="https://web.archive.org/web/20130322004354if_/http://files.minecraftforge.net:80/fmllibs/bcprov-jdk15on-147.jar"
+    guava_url="https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
+    scala_lib_url=""
+    mcp_srg_url="" #MCP_SRG doesn't exist pre 1.5
+
+elif [[ "$mc_ver" == "1.3.2" ]]; then
+    mcp_ver="mcp72"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.3.2-4.3.5.318/forge-1.3.2-4.3.5.318-src.zip"
+    mc_url="https://launcher.mojang.com/v1/objects/c2efd57c7001ddf505ca534e54abf3d006e48309/client.jar"
+    mc_server_url="https://launcher.mojang.com/v1/objects/3de2ae6c488135596e073a9589842800c9f53bfe/server.jar"
+    forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    
+    #Older then 1.5 Forge Uses Older Runtime Libraries
+    argo_url="https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
+    asm_url="https://web.archive.org/web/20130313081705if_/http://files.minecraftforge.net:80/fmllibs/asm-all-4.0.jar"
+    bcprov_url="" #not required below 1.4
+    guava_url="https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
+    scala_lib_url=""
+    mcp_srg_url="" #MCP_SRG doesn't exist pre 1.5
+
+elif [[ "$mc_ver" == 1.2* ]]; then
+    #Works Mc Forge 1.2.5-3.2.5.125+ Older versions require an older method that involves also downloading mod loader
+    if [[ "$mc_ver" == "1.2.5" ]]; then
+        mcp_ver="mcp62"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.5/mcp62.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
+    elif [[ "$mc_ver" == "1.2.4" ]]; then
+        mcp_ver="mcp61"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.4/mcp61.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.4-2.0.0.68/forge-1.2.4-2.0.0.68-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/ad6d1fe7455857269d4185cb8f24e62cc0241aaf/client.jar"
+        mc_server_url="http://files.betacraft.uk/server-archive/release/1.2/1.2.4.jar"
+        modloader_url="https://www.mediafire.com/file/rgzgdnjm3ozlnsb/ModLoader_1.2.4.zip"
+   elif [[ "$mc_ver" == "1.2.3" ]]; then
+        mcp_ver="mcp60"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.3/mcp60.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.4.1.64/forge-1.2.3-1.4.1.64-src.zip"
+        mc_url="https://launcher.mojang.com/v1/objects/5134e433afeba375c00bbdcd8aead1d3222813ee/client.jar"
+        mc_server_url="http://files.betacraft.uk/server-archive/release/1.2/1.2.3.jar"
+        modloader_url="https://www.mediafire.com/file/t93tjpkjae5u7if/ModLoader+1.2.3.zip"
+    else
+        Unsupported-Version
+    fi
+    
+    #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
+    forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    argo_url=""
+    asm_url=""
+    bcprov_url=""
+    guava_url=""
+    scala_lib_url=""
+    mcp_srg_url=""
+
+    fernflower_dl="T"  #Enable Fernflower Download From newer MCP
+    server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+
+elif [[ "$mc_ver" == "1.1" ]]; then
+    mcp_ver="mcp56"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
+    mc_url="https://launcher.mojang.com/v1/objects/f690d4136b0026d452163538495b9b0e8513d718/client.jar"
+    mc_server_url="http://files.betacraft.uk/server-archive/release/1.1/1.1.jar"
+    #Mod loader is a dep of forge for 1.1
+    modloader_url="https://www.mediafire.com/file/wby6ddco9velug4/ModLoader+1.1.zip"
+
+    #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
+    forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
+    argo_url=""
+    asm_url=""
+    bcprov_url=""
+    guava_url=""
+    scala_lib_url=""
+    mcp_srg_url=""
+
+    fernflower_dl="T"  #Enable Fernflower Download From newer MCP
+    server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+else
+    Unsupported-Version
+fi
+
+echo "Creating Forge MDK for $mc_ver"
+
+#Cleanup previous installations
+MDK-Cleanup
+
+#Create Directories
+mkdir -p "$temp/natives"
+mkdir -p "$mdk_dir/jars/lib"
+mkdir -p "$mdk_dir/jars/bin/natives"
+
+#Download & Extract MCP
+curl -L -o "$temp\$mcp_ver.zip" "$mcp_url"
+unzip -q -o "$temp\$mcp_ver.zip" -d "$mdk_dir"
+#Download FernFlower for MCP 1.1-1.2.5 Forge
+if [[ "$fernflower_dl" == "T" ]]; then
+    curl -ss -L -o "$temp\mcp72.zip" "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
+    unzip -q -o "$temp\mcp72.zip" -d "$temp\mcp72"
+    cp -f "$temp\mcp72\runtime\bin\fernflower.jar" "$mdk_dir\runtime\bin\fernflower.jar"
+fi
+
+#Download & Extract Forge Source
+curl -L -o "$temp/forge.zip" "$forge_url"
+unzip -q -o "$temp/forge.zip" -d "$mdk_dir"
