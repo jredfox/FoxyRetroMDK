@@ -41,11 +41,14 @@ fi
 function Check-Python () {
 	if $isMac
 	then
+		#Patch Python Installer bug that prevents HTTPS from working on macOS
+		bash /Applications/Python*/Install\ Certificates.command
+
 		if ! command -v python2.7 &> /dev/null
 		then
-			echo "Python 2.7.9 Is Required to running MCP & Forge. Installing Python 2.7.9 ISA: x64"
-			curl -ss -L -o "$temp/python-2.7.9-macosx10.6.pkg" "https://www.python.org/ftp/python/2.7.9/python-2.7.9-macosx10.6.pkg"
-			open "$temp/python-2.7.9-macosx10.6.pkg"
+			echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
+			curl -ss -L -o "$SCRIPTPATH/ppython-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
+			open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
 			echo "Please re-run the script once Python has been installed"
 			exit 0
 		fi
