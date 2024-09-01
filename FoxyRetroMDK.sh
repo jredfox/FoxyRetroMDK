@@ -447,22 +447,26 @@ fi
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if [[ "$argo_url" != "" ]]; then
-    curl -L -o "${mdk_dir}/jars/lib/$(basename "$argo_url")" "$argo_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$argo_url")" "$argo_url"
 fi
 if [[ "$asm_url" != "" ]]; then
-	curl -L -o "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url"
+	curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url"
 fi
 if [[ "$bcprov_url" != "" ]]; then
-	curl -L -o "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url"
+	curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url"
 fi
 if [[ "$mcp_srg_url" != "" ]]; then
-    curl -L -o "${mdk_dir}/jars/lib/$(basename "$mcp_srg_url")" "$mcp_srg_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$mcp_srg_url")" "$mcp_srg_url"
 fi
 if [[ "$guava_url" != "" ]]; then
-    curl -L -o "${mdk_dir}/jars/lib/$(basename "$guava_url")" "$guava_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$guava_url")" "$guava_url"
 fi
 if [[ "$scala_lib_url" != "" ]]; then
-    curl -L -o "${mdk_dir}/jars/lib/$(basename "$scala_lib_url")" "$scala_lib_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$scala_lib_url")" "$scala_lib_url"
 fi
 
-
+#Download minecraft.jar & minecraft_server.jar and Install it
+curl -ss -L -o "$mdk_dir/jars/bin/minecraft.jar" "$mc_url"
+if [[ "$server_skip" != "T" ]]; then
+    curl -ss -L -o "$mdk_dir/jars/minecraft_server.jar" "$mc_server_url"
+fi
