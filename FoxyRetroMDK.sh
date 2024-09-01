@@ -132,7 +132,7 @@ fi
 function Patch-MDKPY {
 
 	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
-    	echo "Patching python call $file"
+    	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
 	done
 }
