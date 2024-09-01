@@ -236,8 +236,16 @@ scala_lib_url="https://web.archive.org/web/20130708223654id_/http://files.minecr
 jinput_url="https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
 lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar"
 lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar"
-win_natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
-win_natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
+#Handle native URLS
+if $isMac 
+then
+	natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
+	natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-osx.jar"
+else
+	natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
+	natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-linux.jar"
+fi
+
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 resources_url="https://resources.download.minecraft.net/"
 
@@ -486,4 +494,18 @@ fi
 curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
+
+#Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
+curl -L -o "$temp/natives.jar" "$natives_url"
+curl -L -o "$temp/natives2.jar" "$natives_url2"
+unzip -q -o "$temp/natives.jar" -d "$temp/natives"
+unzip -q -o "$temp/natives2.jar" -d "$temp/natives"
+pushd "$temp/natives" > /dev/null 2>&1
+zip -r "windows_natives.jar" *
+popd > /dev/null 2>&1
+mv -f "$temp/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/windows_natives.jar"
+unzip -q -o "$mdk_dir/jars/bin/natives/windows_natives.jar" -d "$mdk_dir/jars/bin/natives"
+cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/macosx_natives.jar"
+cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/linux_natives.jar"
+
 
