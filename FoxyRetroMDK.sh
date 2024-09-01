@@ -51,6 +51,10 @@ function Check-Python () {
 			echo "Please re-run the script once Python has been installed"
 			exit 0
 		fi
+        if ! command -v jq &> /dev/null; then
+            echo "Installing jq"
+            brew install jq
+        fi
 	else
 		echo "WIP LINUX"
 	fi
@@ -515,6 +519,44 @@ mv -f "$temp/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/windows_nat
 unzip -q -o "$mdk_dir/jars/bin/natives/windows_natives.jar" -d "$mdk_dir/jars/bin/natives"
 cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/macosx_natives.jar"
 cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/linux_natives.jar"
+
+#Make MCP & Forge 1.4x compile with java 7 or higher
+if [[ "$patch_21" == "T" ]]; then
+    echo "Patching Forge's RenderPlayer.java.patch"
+    patch_file="$mdk_dir/forge/patches/minecraft/net/minecraft/src/RenderPlayer.java.patch"
+
+    if [[ ! -f "$patch_file" ]]; then
+        patch_file="$mdk_dir/forge/patches/minecraft/net/minecraft/client/renderer/entity/RenderPlayer.java.patch" # Redirects Patch file between 1.4.5-1.4.7
+    fi
+
+    if [[ -f "$patch_file" ]]; then
+        sed -i -e "s|for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
+        sed -i -e "s|for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
+    fi
+fi
+
+# Download Minecraft Resources
+jsonFile="$temp/assets.json"
+curl -ss -L -o "$jsonFile" "$legacy_assets_url"
+
+jsonData=$(cat "$jsonFile")
+objects=$(echo "$jsonData" | jq -c '.objects')
+
+# Loop through JSON objects and download resources
+for key in $(echo "$objects" | jq -r 'keys[]'); do
+  hash=$(echo "$objects" | jq -r --arg key "$key" '.[$key].hash')
+  resource="$resources_url${hash:0:2}/$hash"
+  resource_file="$mdk_dir/jars/resources/$key"
+  
+  echo "Downloading Resource URL: $resource"
+  
+  # Create necessary directories
+  rd=$(dirname "$resource_file")
+  mkdir -p "$rd"
+  
+  # Download the resource file
+  curl -ss -L -o "$resource_file" "$resource"
+done
 
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
