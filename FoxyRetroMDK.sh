@@ -129,6 +129,14 @@ fi
 
 }
 
+function Patch-MDKPY {
+
+	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
+    	echo "Patching python call $file"
+    	sed -i -e 's/python/python2.7/g' "$file"
+	done
+}
+
 function Install-1.6x {
 
 	#Start URL's
@@ -207,10 +215,7 @@ function Install-1.6x {
 	rm -rf "$temp"
 
 	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
-	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
-    	echo "Patching python call $file"
-    	sed -i -e 's/python/python2.7/g' "$file"
-	done
+	Patch-MDKPY
 
 	echo "Running Forge install.cmd"
 	cd "$mdk_dir"
@@ -446,6 +451,9 @@ fi
 curl -L -o "$temp/forge.zip" "$forge_url"
 unzip -q -o "$temp/forge.zip" -d "$mdk_dir"
 
+#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
+Patch-MDKPY
+
 #Download Forge lib Folder and Install it
 curl -L -o "$temp/forge_lib.zip" "$forge_lib_url"
 unzip -q -o "$temp/forge_lib.zip" -d "$mdk_dir/lib"
@@ -508,4 +516,8 @@ unzip -q -o "$mdk_dir/jars/bin/natives/windows_natives.jar" -d "$mdk_dir/jars/bi
 cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/macosx_natives.jar"
 cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/linux_natives.jar"
 
-
+#Run Forge's Install Script
+cd "$mdk_dir/forge"
+echo "Running Forge install.sh"
+bash "$mdk_dir/forge/install.sh"
+echo "Forge MDK Installation Completed"
