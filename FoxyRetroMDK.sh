@@ -226,26 +226,6 @@ function Install-1.6x {
 	bash "$mdk_dir/install.sh"
 }
 
-function RenNatives () {
-
-# Rename all .dylib files to .jnilib
-for file in *.dylib; do
-  # Check if the file exists to avoid errors
-  if [ -e "$file" ]; then
-    mv -f "$file" "${file%.dylib}.jnilib"
-  fi
-done
-
-# Copy all .jnilib files back to .dylib
-for file in *.jnilib; do
-  # Check if the file exists to avoid errors
-  if [ -e "$file" ]; then
-    cp -f "$file" "${file%.jnilib}.dylib"
-  fi
-done
-
-}
-
 #Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
 function DL-Natives () {
     local natives_url="$1"
@@ -258,10 +238,7 @@ function DL-Natives () {
     unzip -q -o "$temp/natives2.jar" -d "$temp/natives"
     rm -rf "$temp/natives/META-INF"
     pushd "$temp/natives" > /dev/null 2>&1
-    if $isMac
-    then
-        RenNatives
-    fi
+    mv -f "openal.dylib" "openal.jnilib" #prevents openal initialize error
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
