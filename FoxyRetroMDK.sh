@@ -41,7 +41,7 @@ function Check-Python () {
 	if $isMac
 	then
 		#Patch Python Installer bug that prevents HTTPS from working on macOS
-		bash /Applications/Python*/Install\ Certificates.command
+		bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
 		if ! command -v python2.7 &> /dev/null
 		then
