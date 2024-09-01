@@ -437,3 +437,11 @@ fi
 #Download & Extract Forge Source
 curl -L -o "$temp/forge.zip" "$forge_url"
 unzip -q -o "$temp/forge.zip" -d "$mdk_dir"
+
+#Download Forge lib Folder and Install it
+curl -L -o "$temp/forge_lib.zip" "$forge_lib_url"
+unzip -q -o "$temp/forge_lib.zip" -d "$mdk_dir/lib"
+if [[ "$bcprov_dev" == "T" ]]; then
+    curl -L -o "${mdk_dir}/lib/$(basename "$bcprov_url")" "$bcprov_url"
+fi
+
