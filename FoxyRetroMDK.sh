@@ -251,7 +251,7 @@ function DL-Natives () {
     local natives_url="$1"
     local natives_url2="$2"
     local natives_name="$3"
-    local uzip=$4
+    local uzip="$4"
     curl -L -o "$temp/natives.jar" "$natives_url"
     curl -L -o "$temp/natives2.jar" "$natives_url2"
     unzip -q -o "$temp/natives.jar" -d "$temp/natives"
@@ -265,12 +265,11 @@ function DL-Natives () {
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
-    if $uzip
-    then
+    if [ "$uzip" = "true" ]; then
         unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
     fi
     rm -f "$temp/natives/"*
-    #make all .dylib become jnilib and then copy all jnilib to dylib
+
 }
 
 ################# End Functions   #################
@@ -486,13 +485,13 @@ mkdir -p "$mdk_dir/jars/lib"
 mkdir -p "$mdk_dir/jars/bin/natives"
 
 #Download & Extract MCP
-curl -L -o "$temp\$mcp_ver.zip" "$mcp_url"
-unzip -q -o "$temp\$mcp_ver.zip" -d "$mdk_dir"
+curl -L -o "$temp/$mcp_ver.zip" "$mcp_url"
+unzip -q -o "$temp/$mcp_ver.zip" -d "$mdk_dir"
 #Download FernFlower for MCP 1.1-1.2.5 Forge
 if [[ "$fernflower_dl" == "T" ]]; then
-    curl -ss -L -o "$temp\mcp72.zip" "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
-    unzip -q -o "$temp\mcp72.zip" -d "$temp\mcp72"
-    cp -f "$temp\mcp72\runtime\bin\fernflower.jar" "$mdk_dir\runtime\bin\fernflower.jar"
+    curl -ss -L -o "$temp/mcp72.zip" "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
+    unzip -q -o "$temp/mcp72.zip" -d "$temp/mcp72"
+    cp -f "$temp/mcp72/runtime/bin/fernflower.jar" "$mdk_dir/runtime/bin/fernflower.jar"
 fi
 
 #Download & Extract Forge Source
@@ -539,9 +538,9 @@ fi
 if [ -n "$modloader_url" ]; then
     Download-Mediafire "$modloader_url" "$temp/modloader.zip"
     #Install Mod Loader now
-    unzip -q -o "$mdk_dir\jars\bin\minecraft.jar" -d "$temp\minecraft"
-    unzip -q -o "$temp\modloader.zip" -d "$temp\minecraft"
-    rm -rf "$temp\minecraft\META-INF"
+    unzip -q -o "$mdk_dir/jars/bin/minecraft.jar" -d "$temp/minecraft"
+    unzip -q -o "$temp/modloader.zip" -d "$temp/minecraft"
+    rm -rf "$temp/minecraft/META-INF"
     rm -f "$mdk_dir/jars/bin/minecraft.jar"
     Create-Jar "$temp/minecraft" "$mdk_dir/jars/bin/minecraft.jar"
 fi
@@ -552,9 +551,9 @@ curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
 
 #Download & Install the natives
-DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar" false
-DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar" $isMac
-DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar" $isLinux
+DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar" "false"
+DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar" "$isMac"
+DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar" "$isLinux"
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if [[ "$patch_21" == "T" ]]; then
