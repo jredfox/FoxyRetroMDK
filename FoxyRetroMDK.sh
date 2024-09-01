@@ -24,7 +24,6 @@ echo -n -e "\033]0;Foxy Retro MDK - $mc_ver\007"
 
 #Temp Files
 temp="$mdk_dir/tmp"
-mkdir -p "$temp"
 
 #Flag if we are on mac or linux
 NAME_OS="$(uname)"
@@ -47,7 +46,7 @@ function Check-Python () {
 		if ! command -v python2.7 &> /dev/null
 		then
 			echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-			curl -ss -L -o "$SCRIPTPATH/ppython-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
+			curl -ss -L -o "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
 			open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
 			echo "Please re-run the script once Python has been installed"
 			exit 0
