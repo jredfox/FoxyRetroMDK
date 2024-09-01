@@ -226,6 +226,53 @@ function Install-1.6x {
 	bash "$mdk_dir/install.sh"
 }
 
+function RenNatives () {
+
+# Rename all .dylib files to .jnilib
+for file in *.dylib; do
+  # Check if the file exists to avoid errors
+  if [ -e "$file" ]; then
+    mv -f "$file" "${file%.dylib}.jnilib"
+  fi
+done
+
+# Copy all .jnilib files back to .dylib
+for file in *.jnilib; do
+  # Check if the file exists to avoid errors
+  if [ -e "$file" ]; then
+    cp -f "$file" "${file%.jnilib}.dylib"
+  fi
+done
+
+}
+
+#Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
+function DL-Natives () {
+    local natives_url="$1"
+    local natives_url2="$2"
+    local natives_name="$3"
+    local uzip=$4
+    curl -L -o "$temp/natives.jar" "$natives_url"
+    curl -L -o "$temp/natives2.jar" "$natives_url2"
+    unzip -q -o "$temp/natives.jar" -d "$temp/natives"
+    unzip -q -o "$temp/natives2.jar" -d "$temp/natives"
+    rm -rf "$temp/natives/META-INF"
+    pushd "$temp/natives" > /dev/null 2>&1
+    if $isMac
+    then
+        RenNatives
+    fi
+    zip -r "$natives_name" *
+    mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
+    popd > /dev/null 2>&1
+    if $uzip
+    then
+        unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
+    fi
+    rm -f "$temp/natives/"*
+    #make all .dylib become jnilib and then copy all jnilib to dylib
+}
+
 ################# End Functions   #################
 
 #Make sure python gets installed before continuing
@@ -245,15 +292,12 @@ scala_lib_url="https://web.archive.org/web/20130708223654id_/http://files.minecr
 jinput_url="https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
 lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar"
 lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar"
-#Handle native URLS
-if $isMac 
-then
-	natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
-	natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-osx.jar"
-else
-	natives_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
-	natives_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-linux.jar"
-fi
+natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
+natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-osx.jar"
+natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
+natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-linux.jar"
+natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
+natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
 
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 resources_url="https://resources.download.minecraft.net/"
@@ -507,18 +551,10 @@ curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
 
-#Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
-curl -L -o "$temp/natives.jar" "$natives_url"
-curl -L -o "$temp/natives2.jar" "$natives_url2"
-unzip -q -o "$temp/natives.jar" -d "$temp/natives"
-unzip -q -o "$temp/natives2.jar" -d "$temp/natives"
-pushd "$temp/natives" > /dev/null 2>&1
-zip -r "windows_natives.jar" *
-popd > /dev/null 2>&1
-mv -f "$temp/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/windows_natives.jar"
-unzip -q -o "$mdk_dir/jars/bin/natives/windows_natives.jar" -d "$mdk_dir/jars/bin/natives"
-cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/macosx_natives.jar"
-cp -f "$mdk_dir/jars/bin/natives/windows_natives.jar" "$mdk_dir/jars/bin/natives/linux_natives.jar"
+#Download & Install the natives
+DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar" false
+DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar" $isMac
+DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar" $isLinux
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if [[ "$patch_21" == "T" ]]; then
@@ -536,7 +572,7 @@ if [[ "$patch_21" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-jsonFile="test.json"
+jsonFile="$temp/assets.json"
 curl -ss -L -o "$jsonFile" "$legacy_assets_url"
 
 # Parse JSON & Download Resources
