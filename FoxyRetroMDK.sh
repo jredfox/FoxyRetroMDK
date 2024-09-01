@@ -536,27 +536,23 @@ if [[ "$patch_21" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-jsonFile="$temp/assets.json"
+jsonFile="test.json"
 curl -ss -L -o "$jsonFile" "$legacy_assets_url"
 
-jsonData=$(cat "$jsonFile")
-objects=$(echo "$jsonData" | jq -c '.objects')
-
-# Loop through JSON objects and download resources
-for key in $(echo "$objects" | jq -r 'keys[]'); do
-  hash=$(echo "$objects" | jq -r --arg key "$key" '.[$key].hash')
+# Parse JSON & Download Resources
+appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
+while IFS=, read -r key hash; do
   resource="$resources_url${hash:0:2}/$hash"
   resource_file="$mdk_dir/jars/resources/$key"
-  
   echo "Downloading Resource URL: $resource"
-  
+
   # Create necessary directories
   rd=$(dirname "$resource_file")
   mkdir -p "$rd"
-  
+
   # Download the resource file
   curl -ss -L -o "$resource_file" "$resource"
-done
+done <<< "${appls}"
 
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
