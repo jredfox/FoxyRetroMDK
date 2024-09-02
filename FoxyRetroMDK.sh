@@ -101,20 +101,11 @@ function Download-Mediafire () {
 
     # Delete temp HTML file
     rm -f "$mediafire_html"
-}
 
-function Create-Jar {
-    local Dir="$1"
-    local Jar="$2"
-
-    local temp_cd=$(pwd)
-    cd "$Path"
-    echo "Creating Jar $Jar"
-    jar cvf "$Jar" "."
-    cd "$temp_cd"
 }
 
 function Unsupported-Version {
+
     echo "Invalid or Unsupported MC Version $mc_ver" >&2
     exit -1
 }
@@ -521,7 +512,10 @@ if [ -n "$modloader_url" ]; then
     unzip -q -o "$temp/modloader.zip" -d "$temp/minecraft"
     rm -rf "$temp/minecraft/META-INF"
     rm -f "$mdk_dir/jars/bin/minecraft.jar"
-    Create-Jar "$temp/minecraft" "$mdk_dir/jars/bin/minecraft.jar"
+    pushd "$temp/minecraft" > /dev/null 2>&1
+        zip -r "minecraft.jar" *
+    popd > /dev/null 2>&1
+    mv -f "$temp/minecraft/minecraft.jar" "$mdk_dir/jars/bin/minecraft.jar"
 fi
 
 #Download Minecraft Bin Libs
