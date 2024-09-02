@@ -223,7 +223,7 @@ function DL-Natives () {
     local natives_url="$1"
     local natives_url2="$2"
     local natives_name="$3"
-    local natives_name2="${natives_name##*/}2.jar"
+    local natives_name2="${natives_name%.*}2.jar"
     local uzip="$4"
     curl -L -o "$temp/$natives_name" "$natives_url"
     curl -L -o "$temp/$natives_name2" "$natives_url2"
