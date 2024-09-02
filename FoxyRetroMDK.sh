@@ -219,14 +219,16 @@ function Install-1.6x {
 
 #Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
 function DL-Natives () {
+
     local natives_url="$1"
     local natives_url2="$2"
     local natives_name="$3"
+    local natives_name2="${natives_name##*/}2.jar"
     local uzip="$4"
-    curl -L -o "$temp/natives.jar" "$natives_url"
-    curl -L -o "$temp/natives2.jar" "$natives_url2"
-    unzip -q -o "$temp/natives.jar" -d "$temp/natives"
-    unzip -q -o "$temp/natives2.jar" -d "$temp/natives"
+    curl -L -o "$temp/$natives_name" "$natives_url"
+    curl -L -o "$temp/$natives_name2" "$natives_url2"
+    unzip -q -o "$temp/$natives_name" -d "$temp/natives"
+    unzip -q -o "$temp/$natives_name2" -d "$temp/natives"
     rm -rf "$temp/natives/META-INF"
     pushd "$temp/natives" > /dev/null 2>&1
     #prevents openal intialization error. Comment out if an older java or macOS version is throwing a fit
@@ -513,7 +515,7 @@ if [ -n "$modloader_url" ]; then
     rm -rf "$temp/minecraft/META-INF"
     rm -f "$mdk_dir/jars/bin/minecraft.jar"
     pushd "$temp/minecraft" > /dev/null 2>&1
-        zip -r "minecraft.jar" *
+        zip -r "minecraft.jar" * > /dev/null 2>&1
     popd > /dev/null 2>&1
     mv -f "$temp/minecraft/minecraft.jar" "$mdk_dir/jars/bin/minecraft.jar"
 fi
