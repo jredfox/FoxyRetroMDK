@@ -388,7 +388,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     if [[ "$mc_ver" == "1.2.5" ]]; then
         mcp_ver="mcp62"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.5/mcp62.zip"
-        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.3.8.164/forge-1.2.5-3.3.8.164-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
     elif [[ "$mc_ver" == "1.2.4" ]]; then
@@ -401,7 +401,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
    elif [[ "$mc_ver" == "1.2.3" ]]; then
         mcp_ver="mcp60"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.3/mcp60.zip"
-        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.4.1.64/forge-1.2.3-1.4.1.64-src.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.3.4.34/forge-1.2.3-1.3.4.34-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/5134e433afeba375c00bbdcd8aead1d3222813ee/client.jar"
         mc_server_url="http://files.betacraft.uk/server-archive/release/1.2/1.2.3.jar"
         modloader_url="https://www.mediafire.com/file/t93tjpkjae5u7if/ModLoader+1.2.3.zip"
