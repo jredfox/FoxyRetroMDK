@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #Take in Arguments
-mc_ver=$1
-mdk_dir=$2
+mc_ver="$1"
+mdk_dir="$2"
+skip_rc="$3"
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
@@ -545,23 +546,25 @@ if [[ "$patch_21" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-jsonFile="$temp/assets.json"
-curl -ss -L -o "$jsonFile" "$legacy_assets_url"
+if [[ "$skip_rc" != T* ]]; then
+    jsonFile="$temp/assets.json"
+    curl -ss -L -o "$jsonFile" "$legacy_assets_url"
 
-# Parse JSON & Download Resources
-appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
-while IFS=, read -r key hash; do
-  resource="$resources_url${hash:0:2}/$hash"
-  resource_file="$mdk_dir/jars/resources/$key"
-  echo "Downloading Resource URL: $resource"
+    # Parse JSON & Download Resources
+    appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
+    while IFS=, read -r key hash; do
+      resource="$resources_url${hash:0:2}/$hash"
+      resource_file="$mdk_dir/jars/resources/$key"
+      echo "Downloading Resource URL: $resource"
 
-  # Create necessary directories
-  rd=$(dirname "$resource_file")
-  mkdir -p "$rd"
+      # Create necessary directories
+      rd=$(dirname "$resource_file")
+      mkdir -p "$rd"
 
-  # Download the resource file
-  curl -ss -L -o "$resource_file" "$resource"
-done <<< "${appls}"
+      # Download the resource file
+      curl -ss -L -o "$resource_file" "$resource"
+    done <<< "${appls}"
+fi
 
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
