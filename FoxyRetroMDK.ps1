@@ -1,4 +1,3 @@
-#TODO: Fix not downloading other OS's natives
 param(
 	[Parameter(Mandatory=$false)]
 	$mc_ver,
@@ -209,6 +208,28 @@ function Install-1.6x {
 	Start-Process -FilePath "$mdk_dir\install.cmd" -Wait -NoNewWindow
 }
 
+function DL-Natives
+{
+    param (
+        [string]$URL,
+        [string]$URL2,
+        [string]$FileName,
+        [string]$uzip
+    )
+
+    Invoke-WebRequest -Uri "$URL" -OutFile "$temp/$FileName.jar"
+    Invoke-WebRequest -Uri "$URL2" -OutFile "$temp/$FileName2.jar"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/$FileName.jar", "$temp/natives")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/$FileName2.jar", "$temp/natives")
+    [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/natives", "$mdk_dir/jars/bin/natives/$FileName.jar") # Re-Zips the natives and installs it to the correct
+    #Unzip Windows Natives
+    if ($uzip -eq "T") {
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir/jars/bin/natives/$FileName.jar", "$mdk_dir/jars/bin/natives") # Un-Zips all Windows Natives to the correct location
+    }
+    #Cleanup When Done
+    Remove-Item "$temp\natives\*" -Recurse -Force
+}
+
 ################# End Functions   #################
 
 if ($mc_ver.StartsWith("1.6")) 
@@ -226,8 +247,14 @@ $scala_lib_url = "https://web.archive.org/web/20130708223654id_/http://files.min
 $jinput_url = "https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
 $lwjgl_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar"
 $lwjgl_util_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar"
-$win_natives_url = "https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
-$win_natives_url2 = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
+#Native URLS
+$natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
+$natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-osx.jar"
+$natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
+$natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-linux.jar"
+$natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
+$natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
+#Resource URLS
 $legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $resources_url = "https://resources.download.minecraft.net/"
 $mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
@@ -512,15 +539,10 @@ Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir/jars/bin/jinput.jar"
 Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir/jars/bin/lwjgl.jar"
 Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir/jars/bin/lwjgl_util.jar"
 
-#Download Windows Natives & Extract then Install them (We are Powershell :( We can't support MacOs and Linux )
-Invoke-WebRequest -Uri "$win_natives_url" -OutFile "$temp/win_natives.jar"
-Invoke-WebRequest -Uri "$win_natives_url2" -OutFile "$temp/win_natives2.jar"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/win_natives.jar", "$temp/natives")
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/win_natives2.jar", "$temp/natives")
-[System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/natives", "$mdk_dir/jars/bin/natives/windows_natives.jar") # Re-Zips the natives and installs it to the correct location
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir/jars/bin/natives/windows_natives.jar", "$mdk_dir/jars/bin/natives") # Un-Zips all Windows Natives to the correct location
-Copy-Item -Path "$mdk_dir/jars/bin/natives/windows_natives.jar" -Destination "$mdk_dir/jars/bin/natives/macosx_natives.jar" -Force | out-null # Creates new Dummy Files to prevent forge install from crashing trying to extract other
-Copy-Item -Path "$mdk_dir/jars/bin/natives/windows_natives.jar" -Destination "$mdk_dir/jars/bin/natives/linux_natives.jar" -Force | out-null
+#Download Windows Natives & Extract then Install
+DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives" "T"
+DL-Natives -URL "$natives_mac_url" -URL2 "$natives_mac_url2" -FileName "macosx_natives" "F"
+DL-Natives -URL "$natives_linux_url" -URL2 "$natives_linux_url2" -FileName "linux_natives" "F"
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if ($patch_21 -eq "T")
