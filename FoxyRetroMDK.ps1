@@ -1,5 +1,4 @@
 #TODO: Fix not downloading other OS's natives
-#TODO: fix mcp72_url
 param(
 	[Parameter(Mandatory=$false)]
 	$mc_ver,
@@ -231,6 +230,7 @@ $win_natives_url = "https://libraries.minecraft.net/net/java/jinput/jinput-platf
 $win_natives_url2 = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
 $legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $resources_url = "https://resources.download.minecraft.net/"
+$mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
 #URLS that change based upon MC Version
 if ($mc_ver -eq "1.5.2")
 {
@@ -349,7 +349,7 @@ elseif ($mc_ver.StartsWith("1.4"))
 elseif ($mc_ver -eq "1.3.2")
 {
     $mcp_ver = "mcp72"
-    $mcp_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
+    $mcp_url = "$mcp72_url"
     $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.3.2-4.3.5.318/forge-1.3.2-4.3.5.318-src.zip"
     $mc_url = "https://launcher.mojang.com/v1/objects/c2efd57c7001ddf505ca534e54abf3d006e48309/client.jar"
     $mc_server_url = "https://launcher.mojang.com/v1/objects/3de2ae6c488135596e073a9589842800c9f53bfe/server.jar"
@@ -452,7 +452,7 @@ Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
 #Download FernFlower for MCP 1.1-1.2.5 Forge
 if ($fernflower_dl -eq "T")
 {
-    Invoke-WebRequest -Uri "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip" -OutFile "$temp\mcp72.zip"
+    Invoke-WebRequest -Uri "$mcp72_url" -OutFile "$temp\mcp72.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\mcp72.zip", "$temp\mcp72")
     Copy-Item -Path "$temp\mcp72\runtime\bin\fernflower.jar" -Destination "$mdk_dir\runtime\bin\fernflower.jar" -Force | out-null
 }
