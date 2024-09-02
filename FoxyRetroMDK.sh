@@ -8,7 +8,6 @@ mdk_dir=$2
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 #Change this MC Release Version between 1.1 through 1.5.2
-#NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
 if [[ -z "$mc_ver" ]] 
 then
 	mc_ver="1.5.2"
@@ -115,7 +114,7 @@ function MDK-Cleanup {
 
 if [ -d "$mdk_dir" ]; then
 	read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
-	if [[ "$user_input" == "Y" || "$user_input" == "y" ]]; then
+	if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
     	rm -rf "$mdk_dir"
     else
     	exit 0
@@ -567,5 +566,5 @@ done <<< "${appls}"
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
 echo "Running Forge install.sh"
-bash "$mdk_dir/forge/install.sh"
+#bash "$mdk_dir/forge/install.sh"
 echo "Forge MDK Installation Completed"
