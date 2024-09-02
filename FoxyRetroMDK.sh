@@ -217,7 +217,7 @@ function Install-1.6x {
 	bash "$mdk_dir/install.sh"
 }
 
-#Download Linus or OSX Natives & Extract then Install them (We are Bash :( don't support windows )
+#Download Linus or OSX Natives & Extract then Install them
 function DL-Natives () {
 
     local natives_url="$1"
