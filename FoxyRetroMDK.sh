@@ -566,5 +566,5 @@ done <<< "${appls}"
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
 echo "Running Forge install.sh"
-#bash "$mdk_dir/forge/install.sh"
+bash "$mdk_dir/forge/install.sh"
 echo "Forge MDK Installation Completed"
