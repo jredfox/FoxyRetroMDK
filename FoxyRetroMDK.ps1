@@ -1,9 +1,6 @@
 param(
-	[Parameter(Mandatory=$false)]
-	$mc_ver,
-	
-	[Parameter(Mandatory=$false)]
-    $mdk_dir
+	[string]$mc_ver,
+	[string]$mdk_dir
 )
 
 #import C# zip tools
