@@ -27,7 +27,7 @@ $host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
 $temp = "$mdk_dir\tmp"
 
 #Resource URLS
-$legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
+$resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
 
@@ -598,7 +598,7 @@ if ($patch_21 -eq "T")
 }
 
 #Download Minecraft Resources
-DL-Resources -JsonURL "$legacy_assets_url" -Resources "$mdk_dir\jars\resources"
+DL-Resources -JsonURL "$resources_json_url" -Resources "$mdk_dir\jars\resources"
 
 #Run Forge's Install Script
 Set-Location -Path "$mdk_dir\forge"
