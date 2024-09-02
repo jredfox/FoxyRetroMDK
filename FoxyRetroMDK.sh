@@ -423,6 +423,11 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
 
 elif [[ "$mc_ver" == "1.1" ]]; then
+    if $isMac
+    then
+        echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on macOS Please use Windows for this version :("
+        exit -1
+    fi
     mcp_ver="mcp56"
     mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
     forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
