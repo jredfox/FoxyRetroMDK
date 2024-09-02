@@ -9,7 +9,6 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 & {
 
 #Change this MC Release Version between 1.1 through 1.5.2
-#NOTE: 1.3.2-1.4.7 requires java 7 compliance jars else forge's ASM library will throw a fit and crash
 if ([string]::IsNullOrEmpty($mc_ver)) 
 {
     $mc_ver = "1.5.2"
@@ -26,6 +25,11 @@ $host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
 
 #Temp Files
 $temp = "$mdk_dir\tmp"
+
+#Resource URLS
+$legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
+$assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
+$resources_url = "https://resources.download.minecraft.net/"
 
 ################# Functions Start #################
 
@@ -107,10 +111,43 @@ if ([System.IO.Directory]::Exists("$mdk_dir")) {
 
 }
 
+#Download Minecraft Resources
+function DL-Resources {
+    param (
+        [string]$JsonURL,
+        [string]$Resources
+    )
+
+$progress_org = "$ProgressPreference"
+$ProgressPreference = 'SilentlyContinue'
+try
+{
+    $jsonFile = "$temp/assets.json"
+    Invoke-WebRequest -Uri "$JsonURL" -OutFile "$jsonFile"
+    $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
+    $objects = $jsonData.objects
+    foreach ($key in $objects.PSObject.Properties.Name) 
+    {
+        $hash = $objects.$key.hash
+        $resource = $resources_url + $hash.Substring(0, 2) + "/$hash"
+        $resource_file = "$Resources\$key"
+        Write-Output "Downloading Resource URL:$resource"
+        $rd = Split-Path "$resource_file" -Parent #build resource directory path
+        New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
+        Invoke-WebRequest -Uri "$resource" -OutFile "$resource_file"
+    }
+}
+catch
+{
+    Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $Resources"
+}
+$ProgressPreference = "$progress_org"
+
+}
+
 function Install-1.6x {
     
     #Start URL's
-    $assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 	$assets_base_url="https://resources.download.minecraft.net"
 	$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
 	$forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
@@ -196,6 +233,9 @@ function Install-1.6x {
 	Compress-Archive -Path "$temp\python\Lib\*" -DestinationPath "$temp\python27.zip"
 	Move-Item -Path "$temp\python27.zip" -Destination "$mdk_dir\fml\python\" -Force | out-null
 
+    #Download Resources to as powershell does it 3-5x faster then 1.6x's method
+    DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
+
     #Clear the Temp Folder
 	Remove-Item -Path "$temp" -Recurse -Force | out-null
 
@@ -251,9 +291,6 @@ $natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platf
 $natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-linux.jar"
 $natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
 $natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.0/lwjgl-platform-2.9.0-natives-windows.jar"
-#Resource URLS
-$legacy_assets_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
-$resources_url = "https://resources.download.minecraft.net/"
 $mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
 #URLS that change based upon MC Version
 if ($mc_ver -eq "1.5.2")
@@ -561,30 +598,7 @@ if ($patch_21 -eq "T")
 }
 
 #Download Minecraft Resources
-$progress_org = "$ProgressPreference"
-$ProgressPreference = 'SilentlyContinue'
-try
-{
-    $jsonFile = "$temp/assets.json"
-    Invoke-WebRequest -Uri "$legacy_assets_url" -OutFile "$jsonFile"
-    $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
-    $objects = $jsonData.objects
-    foreach ($key in $objects.PSObject.Properties.Name) 
-    {
-        $hash = $objects.$key.hash
-        $resource = $resources_url + $hash.Substring(0, 2) + "/$hash"
-        $resource_file = "$mdk_dir\jars\resources\$key"
-        Write-Output "Downloading Resource URL:$resource"
-        $rd = Split-Path "$resource_file" -Parent #build resource directory path
-        New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Invoke-WebRequest -Uri "$resource" -OutFile "$resource_file"
-    }
-}
-catch
-{
-    Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $mdk_dir\jars\resources"
-}
-$ProgressPreference = "$progress_org"
+DL-Resources -JsonURL "$legacy_assets_url" -Resources "$mdk_dir\jars\resources"
 
 #Run Forge's Install Script
 Set-Location -Path "$mdk_dir\forge"
