@@ -525,7 +525,6 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 #Enforce JDK-8 in Path during setup for legacy versions
 $JDK8 = (& "$mdk_dir\runtime\bin\python\python_mcp.exe" "find-jdk-8.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
-echo "JAVA_PATH $env:PATH"
 
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
