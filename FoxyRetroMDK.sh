@@ -3,7 +3,11 @@
 #Take in Arguments
 mc_ver="$1"
 mdk_dir="$2"
-skip_rc="$3"
+if [[ "$3" == T* || "$3" == t* ]]; then
+    dl_rc=false
+else
+    dl_rc=true
+fi
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
@@ -41,8 +45,7 @@ fi
 ################# Functions Start #################
 
 function Check-Python () {
-	if $isMac
-	then
+	if [[ "$isMac" == "true" ]]; then
 		#Patch Python Installer bug that prevents HTTPS from working on macOS
 		bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
@@ -54,7 +57,7 @@ function Check-Python () {
 			echo "Please re-run the script once Python has been installed"
 			exit 0
 		fi
-        if [[ "$skip_rc" != "T" ]] && ! command -v jq &> /dev/null; then
+        if [[ "$dl_rc" == "true" ]] && ! command -v jq &> /dev/null; then
             echo "Installing jq"
             brew install jq
             echo ""
@@ -253,9 +256,8 @@ function DL-Natives () {
 Check-Python
 
 #Make sure mdk_dir is an absolute path
-if $fix_path
-then
-        #Enforce absolute paths so things don't break
+if [[ "$fix_path" == "true" ]]; then
+    #Enforce absolute paths so things don't break
     mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$mdk_dir")
 fi
 
@@ -435,8 +437,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
 
 elif [[ "$mc_ver" == "1.1" ]]; then
-    if $isMac
-    then
+    if [[ "$isMac" == "true" ]]; then
         echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on macOS Please use Windows for this version :("
         exit -1
     fi
@@ -563,7 +564,7 @@ if [[ "$patch_21" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-if [[ "$skip_rc" != T* ]]; then
+if [[ "$dl_rc" == "true" ]]; then
     jsonFile="$temp/assets.json"
     curl -ss -L -o "$jsonFile" "$legacy_assets_url"
 
