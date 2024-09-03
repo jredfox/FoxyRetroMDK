@@ -1,6 +1,7 @@
 param(
 	[string]$mc_ver,
-	[string]$mdk_dir
+	[string]$mdk_dir,
+	[string]$skip_rc
 )
 
 #import C# zip tools
@@ -117,6 +118,12 @@ function DL-Resources {
         [string]$JsonURL,
         [string]$Resources
     )
+
+#Skip Resource Downloading if it's enabled
+if($skip_rc -like "T*") {
+    Write-Host "Skipping Resource Downloading"
+    return
+}
 
 $progress_org = "$ProgressPreference"
 $ProgressPreference = 'SilentlyContinue'
