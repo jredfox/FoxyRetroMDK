@@ -498,6 +498,7 @@ elseif ($mc_ver -eq "1.1")
 
     $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+    $patchMDKJDK8 = "T" #patch all batch files to enforce JDK-8 is used for all scripts
 }
 else
 {
@@ -530,8 +531,12 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mdk_dir")
 
 #Enforce JDK-8 in Path during setup for legacy versions
-$JDK8 = (& "$mdk_dir\runtime\bin\python\python_mcp.exe" "find-jdk-8.py").Trim()
+$JDK8 = (& "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk-8.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
+if ($patchMDKJDK8 -eq "T") {
+& "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mdk_dir"
+Copy-Item -Path "$PSScriptRoot\find-jdk-8.py" -Destination "$mdk_dir\find-jdk-8.py" -Force | out-null
+}
 
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
