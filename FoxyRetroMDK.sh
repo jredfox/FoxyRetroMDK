@@ -70,12 +70,12 @@ function Check-Python () {
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
 function Download-Mediafire () {
-	local mediafire_url="$1"
-	local mediafire_file="$2"
+    local mediafire_url="$1"
+    local mediafire_file="$2"
 
-	# Initialize variables
-    local inDownloadDiv=false
-    local inputFound=false
+    # Initialize variables
+    local inDownloadDiv="false"
+    local inputFound="false"
     local downloadLink=""
     local mediafire_html="$mediafire_file.html"
 
@@ -83,24 +83,23 @@ function Download-Mediafire () {
     curl -ss -o "$mediafire_html" "$mediafire_url"
 
     # Read the file line by line
-	while IFS= read -r line; do
-	    # Check if the line contains the <div class="download_link">
-	    if [[ "$line" =~ '<div class="download_link' ]]; then
-	        inDownloadDiv=true
-	    fi
+    while IFS= read -r line; do
+        # Check if the line contains the <div class="download_link">
+        if [[ "$line" =~ '<div class="download_link' ]]; then
+            inDownloadDiv=true
+        fi
 
-	    # If we are inside the <div> block, check for <a class="input" (with possible additional class names)
-	    if $inDownloadDiv && [[ "$line" =~ '<a class="input' ]]; then
-	        inputFound=true
-	    fi
+        # If we are inside the <div> block, check for <a class="input" (with possible additional class names)
+        if [[ "$inDownloadDiv" == "true" ]] && [[ "$line" =~ '<a class="input' ]]; then
+            inputFound=true
+        fi
 
-	    # Extract the link from href value using a regular expression
-	    if $inDownloadDiv && $inputFound && [[ "$line" =~ href=\"([^\"]+)\" ]]; then
-	        downloadLink="${BASH_REMATCH[1]}"
-	        #echo "Download link found: $downloadLink"
-	        break # Exit the loop once the download link is found
-	    fi
-	done < "$mediafire_html"
+        # Extract the link from href value using a regular expression
+        if [[ "$inDownloadDiv" == "true" ]] && [[ "$inputFound" == "true" ]] && [[ "$line" =~ href=\"([^\"]+)\" ]]; then
+            downloadLink="${BASH_REMATCH[1]}"
+            break # Exit the loop once the download link is found
+        fi
+    done < "$mediafire_html"
 
     # Output the download link
     echo "Downloading file:$downloadLink"
