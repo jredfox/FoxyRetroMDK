@@ -7,6 +7,7 @@ skip_rc="$3"
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+fix_path=false
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]] 
@@ -17,6 +18,8 @@ fi
 if [[ -z "$mdk_dir" ]] 
 then
 	mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
+else
+    fix_path=true
 fi
 
 #Change the Title
@@ -248,6 +251,14 @@ function DL-Natives () {
 #Make sure python gets installed before continuing
 Check-Python
 
+#Make sure mdk_dir is an absolute path
+if $fix_path
+then
+        #Enforce absolute paths so things don't break
+    mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$mdk_dir")
+fi
+
+#Install 1.6x versions
 if [[ "$mc_ver" == 1.6* ]]; then
     Install-1.6x
     exit 0
