@@ -276,9 +276,9 @@ mcp72_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zi
 #URLS that change based upon MC Version
 if [[ "$mc_ver" == "1.5.2" ]]; then
     mcp_ver="mcp751"
-    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.2/$mcp_ver.zip"
+    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.5.2/mcp751.zip"
     mcp_srg_url="https://web.archive.org/web/20150324115021id_/https://files.minecraftforge.net/fmllibs/deobfuscation_data_1.5.2.zip"
-    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-src.zip"
+    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.0.689/forge-1.5.2-7.8.0.689-src.zip" #Blackscreen on macOS "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-src.zip"
     mc_url="https://launcher.mojang.com/v1/objects/465378c9dc2f779ae1d6e8046ebc46fb53a57968/client.jar"
     mc_server_url="https://launcher.mojang.com/v1/objects/f9ae3f651319151ce99a0bfad6b34fa16eb6775f/server.jar"
     forge_lib_url="https://web.archive.org/web/20160126150649id_/http://files.minecraftforge.net/fmllibs/fml_libs_dev15.zip"
