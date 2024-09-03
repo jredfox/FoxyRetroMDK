@@ -86,12 +86,12 @@ function Download-Mediafire () {
     while IFS= read -r line; do
         # Check if the line contains the <div class="download_link">
         if [[ "$line" =~ '<div class="download_link' ]]; then
-            inDownloadDiv=true
+            inDownloadDiv="true"
         fi
 
         # If we are inside the <div> block, check for <a class="input" (with possible additional class names)
         if [[ "$inDownloadDiv" == "true" ]] && [[ "$line" =~ '<a class="input' ]]; then
-            inputFound=true
+            inputFound="true"
         fi
 
         # Extract the link from href value using a regular expression
