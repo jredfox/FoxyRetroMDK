@@ -54,9 +54,10 @@ function Check-Python () {
 			echo "Please re-run the script once Python has been installed"
 			exit 0
 		fi
-        if ! command -v jq &> /dev/null; then
+        if [[ "$skip_rc" != "T" ]] && ! command -v jq &> /dev/null; then
             echo "Installing jq"
             brew install jq
+            echo ""
         fi
 	else
 		echo "WIP LINUX"
