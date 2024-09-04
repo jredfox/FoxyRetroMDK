@@ -575,6 +575,9 @@ if [[ "$dl_rc" == "true" ]]; then
     done <<< "${appls}"
 fi
 
+#Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
+rm -rf "$temp"
+
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
 echo "Running Forge install.sh"
