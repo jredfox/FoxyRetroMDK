@@ -4,7 +4,7 @@ import sys
 def patch_mcpjdk8(directory):
     patch_code = (
         'REM ## FoxyForgeMDK JDK-8 Patch ##\n'
-        'FOR /F "delims=" %%I IN (\'runtime\\bin\\python\\python_mcp find-jdk-8.py\') DO SET "JAVA_DIR=%%I"\n'
+        'FOR /F "delims=" %%I IN (\'runtime\\bin\\python\\python_mcp find-jdk.py\') DO SET "JAVA_DIR=%%I"\n'
         'set "PATH=%JAVA_DIR%;%PATH%"\n'
         'REM ## FoxyForgeMDK JDK-8 Patch ##\n'
     )
