@@ -2,7 +2,6 @@
 ### @purpose to find JDK-<target> and if no target is found it tries to get JDK 6 - 8 with 8 being prefered
 ### @author jredfox
 ### Feel Free to copy, modify, distribute and publically display this script
-###
 #############################################################################################################
 
 import os
@@ -52,7 +51,7 @@ def chk_jdk(jdk_path):
 
 def find_jdk():
     # Add directories to search
-    possible_paths = [
+    mac_paths = [
         '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
         '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
         '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
@@ -61,7 +60,7 @@ def find_jdk():
     ]
 
     if isMac:
-        for path in possible_paths:
+        for path in mac_paths:
             for jdk_path in glob.glob(path):
                 if os.path.isdir(jdk_path):
                     chk_jdk(jdk_path)
