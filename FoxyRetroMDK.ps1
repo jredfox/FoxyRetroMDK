@@ -155,6 +155,21 @@ $ProgressPreference = "$progress_org"
 
 }
 
+#Enforce JDK-8 during MDK installation after forge has 
+function Enforce-JDK8 {
+    param (
+        [string]$mcp_dir
+    )
+
+$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk-8.py").Trim()
+$env:PATH = "$JDK8;$env:PATH"
+if ($patchMDKJDK8 -eq "T") {
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mcp_dir"
+    Copy-Item -Path "$PSScriptRoot\find-jdk-8.py" -Destination "$mcp_dir\find-jdk-8.py" -Force | out-null
+}
+
+}
+
 function Install-1.6x {
     
     #Start URL's
@@ -221,6 +236,9 @@ function Install-1.6x {
     #Download & Extract MCP into forge
     Invoke-WebRequest "$mcp_url" -OutFile "$mdk_dir\fml\$mcp_ver.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\fml\$mcp_ver.zip", "$mdk_dir\mcp")
+
+    #Enforce JDK-8
+    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp"
 
     #Download & Install minecraft.jar & minecraft_server.jar
     Invoke-WebRequest "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
@@ -534,12 +552,7 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mdk_dir")
 
 #Enforce JDK-8 in Path during setup for legacy versions
-$JDK8 = (& "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk-8.py").Trim()
-$env:PATH = "$JDK8;$env:PATH"
-if ($patchMDKJDK8 -eq "T") {
-& "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mdk_dir"
-Copy-Item -Path "$PSScriptRoot\find-jdk-8.py" -Destination "$mdk_dir\find-jdk-8.py" -Force | out-null
-}
+Enforce-JDK8 -mcp_dir "$mdk_dir"
 
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
