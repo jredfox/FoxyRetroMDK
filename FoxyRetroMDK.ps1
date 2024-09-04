@@ -619,9 +619,14 @@ if ($patch_21 -eq "T")
 #Download Minecraft Resources
 DL-Resources -JsonURL "$resources_json_url" -Resources "$mdk_dir\jars\resources"
 
+#Clear the Temp Folder. Comment Out if your encountering a bug and want to know what the tmp folder looks like
+Write-Host "Deleting Temp Folder"
+Remove-Item -Path "$temp" -Recurse -Force | out-null
+
 #Run Forge's Install Script
 Set-Location -Path "$mdk_dir\forge"
 Write-Host "Running Forge install.cmd"
 Start-Process -FilePath "$mdk_dir\forge\install.cmd" -Wait -NoNewWindow
 Write-Host "Forge MDK Installation Completed"
+
 }
