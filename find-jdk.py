@@ -1,3 +1,10 @@
+############################################################################################################
+### @purpose to find JDK-<target> and if no target is found it tries to get JDK 6 - 8 with 8 being prefered
+### @author jredfox
+### Feel Free to copy, modify, distribute and publically display this script
+###
+#############################################################################################################
+
 import os
 import sys
 import glob
