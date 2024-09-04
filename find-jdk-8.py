@@ -1,45 +1,92 @@
 import os
+import sys
+import glob
 import subprocess
 import re
 
-# Pyton Script to find JDK-8 from the path
-def find_JDK8():
-    path_dirs = os.getenv('PATH', '').split(os.pathsep)
-    path_jdk8 = None
-    path_jdk7 = None
-    path_jdk6 = None
+jdk_ver = None
+jdk_targ = None
+jdk_8 = None
+jdk_7 = None
+jdk_6 = None
+exe = ""
+isMac = sys.platform.lower() == 'darwin'
 
+def chk_jdk(jdk_path):
+    global jdk_ver
+    global jdk_targ
+    global jdk_8
+    global jdk_7
+    global jdk_6
+
+    # Search JDK if it's the proper version
+    java_path = os.path.join(jdk_path, 'java' + exe)
+    if os.path.isfile(java_path) and os.path.isfile(os.path.join(jdk_path, "javac" + exe)):
+        try:
+            # Run 'java -version' command to check the version
+            version_output = subprocess.check_output([java_path, '-version'], stderr=subprocess.STDOUT)
+            line = version_output.decode('utf-8').splitlines()[0]  # Get the first line of the output
+            version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1)
+            
+            # Check if the version is 1.8 (Java 8)
+            if version_info.startswith(jdk_ver):
+                jdk_targ = jdk_path
+                print(jdk_targ)
+                exit(0)
+            elif jdk_8 is None and version_info.startswith('1.8.'):
+                jdk_8 = jdk_path
+            elif jdk_7 is None and version_info.startswith('1.7.'):
+                jdk_7 = jdk_path
+            elif jdk_6 is None and version_info.startswith('1.6.'):
+                jdk_6 = jdk_path
+
+        except Exception:
+            return
+
+def find_jdk():
+    # Add directories to search
+    possible_paths = [
+        '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
+        '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
+        '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
+        '/usr/local/java/*/Contents/Home/bin'
+        '/opt/java/*/Contents/Home/bin'
+    ]
+
+    if isMac:
+        for path in possible_paths:
+            for jdk_path in glob.glob(path):
+                if os.path.isdir(jdk_path):
+                    chk_jdk(jdk_path)
+
+    #Check JDKs from the PATH first before resorting to mac madness
+    path_dirs = os.getenv('PATH', '').split(os.pathsep)
     for directory in path_dirs:
-        # Check if javac exists in the directory
-        javac_path = os.path.join(directory, 'javac')
-        if os.path.isfile(javac_path) or os.path.isfile(javac_path + '.exe'):
-            java_path = os.path.join(directory, 'java')
-            if os.path.isfile(java_path) or os.path.isfile(java_path + '.exe'):
-                try:
-                    # Run 'java -version' command to check the version
-                    version_output = subprocess.check_output([java_path, '-version'], stderr=subprocess.STDOUT)
-                    line = version_output.decode('utf-8').splitlines()[0]  # Get the first line of the output
-                    version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1)
-                    
-                    # Check if the version is 1.8 (Java 8)
-                    if version_info.startswith('1.8.'):
-                        path_jdk8 = directory
-                        break
-                    elif version_info.startswith('1.7.'):
-                        path_jdk7 = directory
-                    elif version_info.startswith('1.6.'):
-                        path_jdk6 = directory
-                except subprocess.CalledProcessError:
-                    continue
-                except Exception:
-                    continue
-    
-    if path_jdk8:
-        print(path_jdk8)
-    elif path_jdk7:
-        print(path_jdk7)
-    elif path_jdk6:
-        print(path_jdk6)
-        
+        chk_jdk(directory)
+
+    if isMac:
+        chk_jdk("/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin")
+        chk_jdk("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin")
+
+    #If the methods cannot find the target get JDK-8 or earlier
+    if jdk_8:
+        print(jdk_8)
+        exit(0)
+    elif jdk_7:
+        print(jdk_7)
+        exit(0)
+    elif jdk_6:
+        print(jdk_6)
+        exit(0)
+
 if __name__ == "__main__":
-    find_JDK8()
+    #Parse Arguments
+    if len(sys.argv) == 2 and sys.argv[1]:
+        jdk_ver = sys.argv[1]
+    else:
+        jdk_ver = "1.8."
+
+    if os.name == 'nt':
+        exe = ".exe"
+
+    find_jdk()
