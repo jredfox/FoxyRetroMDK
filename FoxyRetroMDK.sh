@@ -11,7 +11,6 @@ fi
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-fix_path=false
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]] 
@@ -19,18 +18,8 @@ then
 	mc_ver="1.5.2"
 fi
 
-if [[ -z "$mdk_dir" ]] 
-then
-	mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
-else
-    fix_path=true
-fi
-
 #Change the Title
 echo -n -e "\033]0;Foxy Retro MDK - $mc_ver\007"
-
-#Temp Files
-temp="$mdk_dir/tmp"
 
 #Flag if we are on mac or linux
 NAME_OS="$(uname)"
@@ -254,11 +243,14 @@ function DL-Natives () {
 #Make sure python gets installed before continuing
 Check-Python
 
-#Make sure mdk_dir is an absolute path
-if [[ "$fix_path" == "true" ]]; then
-    #Enforce absolute paths so things don't break
-    mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$mdk_dir")
+#Correct directory
+mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$mdk_dir")
+if [[ "$mdk_dir" ==  "$SCRIPTPATH" ]]; then
+    mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
 fi
+
+#Temp Files
+temp="$mdk_dir/tmp"
 
 #Install 1.6x versions
 if [[ "$mc_ver" == 1.6* ]]; then
