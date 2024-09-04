@@ -16,7 +16,7 @@ if ([string]::IsNullOrEmpty($mc_ver))
 }
 
 #Set the mcp(MDK) dir
-if ([string]::IsNullOrEmpty($mdk_dir)) 
+if ([string]::IsNullOrEmpty($mdk_dir) -Or ([System.IO.Path]::GetFullPath("$mdk_dir") -eq "$PSScriptRoot")) 
 {
     $mdk_dir = "$PSScriptRoot\MDK-$mc_ver"
 }
