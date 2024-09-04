@@ -161,11 +161,11 @@ function Enforce-JDK8 {
         [string]$mcp_dir
     )
 
-$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk-8.py").Trim()
+$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
 if ($patchMDKJDK8 -eq "T") {
     & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mcp_dir"
-    Copy-Item -Path "$PSScriptRoot\find-jdk-8.py" -Destination "$mcp_dir\find-jdk-8.py" -Force | out-null
+    Copy-Item -Path "$PSScriptRoot\find-jdk.py" -Destination "$mcp_dir\find-jdk.py" -Force | out-null
 }
 
 }
