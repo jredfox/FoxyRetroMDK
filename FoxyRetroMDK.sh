@@ -244,6 +244,9 @@ function DL-Natives () {
 Check-Python
 
 #Correct directory
+if [[ -z "$mdk_dir" ]]; then
+    mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
+fi
 mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$mdk_dir")
 if [[ "$mdk_dir" ==  "$SCRIPTPATH" ]]; then
     mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
