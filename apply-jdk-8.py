@@ -14,15 +14,13 @@ def patch_mcpjdk8(directory):
             file_path = os.path.join(directory, filename)
             with open(file_path, 'r') as file:
                 lines = file.readlines()
-            
-            # Check if @echo off is present
-            if '@echo off' in lines[0]:
-                # Insert patch code after @echo off
-                lines.insert(1, patch_code)
                 
-                # Write the modified content back to the file
-                with open(file_path, 'w') as file:
-                    file.writelines(lines)
+            # Inject Code
+            lines.insert(1, patch_code)
+                
+            # Save file
+            with open(file_path, 'w') as file:
+                file.writelines(lines)
                 print("Patch MCP for JDK-8: {}".format(filename))
 
 if __name__ == "__main__":
