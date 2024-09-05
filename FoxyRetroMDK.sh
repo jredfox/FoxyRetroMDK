@@ -11,6 +11,7 @@ fi
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+dir_bin="$SCRIPTPATH/bin/$(uname -m)"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]] 
@@ -71,7 +72,6 @@ function Check-LinuxDeps () {
 
     #Create Dep Folders for Deps
     local tmp_deps="$SCRIPTPATH/tmp_deps"
-    local dir_bin="$SCRIPTPATH/bin/$(uname -m)"
     rm -rf "$tmp_deps" > /dev/null 2>&1
     mkdir -p "$tmp_deps"
     mkdir -p "$dir_bin"
@@ -202,7 +202,17 @@ fi
 
 function Patch-MDKPY {
 
-	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
+    local mcp_dir="$1"
+    
+    ## Copy Linux Binaries over to the MDK
+    if [[ "$isLinux" == "true" ]]; then
+        mkdir -p "$mcp_dir/bin/astyle"
+        mkdir -p "$mcp_dir/bin/python2.7"
+        cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin/astyle"
+        cp -rf "$dir_bin/python2.7" "$mcp_dir/bin/python2.7"
+    fi
+
+	find "$mcp_dir" -type f -name "*.sh" | while read -r file; do
     	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
 	done
@@ -286,7 +296,7 @@ function Install-1.6x {
 	rm -rf "$temp"
 
 	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
-	Patch-MDKPY
+	Patch-MDKPY "$mdk_dir/mcp"
 
 	echo "Running Forge install.cmd"
 	cd "$mdk_dir"
@@ -547,7 +557,7 @@ curl -L -o "$temp/forge.zip" "$forge_url"
 unzip -q -o "$temp/forge.zip" -d "$mdk_dir"
 
 #patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
-Patch-MDKPY
+Patch-MDKPY "$mdk_dir"
 
 #Download Forge lib Folder and Install it
 curl -L -o "$temp/forge_lib.zip" "$forge_lib_url"
