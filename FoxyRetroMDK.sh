@@ -33,6 +33,38 @@ fi
 
 ################# Functions Start #################
 
+#Checks linux Pre-Installed Requirements
+function Check-Deps () {
+
+    local missing="F"
+
+    if ! output=$(zip "--help" > /dev/null 2>&1); then
+        echo "zip command not found"
+        missing="T"
+    fi
+    if ! output=$(unzip "--help" > /dev/null 2>&1); then
+        echo "unzip command not found"
+        missing="T"
+    fi
+    if ! output=$(curl "--help" > /dev/null 2>&1); then
+        echo "curl command not found"
+        missing="T"
+    fi
+    if ! output=$(jq "--help" > /dev/null 2>&1); then
+        echo "jq command not found"
+        missing="T"
+    fi
+    if ! output=$(sed "--help" > /dev/null 2>&1); then
+        echo "sed command not found"
+        missing="T"
+    fi
+
+    if [[ "$missing" == "T" ]]; then
+        echo "Missing Required Command Deps"
+        exit -1
+    fi
+}
+
 function Check-Python () {
 	if [[ "$isMac" == "true" ]]; then
 		#Patch Python Installer bug that prevents HTTPS from working on macOS
@@ -52,7 +84,10 @@ function Check-Python () {
             echo ""
         fi
 	else
-		echo "WIP LINUX"
+        Check-Deps
+        #TODO: remove
+        echo "LINUX WIP python & JQ deps not handled yet"
+        exit
 	fi
 }
 
