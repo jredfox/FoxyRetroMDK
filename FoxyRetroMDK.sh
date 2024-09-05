@@ -203,19 +203,23 @@ fi
 function Patch-MDKPY {
 
     local mcp_dir="$1"
-    
-    ## Copy Linux Binaries over to the MDK
-    if [[ "$isLinux" == "true" ]]; then
-        mkdir -p "$mcp_dir/bin/astyle"
-        mkdir -p "$mcp_dir/bin/python2.7"
-        cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin/astyle"
-        cp -rf "$dir_bin/python2.7" "$mcp_dir/bin/python2.7"
-    fi
 
 	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
     	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
+        if [[ "$isLinux" == "true" ]]; then
+            sed -i '1a\cd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nexport PATH="bin_linux/python2.7:$PATH"\nexport PATH="bin_linux/astyle:$PATH"' "$file"
+        fi
 	done
+
+    ## Copy Linux Binaries over to the MDK
+    if [[ "$isLinux" == "true" ]]; then
+        mkdir -p "$mcp_dir/bin_linux/astyle"
+        mkdir -p "$mcp_dir/bin_linux/python2.7"
+        cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin_linux/astyle"
+        cp -rf "$dir_bin/python2.7" "$mcp_dir/bin_linux"
+    fi
+
 }
 
 function Install-1.6x {
