@@ -34,9 +34,10 @@ fi
 ################# Functions Start #################
 
 #Checks linux Pre-Installed Requirements
-function Check-Deps () {
+function Check-LinuxDeps () {
 
     local missing="F"
+    local user_input=""
 
     if ! output=$(zip "--help" > /dev/null 2>&1); then
         echo "zip command not found"
@@ -58,14 +59,46 @@ function Check-Deps () {
         echo "sed command not found"
         missing="T"
     fi
+    if ! output=$(astyle "--version" > /dev/null 2>&1); then
+        echo "astyle command not found"
+        missing="T"
+    fi
+
+    #Add python2.7 into the path
+    export PATH="/usr/bin/python2.7:$PATH"
+    if ! output=$(python2.7 "--help" > /dev/null 2>&1); then
+        read -p "python2.7 Required Dep is not found. Would you like to Install it? (Y/N) " user_input
+        if [[ "$user_input" != Y* ]] && [[ "$user_input" != y* ]]; then
+            echo "python2.7 is a requirement to run Forge & MCP scripts! Please Install manually"
+            exit -1
+        else
+            #Download, Compile & Install Python 2.7x
+            echo "Installig Compiler Libs"
+            sudo apt-get update
+            sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev
+            echo "\n"
+
+            py_ver="2.7.15"
+            curl -L -o "$HOME/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
+            tar xzf "$HOME/Python-${py_ver}.tgz"
+
+            pushd "$HOME/Python-${py_ver}"
+            echo "Compiling Python ${py_ver}"
+            sudo ./configure --enable-optimizations
+            sudo make altinstall
+            cp -f "python" "python2.7"
+            popd
+            sudo ln -s "$HOME/Python-${py_ver}" "/usr/bin/python2.7"
+        fi
+    fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Missing Required Command Deps"
+        echo "Missing Required Command Deps exiting...."
         exit -1
     fi
 }
 
-function Check-Python () {
+function Check-Deps () {
 	if [[ "$isMac" == "true" ]]; then
 		#Patch Python Installer bug that prevents HTTPS from working on macOS
 		bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
@@ -84,10 +117,7 @@ function Check-Python () {
             echo ""
         fi
 	else
-        Check-Deps
-        #TODO: remove
-        echo "LINUX WIP python & JQ deps not handled yet"
-        exit
+        Check-LinuxDeps
 	fi
 }
 
@@ -276,7 +306,7 @@ function DL-Natives () {
 ################# End Functions   #################
 
 #Make sure python gets installed before continuing
-Check-Python
+Check-Deps
 
 #Correct directory
 if [[ -z "$mdk_dir" ]]; then
