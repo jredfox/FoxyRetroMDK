@@ -69,30 +69,33 @@ function Check-LinuxDeps () {
     #sudo apt-get update
     #sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev
 
-    #Create TMP Folder for Deps
-    tmp_deps="$SCRIPTPATH/tmp_deps"
+    #Create Dep Folders for Deps
+    local tmp_deps="$SCRIPTPATH/tmp_deps"
+    local dir_bin="$SCRIPTPATH/bin/$(uname -m)"
     rm -rf "$tmp_deps" > /dev/null 2>&1
-    mkdir "$tmp_deps"
+    mkdir -p "$tmp_deps"
+    mkdir -p "$dir_bin"
 
     #Download Compile & Install astyle
-    export PATH="$SCRIPTPATH/bin/astyle/astyle:$PATH"
-    if [[ ! -e "$SCRIPTPATH/bin/astyle/astyle" ]]; then
-        echo "Installing astyle to $SCRIPTPATH/bin/astyle/astyle"
+    export PATH="$dir_bin/astyle/astyle:$PATH"
+    if [[ ! -e "$dir_bin/astyle/astyle" ]]; then
+        echo "Installing astyle to $dir_bin/astyle/astyle"
         curl -L -o "$tmp_deps/astyle-src.tar.gz" "https://launchpadlibrarian.net/139196778/astyle_2.02.1.orig.tar.gz"
         pushd "$tmp_deps" > /dev/null 2>&1
         tar -xvzf "astyle-src.tar.gz"
         popd > /dev/null 2>&1
         pushd "$tmp_deps/astyle/build/gcc" > /dev/null 2>&1
         make -j$(nproc)
-        mkdir -p "$SCRIPTPATH/bin/astyle"
-        cp -f "bin/astyle" "$SCRIPTPATH/bin/astyle/astyle"
+        mkdir -p "$dir_bin/astyle"
+        cp -f "bin/astyle" "$dir_bin/astyle/astyle"
         popd > /dev/null 2>&1
     fi
 
     #Download Compile & Install python2.7
-    export PATH="$SCRIPTPATH/bin/python2.7:$PATH"
-    if [[ ! -e "$SCRIPTPATH/bin/python2.7/python2.7" ]]; then
+    export PATH="$dir_bin/python2.7:$PATH"
+    if [[ ! -e "$dir_bin/python2.7" ]]; then
         py_ver="2.7.15"
+        echo "Installing python $py_ver to $dir_bin/python2.7"
         curl -L -o "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
         pushd "$tmp_deps" > /dev/null 2>&1 
         tar xzf "$tmp_deps/Python-${py_ver}.tgz"
@@ -104,7 +107,7 @@ function Check-LinuxDeps () {
         make -j$(nproc)
         cp -f "python" "python2.7"
         popd > /dev/null 2>&1 
-        mv -f "$tmp_deps/Python-${py_ver}.tgz" "$SCRIPTPATH/bin/python2.7" #copy from temp_deps to the bins folder
+        mv -f "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
     fi
 
     #Delete temp_deps Dir
