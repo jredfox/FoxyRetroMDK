@@ -213,7 +213,7 @@ function Patch-MDKPY {
     	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
         if [[ "$isLinux" == "true" ]]; then
-            sed -i '1a\## FoxyRetroMDK ##\ncd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nisa="$(uname -m)"\nexport PATH="bin_linux/$isa/python2.7:$PATH"\nexport PATH="bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$file"
+            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##' "$file"
         fi
 	done
 
@@ -228,11 +228,10 @@ function Patch-MDKPY {
         if [[ "$mcp_dir" != "$mdk_dir" ]]; then
             sed -i -e 's/python/python2.7/g' "$mdk_dir/install.sh"
             sed -i -e 's/python/python2.7/g' "$mdk_dir/fml/install.sh"
-            sed -i '1a\## FoxyRetroMDK ##\ncd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nisa="$(uname -m)"\nexport PATH="mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'  "$mdk_dir/install.sh"
-            sed -i '1a\## FoxyRetroMDK ##\ncd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nisa="$(uname -m)"\nexport PATH="../mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="../mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'  "$mdk_dir/fml/install.sh"
+            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'  "$mdk_dir/install.sh"
+            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'  "$mdk_dir/fml/install.sh"
         fi
     fi
-
 }
 
 function Install-1.6x {
