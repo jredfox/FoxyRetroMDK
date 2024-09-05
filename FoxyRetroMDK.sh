@@ -500,29 +500,8 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
 
 elif [[ "$mc_ver" == "1.1" ]]; then
-    if [[ "$isMac" == "true" ]]; then
-        echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on macOS Please use Windows for this version :("
-        exit -1
-    fi
-    mcp_ver="mcp56"
-    mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
-    forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
-    mc_url="https://launcher.mojang.com/v1/objects/f690d4136b0026d452163538495b9b0e8513d718/client.jar"
-    mc_server_url="http://files.betacraft.uk/server-archive/release/1.1/1.1.jar"
-    #Mod loader is a dep of forge for 1.1
-    modloader_url="https://www.mediafire.com/file/wby6ddco9velug4/ModLoader+1.1.zip"
-
-    #1.2.5 and below Require no Forge Runtime Libraries but do require compile time libraries?
-    forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
-    argo_url=""
-    asm_url=""
-    bcprov_url=""
-    guava_url=""
-    scala_lib_url=""
-    mcp_srg_url=""
-
-    fernflower_dl="T"  #Enable Fernflower Download From newer MCP
-    server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+    echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on Non Windows :("
+    exit -1
 else
     Unsupported-Version
 fi
