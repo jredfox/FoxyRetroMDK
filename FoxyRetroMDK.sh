@@ -11,7 +11,8 @@ fi
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-dir_bin="$SCRIPTPATH/bin/$(uname -m)"
+isa=$(uname -m)
+dir_bin="$SCRIPTPATH/bin/$isa"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]] 
@@ -62,6 +63,10 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
+        echo "try running:"
+        echo "sudo apt update"
+        echo "sudo apt-get update"
+        echo "sudo apt-get install <missing_program>"
         echo "Missing Required Command Deps exiting...."
         exit -1
     fi
@@ -204,20 +209,20 @@ function Patch-MDKPY {
 
     local mcp_dir="$1"
 
-	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
+	find "$mcp_dir" -type f -name "*.sh" | while read -r file; do
     	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
         if [[ "$isLinux" == "true" ]]; then
-            sed -i '1a\cd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nexport PATH="bin_linux/python2.7:$PATH"\nexport PATH="bin_linux/astyle:$PATH"' "$file"
+            sed -i '1a\## FoxyRetroMDK ##\ncd "$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\nisa=$(uname -m)\nexport PATH="bin_linux/$isa/python2.7:$PATH"\nexport PATH="bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$file"
         fi
 	done
 
     ## Copy Linux Binaries over to the MDK
     if [[ "$isLinux" == "true" ]]; then
-        mkdir -p "$mcp_dir/bin_linux/astyle"
-        mkdir -p "$mcp_dir/bin_linux/python2.7"
-        cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin_linux/astyle"
-        cp -rf "$dir_bin/python2.7" "$mcp_dir/bin_linux"
+        mkdir -p "$mcp_dir/bin_linux/$isa/astyle"
+        mkdir -p "$mcp_dir/bin_linux/$isa/python2.7"
+        cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin_linux/$isa/astyle"
+        cp -rf "$dir_bin/python2.7" "$mcp_dir/bin_linux/$isa"
     fi
 
 }
