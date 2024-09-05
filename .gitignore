@@ -1,4 +1,5 @@
 MDK-*
+bin/*
 Modloader.zip
 .DS_Store
 *.pkg

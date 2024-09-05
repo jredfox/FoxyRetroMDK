@@ -59,43 +59,56 @@ function Check-LinuxDeps () {
         echo "sed command not found"
         missing="T"
     fi
-    if ! output=$(astyle "--version" > /dev/null 2>&1); then
-        echo "astyle command not found"
-        missing="T"
-    fi
-
-    #Add python2.7 into the path
-    export PATH="/usr/bin/python2.7:$PATH"
-    if ! output=$(python2.7 "--help" > /dev/null 2>&1); then
-        read -p "python2.7 Required Dep is not found. Would you like to Install it? (Y/N) " user_input
-        if [[ "$user_input" != Y* ]] && [[ "$user_input" != y* ]]; then
-            echo "python2.7 is a requirement to run Forge & MCP scripts! Please Install manually"
-            exit -1
-        else
-            #Download, Compile & Install Python 2.7x
-            echo "Installig Compiler Libs"
-            sudo apt-get update
-            sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev
-            echo "\n"
-
-            py_ver="2.7.15"
-            curl -L -o "$HOME/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
-            tar xzf "$HOME/Python-${py_ver}.tgz"
-
-            pushd "$HOME/Python-${py_ver}"
-            echo "Compiling Python ${py_ver}"
-            sudo ./configure --enable-optimizations
-            sudo make altinstall
-            cp -f "python" "python2.7"
-            popd
-            sudo ln -s "$HOME/Python-${py_ver}" "/usr/bin/python2.7"
-        fi
-    fi
 
     if [[ "$missing" == "T" ]]; then
         echo "Missing Required Command Deps exiting...."
         exit -1
     fi
+
+    #echo "Installig Compiler Libs"
+    #sudo apt-get update
+    #sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev
+
+    #Create TMP Folder for Deps
+    tmp_deps="$SCRIPTPATH/tmp_deps"
+    rm -rf "$tmp_deps" > /dev/null 2>&1
+    mkdir "$tmp_deps"
+
+    #Download Compile & Install astyle
+    export PATH="$SCRIPTPATH/bin/astyle/astyle:$PATH"
+    if [[ ! -e "$SCRIPTPATH/bin/astyle/astyle" ]]; then
+        echo "Installing astyle to $SCRIPTPATH/bin/astyle/astyle"
+        curl -L -o "$tmp_deps/astyle-src.tar.gz" "https://launchpadlibrarian.net/139196778/astyle_2.02.1.orig.tar.gz"
+        pushd "$tmp_deps" > /dev/null 2>&1
+        tar -xvzf "astyle-src.tar.gz"
+        popd > /dev/null 2>&1
+        pushd "$tmp_deps/astyle/build/gcc" > /dev/null 2>&1
+        make -j$(nproc)
+        mkdir -p "$SCRIPTPATH/bin/astyle"
+        cp -f "bin/astyle" "$SCRIPTPATH/bin/astyle/astyle"
+        popd > /dev/null 2>&1
+    fi
+
+    #Download Compile & Install python2.7
+    export PATH="$SCRIPTPATH/bin/python2.7:$PATH"
+    if [[ ! -e "$SCRIPTPATH/bin/python2.7/python2.7" ]]; then
+        py_ver="2.7.15"
+        curl -L -o "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
+        pushd "$tmp_deps" > /dev/null 2>&1 
+        tar xzf "$tmp_deps/Python-${py_ver}.tgz"
+        popd > /dev/null 2>&1 
+
+        pushd "$tmp_deps/Python-${py_ver}" > /dev/null 2>&1 
+        echo "Compiling Python ${py_ver}"
+        ./configure
+        make -j$(nproc)
+        cp -f "python" "python2.7"
+        popd > /dev/null 2>&1 
+        mv -f "$tmp_deps/Python-${py_ver}.tgz" "$SCRIPTPATH/bin/python2.7" #copy from temp_deps to the bins folder
+    fi
+
+    #Delete temp_deps Dir
+    rm -rf "$tmp_deps" > /dev/null 2>&1
 }
 
 function Check-Deps () {
