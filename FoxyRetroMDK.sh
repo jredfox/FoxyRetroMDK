@@ -75,7 +75,7 @@ function Check-LinuxDeps () {
     mkdir "$tmp_deps"
 
     #Download Compile & Install astyle
-    export PATH="$SCRIPTPATH/bin/$(uname -m)/astyle:$PATH"
+    export PATH="$SCRIPTPATH/bin/astyle/astyle:$PATH"
     if [[ ! -e "$SCRIPTPATH/bin/astyle/astyle" ]]; then
         echo "Installing astyle to $SCRIPTPATH/bin/astyle/astyle"
         curl -L -o "$tmp_deps/astyle-src.tar.gz" "https://launchpadlibrarian.net/139196778/astyle_2.02.1.orig.tar.gz"
