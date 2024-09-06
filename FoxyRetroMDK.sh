@@ -63,10 +63,11 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "try running:"
+        echo "## try running: ##"
         echo "sudo apt update"
         echo "sudo apt-get update"
         echo "sudo apt-get install <missing_program>"
+        echo "## repeat apt-get install <missing_program2> until all deps are installed ##"
         echo "Missing Required Command Deps exiting...."
         exit -1
     fi
@@ -113,7 +114,7 @@ function Check-LinuxDeps () {
         make -j$(nproc)
         cp -f "python" "python2.7"
         popd > /dev/null 2>&1 
-        mv -f "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
+        cp -rfL "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
     fi
 
     #Delete temp_deps Dir
