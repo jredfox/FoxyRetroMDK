@@ -64,17 +64,13 @@ function Check-LinuxDeps () {
         echo "tr command not found"
         missing="T"
     fi
-    if ! output=$(dpkg "--help" > /dev/null 2>&1); then
-        echo "dpkg command not found"
-        missing="T"
-    fi
     if ! output=$(make "--help" > /dev/null 2>&1); then
         echo "make command not found"
         missing="T"
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
         exit -1
     fi
 

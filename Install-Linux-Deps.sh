@@ -39,7 +39,7 @@ elif command -v brew &> /dev/null; then
     PKG_MNG="brew"
 else
     echo "No supported package manager found."
-    exit 1
+    exit -1
 fi
 
 install_pgk() {
