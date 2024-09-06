@@ -549,6 +549,9 @@ elif [[ "$mc_ver" == 1.2* ]]; then
 
 elif [[ "$mc_ver" == "1.1" ]]; then
     echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on Non Windows :("
+    if [[ "$isLinux" == "true" ]]; then
+        echo "Try Installing Wine and then run FoxyRetroMDK.cmd"
+    fi
     exit -1
 else
     Unsupported-Version
