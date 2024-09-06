@@ -27,10 +27,10 @@ echo -n -e "\033]0;Foxy Retro MDK - $mc_ver\007"
 NAME_OS="$(uname)"
 isMac=false
 isLinux=false
-if [ "$NAME_OS" == "Darwin" ]; then
-	isMac=true
+if [[ "$(echo "$NAME_OS" | tr '[:upper:]' '[:lower:]')" == "darwin" ]]; then
+    isMac=true
 else
-	isLinux=true
+    isLinux=true
 fi
 
 ################# Functions Start #################
@@ -59,6 +59,10 @@ function Check-LinuxDeps () {
     fi
     if ! output=$(sed "--help" > /dev/null 2>&1); then
         echo "sed command not found"
+        missing="T"
+    fi
+    if ! output=$(tr "--help" > /dev/null 2>&1); then
+        echo "tr command not found"
         missing="T"
     fi
 
