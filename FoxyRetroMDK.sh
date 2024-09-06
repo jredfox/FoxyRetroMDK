@@ -68,28 +68,13 @@ function Check-LinuxDeps () {
         echo "dpkg command not found"
         missing="T"
     fi
-
-    if [[ "$missing" == "T" ]]; then
-        echo "## try running: ##"
-        echo "sudo apt update"
-        echo "sudo apt-get update"
-        echo "sudo apt-get install <missing_program>"
-        echo "## repeat apt-get install <missing_program2> until all deps are installed ##"
-        echo "Missing Required Command Deps exiting...."
-        exit -1
+    if ! output=$(make "--help" > /dev/null 2>&1); then
+        echo "make command not found"
+        missing="T"
     fi
 
-    #Check Required Dev libraries
-    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
-        if ! dpkg -s "$pkg" > /dev/null 2>&1; then
-            echo "$pkg is not installed"
-            missing_pkg="T"
-        fi
-    done
-
-    if [[ "$missing_pkg" == "T" ]]; then
-        echo "try running: sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev"
-        "Missing Required Packages exting..."
+    if [[ "$missing" == "T" ]]; then
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
         exit -1
     fi
 
