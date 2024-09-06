@@ -208,7 +208,7 @@ function Patch-MDKPY {
     local mcp_dir="$1"
 
     #Patch python calls
-	find "$mdk_dir" -type f -name "*.sh" | while read -r file; do
+	find "$mdk_dir" -path "$temp" -prune -o -type f -name "*.sh" -print | while read -r file; do
     	echo "Patching python call $(basename "$file")"
     	sed -i -e 's/python/python2.7/g' "$file"
 	done
@@ -231,7 +231,9 @@ function Patch-MDKPY {
             sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/fml/install.sh"
         else
             sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/install.sh"
-            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/fml/install.sh"
+            if [ -e "$mdk_dir/forge/fml/install.sh" ]; then
+                sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/fml/install.sh"
+            fi
         fi
     fi
 }
@@ -527,7 +529,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
    elif [[ "$mc_ver" == "1.2.3" ]]; then
         mcp_ver="mcp60"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.3/mcp60.zip"
-        forge_url=https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.4.1.64/forge-1.2.3-1.4.1.64-src.zip
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.3-1.4.1.64/forge-1.2.3-1.4.1.64-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/5134e433afeba375c00bbdcd8aead1d3222813ee/client.jar"
         mc_server_url="http://files.betacraft.uk/server-archive/release/1.2/1.2.3.jar"
         modloader_url="https://www.mediafire.com/file/t93tjpkjae5u7if/ModLoader+1.2.3.zip"
