@@ -130,15 +130,14 @@ function Check-Deps () {
 		#Patch Python Installer bug that prevents HTTPS from working on macOS
 		bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
-		if ! command -v python2.7 &> /dev/null
-		then
+        if ! output=$(python2.7 "--version" > /dev/null 2>&1); then
 			echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
 			curl -ss -L -o "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
 			open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
 			echo "Please re-run the script once Python has been installed"
 			exit 0
 		fi
-        if [[ "$dl_rc" == "true" ]] && ! command -v jq &> /dev/null; then
+        if [[ "$dl_rc" == "true" ]] && ! output=$(jq "--version" > /dev/null 2>&1); then
             echo "Installing jq"
             brew install jq
             echo ""
