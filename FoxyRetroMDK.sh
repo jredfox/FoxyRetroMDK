@@ -64,6 +64,10 @@ function Check-LinuxDeps () {
         echo "tr command not found"
         missing="T"
     fi
+    if ! output=$(dpkg "--help" > /dev/null 2>&1); then
+        echo "dpkg command not found"
+        missing="T"
+    fi
 
     if [[ "$missing" == "T" ]]; then
         echo "## try running: ##"
@@ -75,10 +79,19 @@ function Check-LinuxDeps () {
         exit -1
     fi
 
-    #echo "Installig Compiler Libs"
-    #sudo apt update
-    #sudo apt-get update
-    #sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev
+    #Check Required Dev libraries
+    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
+        if ! dpkg -s "$pkg" > /dev/null 2>&1; then
+            echo "$pkg is not installed"
+            missing_pkg="T"
+        fi
+    done
+
+    if [[ "$missing_pkg" == "T" ]]; then
+        echo "try running: sudo apt-get install build-essential libssl-dev zlib1g-dev libncurses5-dev libgdbm-dev liblzma-dev"
+        "Missing Required Packages exting..."
+        exit -1
+    fi
 
     #Create Dep Folders for Deps
     local tmp_deps="$SCRIPTPATH/tmp_deps"
