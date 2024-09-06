@@ -342,7 +342,7 @@ function DL-Natives () {
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
-    if [ "$uzip" = "true" ]; then
+    if [[ "$uzip" == "true" ]]; then
         unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
     fi
     rm -f "$temp/natives/"*
@@ -362,7 +362,6 @@ mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$
 if [[ "$mdk_dir" ==  "$SCRIPTPATH" ]]; then
     mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
 fi
-echo "$mdk_dir"
 
 #Temp Files
 temp="$mdk_dir/tmp"
