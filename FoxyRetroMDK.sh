@@ -15,8 +15,7 @@ isa="$(uname -m)"
 dir_bin="$SCRIPTPATH/bin/$isa"
 
 #Change this MC Release Version between 1.1 through 1.5.2
-if [[ -z "$mc_ver" ]] 
-then
+if [[ -z "$mc_ver" ]]; then
 	mc_ver="1.5.2"
 fi
 
@@ -363,6 +362,7 @@ mdk_dir=$(python2.7 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$
 if [[ "$mdk_dir" ==  "$SCRIPTPATH" ]]; then
     mdk_dir="$SCRIPTPATH/MDK-$mc_ver"
 fi
+echo "$mdk_dir"
 
 #Temp Files
 temp="$mdk_dir/tmp"
