@@ -672,8 +672,7 @@ fi
 if [[ "$patch_mcp723" == "T" ]]; then
     mcp_cmds="$mdk_dir/runtime/commands.py"
     echo "Patching MCP 1.4.5 $mcp_cmds"
-    sed -i -e 's|classpath = \[self\.binclient\] \+ self\.cpathclient|classpath = \[self\.binclient\, self\.srcclient\] \+ self\.cpathclient|g' "$mcp_cmds"
-    sed -i -e 's|classpath = \[self\.binserver\] \+ self\.cpathserver|classpath = \[self\.binclient\, self\.srcclient\] \+ self\.cpathserver|g' "$mcp_cmds"
+    python2.7 "$SCRIPTPATH/replace.py" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
 fi
 
 # Download Minecraft Resources
