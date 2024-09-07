@@ -13,6 +13,7 @@ fi
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 isa="$(uname -m)"
 dir_bin="$SCRIPTPATH/bin/$isa"
+rp="$SCRIPTPATH/replace.py"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]]; then
@@ -672,7 +673,7 @@ fi
 if [[ "$patch_mcp723" == "T" ]]; then
     mcp_cmds="$mdk_dir/runtime/commands.py"
     echo "Patching MCP 1.4.5 $mcp_cmds"
-    python2.7 "$SCRIPTPATH/replace.py" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
+    python2.7 "$rp" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
 fi
 
 # Download Minecraft Resources
