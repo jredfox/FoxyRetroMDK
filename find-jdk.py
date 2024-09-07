@@ -96,3 +96,4 @@ if __name__ == "__main__":
         exe = ".exe"
 
     find_jdk()
+    sys.exit(0)

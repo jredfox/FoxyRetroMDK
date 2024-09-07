@@ -30,3 +30,4 @@ if __name__ == "__main__":
 
     directory = sys.argv[1]
     patch_mcpjdk8(directory)
+    sys.exit(0)
