@@ -460,6 +460,7 @@ elif [[ "$mc_ver" == 1.4* ]]; then
         mc_url="https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
         bcprov_dev="T" #Adds bcprov_dev to forge's compile time libraries
+        patch_mcp723="T"
     elif [[ "$mc_ver" == "1.4.4" ]]; then
         mcp_ver="mcp721"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.4/mcp721.zip"
@@ -665,6 +666,14 @@ if [[ "$patch_21" == "T" ]]; then
         sed -i -e "s|for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
         sed -i -e "s|for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
     fi
+fi
+
+#Patch MCP 1.4.5's startclient & startserver so that it works without IDE
+if [[ "$patch_mcp723" == "T" ]]; then
+    mcp_cmds="$mdk_dir/runtime/commands.py"
+    echo "Patching MCP 1.4.5 $mcp_cmds"
+    sed -i -e 's|classpath = \[self\.binclient\] \+ self\.cpathclient|classpath = \[self\.binclient\, self\.srcclient\] \+ self\.cpathclient|g' "$mcp_cmds"
+    sed -i -e 's|classpath = \[self\.binserver\] \+ self\.cpathserver|classpath = \[self\.binclient\, self\.srcclient\] \+ self\.cpathserver|g' "$mcp_cmds"
 fi
 
 # Download Minecraft Resources
