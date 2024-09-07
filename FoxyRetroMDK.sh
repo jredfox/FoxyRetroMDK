@@ -651,6 +651,8 @@ if [[ "$patch_21" == "T" ]]; then
 
     if [[ -f "$patch_file" ]]; then
         python2.7 "$rp" "$patch_file" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"
+    else
+        echo "Failed to patch file $patch_file"
     fi
 fi
 
