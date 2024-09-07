@@ -231,17 +231,17 @@ function Patch-MDKPY {
 
         #Patch MCP sh files to look for astyle & python2.7 in the path
         for file in "$mcp_dir"/*.sh; do
-            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##' "$file"
+            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##' "$file"
         done
 
         #Patch forge install sh shells
         if [[ "$mcp_dir" != "$mdk_dir" ]]; then
-            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/install.sh"
-            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/fml/install.sh"
+            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/install.sh"
+            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/fml/install.sh"
         else
-            sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/install.sh"
+            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/install.sh"
             if [ -e "$mdk_dir/forge/fml/install.sh" ]; then
-                sed -i '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/fml/install.sh"
+                sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/fml/install.sh"
             fi
         fi
     fi
