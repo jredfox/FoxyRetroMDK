@@ -210,7 +210,7 @@ function Patch-MDKPY {
     #Patch python calls
 	find "$mdk_dir" -path "$temp" -prune -o -type f -name "*.sh" -print | while read -r file; do
     	echo "Patching python call $(basename "$file")"
-    	sed -i -e 's/python/python2.7/g' "$file"
+    	sed -i 's/python/python2.7/g' "$file"
 	done
 
     ## Copy Linux Binaries over to the MDK
@@ -306,11 +306,11 @@ function Install-1.6x {
     curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
 
     # Patch fml.json
-	sed -i -e 's|http:|https:|g' "$mdk_dir/fml/fml.json"
+	sed -i 's|http:|https:|g' "$mdk_dir/fml/fml.json"
 
 	# Patch fml.py
-	sed -i -e "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
-	sed -i -e "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
+	sed -i "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
+	sed -i "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
 
 	#Remove Temp Folder
 	rm -rf "$temp"
@@ -653,8 +653,8 @@ if [[ "$patch_21" == "T" ]]; then
     fi
 
     if [[ -f "$patch_file" ]]; then
-        sed -i -e "s|for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
-        sed -i -e "s|for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
+        sed -i "s|for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
+        sed -i "s|for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
     fi
 fi
 
