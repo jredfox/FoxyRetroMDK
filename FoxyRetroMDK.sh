@@ -190,7 +190,7 @@ function Unsupported-Version {
 }
 
 #cleanup previous installation attempts
-function MDK-Cleanup {
+function MDK-Check {
 
 if [ -d "$mdk_dir" ]; then
 	read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
@@ -201,6 +201,15 @@ if [ -d "$mdk_dir" ]; then
     fi
 fi
 
+}
+
+function Cleanup-MDK {
+
+    #Delete the temp dir
+    rm -rf "$temp"
+    #Cleanup .sh-e files
+    find "$mdk_dir" -name "*.sh-e" -type f -delete
+    
 }
 
 function Patch-MDKPY {
@@ -275,7 +284,7 @@ function Install-1.6x {
     fi
 
     #Cleanup Previous MDK installation
-    MDK-Cleanup
+    MDK-Check
 
     #Notify the User of Starting Forge MDK Installation
     echo "Creating Forge MDK for $mc_ver"
@@ -312,11 +321,11 @@ function Install-1.6x {
 	sed -i -e "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
 	sed -i -e "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
 
-	#Remove Temp Folder
-	rm -rf "$temp"
-
 	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
 	Patch-MDKPY "$mdk_dir/mcp"
+
+    #Remove Temp Folder
+    Cleanup-MDK
 
 	echo "Running Forge install.sh"
 	cd "$mdk_dir"
@@ -562,7 +571,7 @@ fi
 echo "Creating Forge MDK for $mc_ver"
 
 #Cleanup previous installations
-MDK-Cleanup
+MDK-Check
 
 #Create Directories
 mkdir -p "$temp/natives"
@@ -680,7 +689,7 @@ if [[ "$dl_rc" == "true" ]]; then
 fi
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
-rm -rf "$temp"
+Cleanup-MDK
 
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
