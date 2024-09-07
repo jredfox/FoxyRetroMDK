@@ -104,7 +104,7 @@ function Check-LinuxDeps () {
 
         pushd "$tmp_deps/Python-${py_ver}" > /dev/null 2>&1 
         echo "Compiling Python ${py_ver}"
-        ./configure
+        sh ./configure
         make -j$(nproc)
         cp -f "python" "python2.7"
         popd > /dev/null 2>&1 
