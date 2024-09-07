@@ -53,12 +53,12 @@ function Check-LinuxDeps () {
         echo "curl command not found"
         missing="T"
     fi
-    if ! output=$(jq "--help" > /dev/null 2>&1); then
-        echo "jq command not found"
-        missing="T"
-    fi
     if ! output=$(tr "--help" > /dev/null 2>&1); then
         echo "tr command not found"
+        missing="T"
+    fi
+    if ! output=$(jq "--help" > /dev/null 2>&1); then
+        echo "jq command not found"
         missing="T"
     fi
     if ! output=$(make "--help" > /dev/null 2>&1); then
