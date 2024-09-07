@@ -57,10 +57,6 @@ function Check-LinuxDeps () {
         echo "jq command not found"
         missing="T"
     fi
-    if ! output=$(sed "--help" > /dev/null 2>&1); then
-        echo "sed command not found"
-        missing="T"
-    fi
     if ! output=$(tr "--help" > /dev/null 2>&1); then
         echo "tr command not found"
         missing="T"
@@ -211,7 +207,7 @@ function Patch-MDKPY {
     #Patch python calls
 	find "$mdk_dir" -path "$temp" -prune -o -type f -name "*.sh" -print | while read -r file; do
     	echo "Patching python call $(basename "$file")"
-    	sed -i -e 's/python/python2.7/g' "$file"
+    	python2.7 "$rp" "$file" 'python' 'python2.7'
 	done
 
     ## Copy Linux Binaries over to the MDK
@@ -223,17 +219,17 @@ function Patch-MDKPY {
 
         #Patch MCP sh files to look for astyle & python2.7 in the path
         for file in "$mcp_dir"/*.sh; do
-            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##' "$file"
+            python2.7 "$rp" "$file" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##'
         done
 
         #Patch forge install sh shells
         if [[ "$mcp_dir" != "$mdk_dir" ]]; then
-            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/install.sh"
-            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/fml/install.sh"
+            python2.7 "$rp" "$mdk_dir/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
+            python2.7 "$rp" "$mdk_dir/fml/install.sh" "#!/bin/bash" '\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' 
         else
-            sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/install.sh"
+            python2.7 "$rp" "$mdk_dir/forge/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
             if [ -e "$mdk_dir/forge/fml/install.sh" ]; then
-                sed -i -e '1a\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' "$mdk_dir/forge/fml/install.sh"
+                python2.7 "$rp" "$mdk_dir/forge/fml/install.sh" "#!/bin/bash" '#!/bin/bash\n\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
             fi
         fi
     fi
@@ -307,11 +303,10 @@ function Install-1.6x {
     curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
 
     # Patch fml.json
-	sed -i -e 's|http:|https:|g' "$mdk_dir/fml/fml.json"
+    python2.7 "$rp" "$mdk_dir/forge/fml/install.sh" "http:" "https:"
 
 	# Patch fml.py
-	sed -i -e "s|http://resources.download.minecraft.net|$assets_base_url|g" "$mdk_dir/fml/fml.py"
-	sed -i -e "s|https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json|$assets_json_url|g" "$mdk_dir/fml/fml.py"
+    python2.7 "$rp" "$mdk_dir/fml/fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
 
 	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
 	Patch-MDKPY "$mdk_dir/mcp"
@@ -655,8 +650,7 @@ if [[ "$patch_21" == "T" ]]; then
     fi
 
     if [[ -f "$patch_file" ]]; then
-        sed -i -e "s|for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
-        sed -i -e "s|for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)|for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)|g" "$patch_file"
+        python2.7 "$rp" "$patch_file" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"
     fi
 fi
 
