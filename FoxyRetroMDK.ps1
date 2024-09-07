@@ -163,6 +163,7 @@ function Enforce-JDK8 {
 
 $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
+$patchMDKJDK8 = "T"
 if ($patchMDKJDK8 -eq "T") {
     & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mcp_dir"
     Copy-Item -Path "$PSScriptRoot\find-jdk.py" -Destination "$mcp_dir\find-jdk.py" -Force | out-null
@@ -615,7 +616,7 @@ if ($patch_21 -eq "T")
 {
     Write-Host "Patching Forge's RenderPlayer.java.patch"
     $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
-    if (-Not [System.IO.Directory]::Exists("$patch_file"))
+    if (-Not [System.IO.File]::Exists("$patch_file"))
     {
         $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
     }
