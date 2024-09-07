@@ -380,6 +380,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $mc_url = "https://launcher.mojang.com/v1/objects/7a8a963ababfec49406e1541d3a87198e50604e5/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/c12fd88a8233d2c517dbc8196ba2ae855f4d36ea/server.jar"
         $bcprov_dev = "T" #Adds bcprov_dev to forge's compile time libraries
+        $patch_mcp723 = "T"
     }
     elseif ($mc_ver -eq "1.4.4")
     {
@@ -628,6 +629,13 @@ if ($patch_21 -eq "T")
     {
         Write-Error "Failed to patch $patch_file"
     }
+}
+
+#Patch MCP 1.4.5's startclient & startserver so that it works without IDE
+if ($patch_mcp723 -eq "T") {
+    $mcp_cmds = "$mdk_dir/runtime/commands.py"
+    Write-Host "Patching MCP 1.4.5 $mcp_cmds"
+    (Get-Content "$mcp_cmds").replace("classpath = [self.binclient] + self.cpathclient", "classpath = [self.binclient, self.srcclient] + self.cpathclient").replace("classpath = [self.binserver] + self.cpathserver", "classpath = [self.binclient, self.srcclient] + self.cpathserver") | Set-Content "$mcp_cmds"
 }
 
 #Download Minecraft Resources
