@@ -204,15 +204,6 @@ fi
 
 }
 
-function Cleanup-MDK {
-
-    #Delete the temp dir
-    rm -rf "$temp"
-    #Cleanup .sh-e files
-    find "$mdk_dir" -name "*.sh-e" -type f -delete
-    
-}
-
 function Patch-MDKPY {
 
     local mcp_dir="$1"
@@ -326,7 +317,7 @@ function Install-1.6x {
 	Patch-MDKPY "$mdk_dir/mcp"
 
     #Remove Temp Folder
-    Cleanup-MDK
+    rm -rf "$temp"
 
 	echo "Running Forge install.sh"
 	cd "$mdk_dir"
@@ -698,7 +689,7 @@ if [[ "$dl_rc" == "true" ]]; then
 fi
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
-Cleanup-MDK
+rm -rf "$temp"
 
 #Run Forge's Install Script
 cd "$mdk_dir/forge"
