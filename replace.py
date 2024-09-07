@@ -12,3 +12,5 @@ if __name__ == "__main__":
 
     with open(filename, 'w') as file:
         file.write(data)
+        
+    sys.exit(0)
