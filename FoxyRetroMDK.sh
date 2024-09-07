@@ -225,7 +225,7 @@ function Patch-MDKPY {
         #Patch forge install sh shells
         if [[ "$mcp_dir" != "$mdk_dir" ]]; then
             python2.7 "$rp" "$mdk_dir/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
-            python2.7 "$rp" "$mdk_dir/fml/install.sh" "#!/bin/bash" '\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' 
+            python2.7 "$rp" "$mdk_dir/fml/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' 
         else
             python2.7 "$rp" "$mdk_dir/forge/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
             if [ -e "$mdk_dir/forge/fml/install.sh" ]; then
