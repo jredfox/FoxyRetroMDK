@@ -1,12 +1,9 @@
 MDK-*
 bin/*
-Modloader.zip
-.DS_Store
+*.py
+*.cfg
 *.pkg
-Testing.sh
-J.sh
-test.sh
+*.DS_Store
 FoxyRetroMDK - Copy.cmd
-test.py
 test.ps1
 tmp_deps/*

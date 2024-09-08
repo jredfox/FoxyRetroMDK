@@ -7,20 +7,32 @@
 import os
 import sys
 import glob
-import subprocess
 import re
+import subprocess
 
 jdk_ver = None
 jdk_targ = None
 jdk_8 = None
 jdk_7 = None
 jdk_6 = None
+pfirst = True
 exe = ""
+cached_path = None
 plat = sys.platform.lower()
 isMac = plat == 'darwin'
-isLinux = os.name != 'darwin' and os.name != 'nt'
+isLinux = os.name != 'darwin' and os.name != 'nt' #I am aware that most of the time it will return linux but there are 50 other strings it could be and since I only support 3 OS's this is better
+debug = False
+
+def save(jdk_path, cache):
+    if cache and not debug:
+        with open(cached_path, "w") as file:
+            file.write(jdk_path)
+    print(jdk_path)
+    sys.exit(0)
 
 def chk_jdk(jdk_path):
+    if debug:
+        print("checking:" + jdk_path)
     global jdk_ver
     global jdk_targ
     global jdk_8
@@ -34,13 +46,11 @@ def chk_jdk(jdk_path):
             # Run 'java -version' command to check the version
             version_output = subprocess.check_output([java_path, '-version'], stderr=subprocess.STDOUT)
             line = version_output.decode('utf-8').splitlines()[0]  # Get the first line of the output
-            version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1)
+            version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1) #version_info = line.split()[1]
             
-            # Check if the version is 1.8 (Java 8)
             if version_info.startswith(jdk_ver):
                 jdk_targ = jdk_path
-                print(jdk_targ)
-                exit(0)
+                save(jdk_path, True)
             elif jdk_8 is None and version_info.startswith('1.8.'):
                 jdk_8 = jdk_path
             elif jdk_7 is None and version_info.startswith('1.7.'):
@@ -48,82 +58,89 @@ def chk_jdk(jdk_path):
             elif jdk_6 is None and version_info.startswith('1.6.'):
                 jdk_6 = jdk_path
 
-        except Exception:
+        except Exception as e: 
+            print(e)
             return
 
 def find_jdk():
-    # Add directories to search
-    mac_paths = [
-        '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
-        '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
-        '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
-        '/usr/local/java/*/Contents/Home/bin'
-        '/opt/java/*/Contents/Home/bin'
-    ]
+
+    #Check JDKs from the PATH first before resorting to mac & linux madness
+    path_dirs = os.getenv('PATH', '').split(os.pathsep)
+    if pfirst:
+        for directory in path_dirs:
+            chk_jdk(directory)
 
     if isMac:
+        # Add directories to search
+        mac_paths = [
+            '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
+            '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
+            '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
+            '/usr/local/java/*/Contents/Home/bin'
+            '/opt/java/*/Contents/Home/bin',
+            '/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin'
+            '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin'
+        ]
         for path in mac_paths:
             for jdk_path in glob.glob(path):
                 if os.path.isdir(jdk_path):
                     chk_jdk(jdk_path)
 
-    #Check JDKs from the PATH first before resorting to mac & linux madness
-    path_dirs = os.getenv('PATH', '').split(os.pathsep)
-    for directory in path_dirs:
-        chk_jdk(directory)
-
-    if isMac:
-        chk_jdk("/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin")
-        chk_jdk("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin")
-
-    #Start Linux checks
-    linux_paths = [
-        #Standard Installations
-        '/usr/lib/jvm/*/bin', #Most Common installations and seems to be the new standard
-        '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
-        '/usr/java/*/bin', #Some oracle Installations
-        '/etc/alternatives/*/bin', #RPM redhat linux
-        '/usr/java/*/bin', #RPM redhat linux
-        #Check opt Installations by user or some programs
-        '/opt/jre*/*/bin',
-        '/opt/jdk*/*/bin',
-        '/opt/java*/*/bin',
-        '/opt/jvm*/*/bin',
-        #Non Standard Installations
-        '/usr/lib/java/*/bin',
-        '/usr/lib/jdk*/*/bin',
-        '/usr/lib/jre*/*/bin',
-        '/usr/lib/jvm*/*/bin',
-        '/usr/local/java/*/bin'
-    ]
-
     if isLinux:
+        linux_paths = [
+            #Standard Installations
+            '/usr/lib/jvm/*/bin', #Most Common installations and seems to be the new standard
+            '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
+            '/usr/java/*/bin', #Some oracle Installations
+            '/etc/alternatives/*/bin', #RPM redhat linux
+            '/usr/java/*/bin', #RPM redhat linux
+            #Check opt Installations by user or some programs
+            '/opt/jre*/*/bin',
+            '/opt/jdk*/*/bin',
+            '/opt/java*/*/bin',
+            '/opt/jvm*/*/bin',
+            #Non Standard Installations
+            '/usr/lib/java/*/bin',
+            '/usr/lib/jdk*/*/bin',
+            '/usr/lib/jre*/*/bin',
+            '/usr/lib/jvm*/*/bin',
+            '/usr/local/java/*/bin'
+        ]
         for path in linux_paths:
             for jdk_path in glob.glob(path):
                 if os.path.isdir(jdk_path):
                     chk_jdk(jdk_path)
-#                    print("checked:" + jdk_path)
+    
+    if not pfirst:
+        for directory in path_dirs:
+            chk_jdk(directory)
 
-    #If the methods cannot find the target get JDK-8 or earlier
+    #If Target cannot be found print JDK-8 without saving it to the cache
     if jdk_8:
-        print(jdk_8)
-        exit(0)
+        save(jdk_8, False)
     elif jdk_7:
-        print(jdk_7)
-        exit(0)
+        save(jdk_7, False)
     elif jdk_6:
-        print(jdk_6)
-        exit(0)
+        save(jdk_6, False)
 
 if __name__ == "__main__":
     #Parse Arguments
-    if len(sys.argv) == 2 and sys.argv[1]:
+    if len(sys.argv) >= 2 and sys.argv[1]:
         jdk_ver = sys.argv[1]
+        if len(sys.argv) > 2:
+            pfirst = sys.argv[2].lower() == 'true'
     else:
         jdk_ver = "1.8."
 
     if os.name == 'nt':
         exe = ".exe"
+
+    #Parsed Cached JDK
+    if not debug:
+        cached_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
+        if(os.path.isfile(cached_path)):
+            with open(cached_path, "r") as file:
+                chk_jdk(file.readline().strip())
 
     find_jdk()
     sys.exit(0)
