@@ -137,7 +137,10 @@ if __name__ == "__main__":
 
     #Parsed Cached JDK
     if not debug:
-        cached_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
+        working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
+        if not os.path.exists(working_dir):
+            os.makedirs(working_dir)
+        cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
         if(os.path.isfile(cached_path)):
             with open(cached_path, "r") as file:
                 chk_jdk(file.readline().strip())
