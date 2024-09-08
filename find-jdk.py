@@ -67,7 +67,7 @@ def find_jdk():
                 if os.path.isdir(jdk_path):
                     chk_jdk(jdk_path)
 
-    #Check JDKs from the PATH first before resorting to mac madness
+    #Check JDKs from the PATH first before resorting to mac & linux madness
     path_dirs = os.getenv('PATH', '').split(os.pathsep)
     for directory in path_dirs:
         chk_jdk(directory)
