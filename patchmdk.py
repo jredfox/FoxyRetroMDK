@@ -71,11 +71,11 @@ if __name__ == "__main__":
 			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
 				with open(file, 'r') as f:
 					lines = f.readlines()
+				if isSh:
+					lines = [line.replace("python", "python2.7") for line in lines]
 				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp find-jdk.py', 'mcp\\runtime\\bin\\python\\python_mcp mcp\\find-jdk.py')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
-				if isSh:
-					lines = [line.replace("python", "python2.7") for line in lines]
 					print("Patching Path:" + file)
 		for file in glob.glob(mdk + "/fml/*"):
 			isSh = file.endswith(".sh")
