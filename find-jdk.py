@@ -93,6 +93,7 @@ def find_jdk():
         '/usr/lib/java/*/bin',
         '/usr/lib/jdk*/*/bin',
         '/usr/lib/jre*/*/bin',
+        '/usr/lib/jvm*/*/bin',
         '/usr/local/java/*/bin'
     ]
 
