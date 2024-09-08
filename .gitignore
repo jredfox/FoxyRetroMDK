@@ -1,9 +1,8 @@
 MDK-*
 bin/*
-*.py
+test.*
 *.cfg
 *.pkg
 *.DS_Store
 FoxyRetroMDK - Copy.cmd
-test.ps1
 tmp_deps/*
