@@ -9,11 +9,11 @@ isLinux = os.name != 'darwin' and os.name != 'nt' #I am aware that most of the t
 
 mcp_sh_patch = (
 	'## FoxyRetroMDK START ##\n'
-	'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
-	'cd "$mcp"\n'
+	'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+	'cd "$mdk"\n'
 	'isa="$(uname -m)"\n'
-	'JDK8=$("$mcp/bin_linux/$isa/python2.7/python2.7" "$mcp/jdk-finder.py" | xargs)\n'
-	'export PATH="$JDK8:$mcp/bin_linux/$isa/python2.7:$mcp/bin_linux/$isa/astyle:$PATH"\n'
+	'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
+	'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
 	'## FoxyRetroMDK END ##\n'
 )
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
+				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\..\\runtime\\bin\\python')))
+				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmdk="$(dirname "$mdk")"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\..\\runtime\\bin\\python')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp find-jdk.py', '..\\mcp\\runtime\\bin\\python\\python_mcp ..\\mcp\\find-jdk.py')))
+				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp find-jdk.py', '..\\mcp\\runtime\\bin\\python\\python_mcp ..\\mcp\\find-jdk.py')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
