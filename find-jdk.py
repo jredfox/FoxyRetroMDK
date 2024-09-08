@@ -16,7 +16,9 @@ jdk_8 = None
 jdk_7 = None
 jdk_6 = None
 exe = ""
-isMac = sys.platform.lower() == 'darwin'
+plat = sys.platform.lower()
+isMac = plat == 'darwin'
+isLinux = os.name != 'darwin' and os.name != 'nt'
 
 def chk_jdk(jdk_path):
     global jdk_ver
@@ -73,6 +75,33 @@ def find_jdk():
     if isMac:
         chk_jdk("/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin")
         chk_jdk("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin")
+
+    #Start Linux checks
+    linux_paths = [
+        #Standard Installations
+        '/usr/lib/jvm/*/bin', #Most Common installations and seems to be the new standard
+        '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
+        '/usr/java/*/bin', #Some oracle Installations
+        '/etc/alternatives/*/bin', #RPM redhat linux
+        '/usr/java/*/bin', #RPM redhat linux
+        #Check opt Installations by user or some programs
+        '/opt/jre*/bin',
+        '/opt/jdk*/bin',
+        '/opt/java*/bin',
+        '/opt/jvm*/bin',
+        #Non Standard Installations
+        '/usr/lib/java/*/bin',
+        '/usr/lib/jdk*/*/bin',
+        '/usr/lib/jre*/*/bin',
+        '/usr/local/java/*/bin'
+    ]
+
+    if isLinux:
+        for path in linux_paths:
+            for jdk_path in glob.glob(path):
+                if os.path.isdir(jdk_path):
+                    chk_jdk(jdk_path)
+                    print("checked:" + jdk_path)
 
     #If the methods cannot find the target get JDK-8 or earlier
     if jdk_8:
