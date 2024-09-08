@@ -85,10 +85,10 @@ def find_jdk():
         '/etc/alternatives/*/bin', #RPM redhat linux
         '/usr/java/*/bin', #RPM redhat linux
         #Check opt Installations by user or some programs
-        '/opt/jre*/bin',
-        '/opt/jdk*/bin',
-        '/opt/java*/bin',
-        '/opt/jvm*/bin',
+        '/opt/jre*/*/bin',
+        '/opt/jdk*/*/bin',
+        '/opt/java*/*/bin',
+        '/opt/jvm*/*/bin',
         #Non Standard Installations
         '/usr/lib/java/*/bin',
         '/usr/lib/jdk*/*/bin',
