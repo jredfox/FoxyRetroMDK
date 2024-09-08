@@ -35,27 +35,56 @@ if __name__ == "__main__":
 		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
 			with open(file, 'r') as f:
 				lines = f.readlines()
+			if isSh:
+				lines = [line.replace("python", "python2.7") for line in lines]
 			lines.insert(1, (mcp_sh_patch if isSh else mcp_batch_patch))
 			with open(file, 'w') as f:
 				f.writelines(lines)
-				print(file)
+				print("Patching Path:" + file)
 
 	if not forgeInMCP:
 		for file in glob.glob(mdk + "/forge/*"):
 			isSh = file.endswith(".sh")
-		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
-			with open(file, 'r') as f:
-				lines = f.readlines()
-			lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
-			with open(file, 'w') as f:
-				f.writelines(lines)
-				print(file)
+			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+				with open(file, 'r') as f:
+					lines = f.readlines()
+				if isSh:
+					lines = [line.replace("python", "python2.7") for line in lines]
+				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
+				with open(file, 'w') as f:
+					f.writelines(lines)
+					print("Patching Path:" + file)
 		for file in glob.glob(mdk + "/forge/fml/*"):
 			isSh = file.endswith(".sh")
-		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
-			with open(file, 'r') as f:
-				lines = f.readlines()
-			lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\..\\runtime\\bin\\python')))
-			with open(file, 'w') as f:
-				f.writelines(lines)
-				print(file)
+			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+				with open(file, 'r') as f:
+					lines = f.readlines()
+				if isSh:
+					lines = [line.replace("python", "python2.7") for line in lines]
+				lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\..\\runtime\\bin\\python')))
+				with open(file, 'w') as f:
+					f.writelines(lines)
+					print("Patching Path:" + file)
+	else:
+		for file in glob.glob(mdk + "/*"):
+			isSh = file.endswith(".sh")
+			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+				with open(file, 'r') as f:
+					lines = f.readlines()
+				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp find-jdk.py', 'mcp\\runtime\\bin\\python\\python_mcp mcp\\find-jdk.py')))
+				with open(file, 'w') as f:
+					f.writelines(lines)
+				if isSh:
+					lines = [line.replace("python", "python2.7") for line in lines]
+					print("Patching Path:" + file)
+		for file in glob.glob(mdk + "/fml/*"):
+			isSh = file.endswith(".sh")
+			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+				with open(file, 'r') as f:
+					lines = f.readlines()
+				if isSh:
+					lines = [line.replace("python", "python2.7") for line in lines]
+				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp find-jdk.py', '..\\mcp\\runtime\\bin\\python\\python_mcp ..\\mcp\\find-jdk.py')))
+				with open(file, 'w') as f:
+					f.writelines(lines)
+					print("Patching Path:" + file)

@@ -214,7 +214,14 @@ function Patch-MDKPY {
         cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin_linux/$isa/astyle"
         cp -rf "$dir_bin/python2.7" "$mcp_dir/bin_linux/$isa"
     fi
-    exit
+
+    #Patch MDK shells
+    if [[ "$mdk_dir" != "$mcp_dir" ]]; then
+        onesixflag="T"
+    else
+        onesixflag="F"
+    fi
+    python2.7 "$SCRIPTPATH/patchmdk.py" "$mdk_dir" "$onesixflag"
 }
 
 function Install-1.6x {
