@@ -9,11 +9,11 @@ isLinux = os.name != 'darwin' and os.name != 'nt' #I am aware that most of the t
 
 mcp_sh_patch = (
 	'## FoxyRetroMDK START ##\n'
-	'SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
-	'cd "$SCRIPTPATH"\n'
+	'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+	'cd "$mcp"\n'
 	'isa="$(uname -m)"\n'
-	'JDK8=$("$SCRIPTPATH/bin_linux/$isa/python2.7/python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)\n'
-	'export PATH="$JDK8:$SCRIPTPATH/bin_linux/$isa/python2.7:$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n'
+	'JDK8=$("$mcp/bin_linux/$isa/python2.7/python2.7" "$mcp/jdk-finder.py" | xargs)\n'
+	'export PATH="$JDK8:$mcp/bin_linux/$isa/python2.7:$mcp/bin_linux/$isa/astyle:$PATH"\n'
 	'## FoxyRetroMDK END ##\n'
 )
 
@@ -27,28 +27,35 @@ mcp_batch_patch = (
 if __name__ == "__main__":
 
 	mdk = sys.argv[1]
-	if sys.argv[2][0].lower() == 't':
-		paths = [
-			mdk + "/mcp/*.sh",
-			mdk + "/*.sh",
-			mdk + "/fml/*.sh",
-		]
-	else:
-		paths = [
-			mdk + "/*",
-			mdk + "/forge/*",
-			mdk + "/forge/fml/*",
-		]
+	forgeInMCP = sys.argv[2][0].lower() == 't'
+	mcp = (mdk + "/mcp") if forgeInMCP else mdk
 
-	for p in paths:
-		for file in glob.glob(p):
-			if file.endswith(".sh") or file.endswith(".bat") or file.endswith(".cmd"):
-				isSh = file.endswith(".sh")
-				with open(file, 'r') as f:
-					lines = f.readlines()
-				if isSh:
-					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch if isSh else mcp_batch_patch))
-				with open(file, 'w') as f:
-					f.writelines(lines)
-					print(file)
+	for file in glob.glob(mcp + "/*"):
+		isSh = file.endswith(".sh")
+		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+			with open(file, 'r') as f:
+				lines = f.readlines()
+			lines.insert(1, (mcp_sh_patch if isSh else mcp_batch_patch))
+			with open(file, 'w') as f:
+				f.writelines(lines)
+				print(file)
+
+	if not forgeInMCP:
+		for file in glob.glob(mdk + "/forge/*"):
+			isSh = file.endswith(".sh")
+		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+			with open(file, 'r') as f:
+				lines = f.readlines()
+			lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
+			with open(file, 'w') as f:
+				f.writelines(lines)
+				print(file)
+		for file in glob.glob(mdk + "/forge/fml/*"):
+			isSh = file.endswith(".sh")
+		if isSh or file.endswith(".bat") or file.endswith(".cmd"):
+			with open(file, 'r') as f:
+				lines = f.readlines()
+			lines.insert(1, (mcp_sh_patch.replace('isa="$(uname -m)"\n', 'isa="$(uname -m)"\nmcp="$(dirname "$mcp")"\nmcp="$(dirname "$mcp")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\..\\runtime\\bin\\python')))
+			with open(file, 'w') as f:
+				f.writelines(lines)
+				print(file)

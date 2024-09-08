@@ -204,16 +204,8 @@ function Patch-MDKPY {
 
     local mcp_dir="$1"
 
-    #Patch python calls
-	find "$mdk_dir" -path "$temp" -prune -o -type f -name "*.sh" -print | while read -r file; do
-    	echo "Patching python call $(basename "$file")"
-    	python2.7 "$rp" "$file" 'python' 'python2.7'
-	done
-
-    #Patch MCP sh files to look for astyle & python2.7 in the path
-    for file in "$mcp_dir"/*.sh; do
-        python2.7 "$rp" "$file" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ##'
-    done
+    #Copy JDK finder over
+    cp -f "$SCRIPTPATH/jdk-finder.py" "$mcp_dir/jdk-finder.py"
 
     ## Copy Linux Binaries over to the MDK
     if [[ "$isLinux" == "true" ]]; then
@@ -221,18 +213,8 @@ function Patch-MDKPY {
         mkdir -p "$mcp_dir/bin_linux/$isa/python2.7"
         cp -f "$dir_bin/astyle/astyle" "$mcp_dir/bin_linux/$isa/astyle"
         cp -rf "$dir_bin/python2.7" "$mcp_dir/bin_linux/$isa"
-        
-        #Patch forge install sh shells
-        if [[ "$mcp_dir" != "$mdk_dir" ]]; then
-            python2.7 "$rp" "$mdk_dir/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$SCRIPTPATH/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
-            python2.7 "$rp" "$mdk_dir/fml/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/mcp/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/mcp/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###' 
-        else
-            python2.7 "$rp" "$mdk_dir/forge/install.sh" "#!/bin/bash" '#!/bin/bash\n## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
-            if [ -e "$mdk_dir/forge/fml/install.sh" ]; then
-                python2.7 "$rp" "$mdk_dir/forge/fml/install.sh" "#!/bin/bash" '#!/bin/bash\n\## FoxyRetroMDK ##\nSCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\ncd "$SCRIPTPATH"\nisa="$(uname -m)"\nmdk="$(dirname "$SCRIPTPATH")"\nmdk="$(dirname "$mdk")"\nexport PATH="$mdk/bin_linux/$isa/python2.7:$PATH"\nexport PATH="$mdk/bin_linux/$isa/astyle:$PATH"\n## FoxyRetroMDK ###'
-            fi
-        fi
     fi
+    exit
 }
 
 function Install-1.6x {
