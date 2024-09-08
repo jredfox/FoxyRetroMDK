@@ -101,7 +101,7 @@ def find_jdk():
             for jdk_path in glob.glob(path):
                 if os.path.isdir(jdk_path):
                     chk_jdk(jdk_path)
-                    print("checked:" + jdk_path)
+#                    print("checked:" + jdk_path)
 
     #If the methods cannot find the target get JDK-8 or earlier
     if jdk_8:
