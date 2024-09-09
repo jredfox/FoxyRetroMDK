@@ -29,7 +29,7 @@ else:
 
 mcp_batch_patch = (
 	'REM ## FoxyForgeMDK JDK-8 START Patch ##\n'
-    'FOR /F "delims=" %%I IN (\'runtime\\bin\\python\\python_mcp jdk-finder.py\') DO SET "JAVA_DIR=%%I"\n'
+    'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\n'
     'REM ## FoxyForgeMDK JDK-8 END Patch ##\n'
 )
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\runtime\\bin\\python')))
+				lines.insert(1, (mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"') ))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python', '..\\..\\runtime\\bin\\python')))
+				lines.insert(1, (mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\..\\runtime\\bin\\python\\python_mcp.exe" "..\\..\\jdk-finder.py"')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
