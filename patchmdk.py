@@ -3,9 +3,9 @@ import sys
 import glob
 
 #global vars
-plat = sys.platform.lower()
-isMac = plat == 'darwin'
-isLinux = os.name != 'darwin' and os.name != 'nt' #I am aware that most of the time it will return linux but there are 50 other strings it could be and since I only support 3 OS's this is better
+isWindows = os.name == 'nt'
+isMac = sys.platform.lower() == 'darwin'
+isLinux = not isMac and not isWindows
 
 if isLinux:
 	mcp_sh_patch = (
@@ -23,7 +23,7 @@ else:
 		'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
 		'cd "$mdk"\n'
 		'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
-		'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
+		'export PATH="$JDK8:$PATH"\n'
 		'## FoxyRetroMDK END ##\n'
 	)
 

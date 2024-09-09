@@ -18,9 +18,9 @@ jdk_6 = None
 pfirst = True
 exe = ""
 cached_path = None
-plat = sys.platform.lower()
-isMac = plat == 'darwin'
-isLinux = os.name != 'darwin' and os.name != 'nt' #I am aware that most of the time it will return linux but there are 50 other strings it could be and since I only support 3 OS's this is better
+isWindows = os.name == 'nt'
+isMac = sys.platform.lower() == 'darwin'
+isLinux = not isMac and not isWindows
 debug = False
 
 def save(jdk_path, cache):
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     else:
         jdk_ver = "1.8."
 
-    if os.name == 'nt':
+    if isWindows:
         exe = ".exe"
 
     #Parsed Cached JDK
