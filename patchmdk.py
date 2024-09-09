@@ -40,8 +40,8 @@ mcp_batch_patch = (
 if __name__ == "__main__":
 
 	mdk = sys.argv[1]
-	forgeInMCP = sys.argv[2][0].lower() == 't'
-	mcp = (mdk + "/mcp") if forgeInMCP else mdk
+	mcpInForge = sys.argv[2][0].lower() == 't'
+	mcp = (mdk + "/mcp") if mcpInForge else mdk
 
 	for file in glob.glob(mcp + "/*"):
 		isSh = file.endswith(".sh")
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 				f.writelines(lines)
 				print("Patching Path:" + file)
 
-	if not forgeInMCP:
+	if not mcpInForge:
 		for file in glob.glob(mdk + "/forge/*"):
 			isSh = file.endswith(".sh")
 			if isSh or file.endswith(".bat") or file.endswith(".cmd"):
