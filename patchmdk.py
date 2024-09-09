@@ -15,6 +15,7 @@ if isLinux:
 		'isa="$(uname -m)"\n'
 		'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
 		'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
+		'export JAVA_HOME=$(dirname "$JDK8")\n'
 		'## FoxyRetroMDK END ##\n'
 	)
 else:
@@ -24,6 +25,7 @@ else:
 		'cd "$mdk"\n'
 		'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
 		'export PATH="$JDK8:$PATH"\n'
+		'export JAVA_HOME=$(dirname "$JDK8")\n'
 		'## FoxyRetroMDK END ##\n'
 	)
 
