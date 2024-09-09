@@ -33,7 +33,7 @@ mcp_batch_patch = (
 	'REM ## FoxyForgeMDK JDK-8 START Patch ##\n'
     'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\n'
-    'FOR %%I IN ("%JAVA_DIR%\..") DO SET "JAVA_HOME=%%~fI"'
+    'FOR %%I IN ("%JAVA_DIR%\..") DO SET "JAVA_HOME=%%~fI"\n'
     'REM ## FoxyForgeMDK JDK-8 END Patch ##\n'
 )
 
