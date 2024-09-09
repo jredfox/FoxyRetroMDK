@@ -83,7 +83,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp jdk-finder.py', 'mcp\\runtime\\bin\\python\\python_mcp mcp\\jdk-finder.py')))
+				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py') if isSh else mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 					lines = f.readlines()
 				if isSh:
 					lines = [line.replace("python", "python2.7") for line in lines]
-				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('runtime\\bin\\python\\python_mcp jdk-finder.py', '..\\mcp\\runtime\\bin\\python\\python_mcp ..\\mcp\\jdk-finder.py')))
+				lines.insert(1, (mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n') if isSh else mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\mcp\\runtime\\bin\\python\\python_mcp.exe" "..\\mcp\\jdk-finder.py"')))
 				with open(file, 'w') as f:
 					f.writelines(lines)
 					print("Patching Path:" + file)
