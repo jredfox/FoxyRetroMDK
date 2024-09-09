@@ -35,6 +35,9 @@ $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
 
+#Enforce JDK-8 to prevent JRE 1.6 (java 6) not supported by javac (java compiler)
+$patchMDKJDK8 = "T"
+
 ################# Functions Start #################
 
 #Author jredfox
@@ -158,15 +161,15 @@ $ProgressPreference = "$progress_org"
 #Enforce JDK-8 during MDK installation after forge has 
 function Enforce-JDK8 {
     param (
-        [string]$mcp_dir
+        [string]$mcp_dir,
+        [string]$onesix
     )
 
-$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\find-jdk.py").Trim()
+$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
-$patchMDKJDK8 = "T"
 if ($patchMDKJDK8 -eq "T") {
-    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\apply-jdk-8.py" "$mcp_dir"
-    Copy-Item -Path "$PSScriptRoot\find-jdk.py" -Destination "$mcp_dir\find-jdk.py" -Force | out-null
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mcp_dir" "$onesix"
+    Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
 }
 
 }
@@ -239,7 +242,7 @@ function Install-1.6x {
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\fml\$mcp_ver.zip", "$mdk_dir\mcp")
 
     #Enforce JDK-8
-    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp"
+    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
 
     #Download & Install minecraft.jar & minecraft_server.jar
     Invoke-WebRequest "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
@@ -521,7 +524,6 @@ elseif ($mc_ver -eq "1.1")
 
     $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
-    $patchMDKJDK8 = "T" #patch all batch files to enforce JDK-8 is used for all scripts
 }
 else
 {
@@ -554,7 +556,7 @@ Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mdk_dir")
 
 #Enforce JDK-8 in Path during setup for legacy versions
-Enforce-JDK8 -mcp_dir "$mdk_dir"
+Enforce-JDK8 -mcp_dir "$mdk_dir" "F"
 
 #Download Forge lib Folder and Install it
 Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
