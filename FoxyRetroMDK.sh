@@ -354,6 +354,7 @@ temp="$mdk_dir/tmp"
 #Enforce JDK-8 is being used
 JDK8=$("python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)
 export PATH="$JDK8:$PATH"
+export JAVA_HOME=$(dirname "$JDK8")
 
 #Install 1.6x versions
 if [[ "$mc_ver" == 1.6* ]]; then
