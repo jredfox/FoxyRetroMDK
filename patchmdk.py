@@ -18,10 +18,10 @@ mcp_sh_patch = (
 )
 
 mcp_batch_patch = (
-	'REM ## FoxyForgeMDK JDK-8 Patch ##\n'
+	'REM ## FoxyForgeMDK JDK-8 START Patch ##\n'
     'FOR /F "delims=" %%I IN (\'runtime\\bin\\python\\python_mcp find-jdk.py\') DO SET "JAVA_DIR=%%I"\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\n'
-    'REM ## FoxyForgeMDK JDK-8 Patch ##\n'
+    'REM ## FoxyForgeMDK JDK-8 END Patch ##\n'
 )
 
 if __name__ == "__main__":
