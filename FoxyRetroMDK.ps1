@@ -180,7 +180,8 @@ function Install-1.6x {
     
     #Start URL's
 	$assets_base_url="https://resources.download.minecraft.net"
-	$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+	#$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+    $python_url = "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
 	$forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
 
 	if($mc_ver -eq "1.6.4"){
@@ -259,13 +260,8 @@ function Install-1.6x {
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
 	Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
-	Invoke-WebRequest "$python_url" -OutFile "$temp\python.msi"
-	Start-process msiexec -ArgumentList "/a `"$temp\python.msi`" /qn TARGETDIR=`"$temp\python`"" -Wait
-	Move-Item -Path "$temp\python\DLLs\*" -Destination "$mdk_dir\fml\python\" -Force | out-null
-	Move-Item -Path "$temp\python\python27.dll" -Destination "$mdk_dir\fml\python\" -Force | out-null
-	Move-Item -Path "$temp\python\python.exe" -Destination "$mdk_dir\fml\python\python_fml.exe" -Force | out-null
-	Compress-Archive -Path "$temp\python\Lib\*" -DestinationPath "$temp\python27.zip"
-	Move-Item -Path "$temp\python27.zip" -Destination "$mdk_dir\fml\python\" -Force | out-null
+	Invoke-WebRequest "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\python_fml_2.7.9.zip", "$mdk_dir\fml\python")
 
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
     DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
