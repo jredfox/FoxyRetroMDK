@@ -35,9 +35,6 @@ $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
 
-#Enforce JDK-8 to prevent JRE 1.6 (java 6) not supported by javac (java compiler)
-$patchMDKJDK8 = "T"
-
 ################# Functions Start #################
 
 #Author jredfox
@@ -169,10 +166,8 @@ function Enforce-JDK8 {
 $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py").Trim()
 $env:PATH = "$JDK8;$env:PATH"
 $env:JAVA_HOME = Split-Path "$JDK8" -Parent
-if ($patchMDKJDK8 -eq "T") {
-    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
-    Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
-}
+& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
+Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
 
 }
 
