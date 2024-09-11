@@ -65,6 +65,10 @@ function Check-LinuxDeps () {
         echo "make command not found"
         missing="T"
     fi
+    if ! output=$(g++ "--help" > /dev/null 2>&1); then
+        echo "g++ command not found"
+        missing="T"
+    fi
 
     if [[ "$missing" == "T" ]]; then
         echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
