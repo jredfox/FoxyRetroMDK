@@ -409,6 +409,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.1-6.0.0.329/forge-1.4.1-6.0.0.329-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/67604a9c206697032165fc067b6255e333e06275/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/baa4e4a7adc3dc9fbfc5ea36f0777b68c9eb7f4a/server.jar"
+        $patch_mcp72 = "T"
     }
     elseif ($mc_ver -eq "1.4")
     {
@@ -417,6 +418,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.0-5.0.0.326/forge-1.4.0-5.0.0.326-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
+        $patch_mcp72 = "T"
     }
     else
     {
@@ -449,6 +451,7 @@ elseif ($mc_ver -eq "1.3.2")
     $guava_url = "https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
     $scala_lib_url = ""
     $mcp_srg_url = "" #MCP_SRG doesn't exist pre 1.5
+    $patch_mcp72 = "T"
 }
 elseif ($mc_ver.StartsWith("1.2"))
 {
@@ -628,9 +631,15 @@ if ($patch_21 -eq "T")
 
 #Patch MCP 1.4.5's startclient & startserver so that it works without IDE
 if ($patch_mcp723 -eq "T") {
-    $mcp_cmds = "$mdk_dir/runtime/commands.py"
+    $mcp_cmds = "$mdk_dir\runtime\commands.py"
     Write-Host "Patching MCP 1.4.5 $mcp_cmds"
     (Get-Content "$mcp_cmds").replace("classpath = [self.binclient] + self.cpathclient", "classpath = [self.binclient, self.srcclient] + self.cpathclient").replace("classpath = [self.binserver] + self.cpathserver", "classpath = [self.binclient, self.srcclient] + self.cpathserver") | Set-Content "$mcp_cmds"
+}
+#Patch MCP for MC 1.3.2 - 1.4.1's startclient & startserver by Injecting a combo of Forge's 1.4.3 & 1.4.5 hotfix for MCP
+elseif($patch_mcp72 -eq "T") {
+    $mcp_cmds="$mdk_dir\runtime\commands.py"
+    Write-Host "Patching MCP $mc_ver $mcp_cmds"
+    (Get-Content "$mcp_cmds").replace("if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):", "if side == SERVER:`r`n            return self.checkbins(CLIENT)`r`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):").replace("classpath = [self.binclient] + self.cpathclient", "classpath = [self.binclient, self.srcshared] + self.cpathclient").replace("classpath = [self.binserver] + self.cpathserver", "classpath = [self.binclient, self.srcshared] + self.cpathserver") | Set-Content "$mcp_cmds"
 }
 
 #Download Minecraft Resources
