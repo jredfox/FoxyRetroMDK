@@ -462,12 +462,14 @@ elif [[ "$mc_ver" == 1.4* ]]; then
         forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.1-6.0.0.329/forge-1.4.1-6.0.0.329-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/67604a9c206697032165fc067b6255e333e06275/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/baa4e4a7adc3dc9fbfc5ea36f0777b68c9eb7f4a/server.jar"
+        patch_mcp72="T"
     elif [[ "$mc_ver" == "1.4" ]]; then
         mcp_ver="mcp719"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.2/mcp719.zip"
         forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.0-5.0.0.326/forge-1.4.0-5.0.0.326-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/2007097b53d3eb43b2c1f3f78caab4a4ef690c7a/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/9470a2bb0fcb8a426328441a01dba164fbbe52c9/server.jar"
+        patch_mcp72="T"
     else
         Unsupported-Version
     fi
@@ -497,7 +499,7 @@ elif [[ "$mc_ver" == "1.3.2" ]]; then
     guava_url="https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
     scala_lib_url=""
     mcp_srg_url="" #MCP_SRG doesn't exist pre 1.5
-    patch_mcp132="T"
+    patch_mcp72="T"
 
 elif [[ "$mc_ver" == 1.2* ]]; then
     #Works Mc Forge 1.2.5-3.2.5.125+ Older versions require an older method that involves also downloading mod loader
@@ -652,7 +654,7 @@ if [[ "$patch_mcp723" == "T" ]]; then
     mcp_cmds="$mdk_dir/runtime/commands.py"
     echo "Patching MCP 1.4.5 $mcp_cmds"
     python2.7 "$rp" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
-elif [[ "$patch_mcp132" == "T" ]]; then
+elif [[ "$patch_mcp72" == "T" ]]; then
     mcp_cmds="$mdk_dir/runtime/commands.py"
     echo "Patching MCP $mc_ver $mcp_cmds"
     #Inject Forge's 1.4.3 hotfix for MCP
