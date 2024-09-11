@@ -25,8 +25,8 @@ elif command -v zypper &> /dev/null; then
     sudo zypper refresh
 elif command -v pacman &> /dev/null; then
     PKG_MNG="pacman"
-    echo "sudo pacman -Sy"
-    sudo pacman -Sy
+    echo "sudo pacman -Syy"
+    sudo pacman -Syy
 elif command -v apk &> /dev/null; then
     PKG_MNG="apk"
     echo "sudo apk update"
@@ -60,10 +60,14 @@ elif command -v brew &> /dev/null; then
     brew update
 else
     echo "No supported package manager found."
-    exit -1
+    exit 1
 fi
 
-install_pgk() {
+#Set Flags
+#Make Homebrew work
+export NONINTERACTIVE=1
+
+install_pkg() {
     local package_manager="$1"
     local package_name="$2"
     
@@ -86,22 +90,22 @@ install_pgk() {
             sudo pacman -Syu --noconfirm "$package_name"
             ;;
         "apk")
-            sudo apk add "$package_name"
+            sudo apk add --no-cache "$package_name"
             ;;
         "emerge")
-            sudo emerge "$package_name"
+            sudo emerge --quiet-build "$package_name"
             ;;
         "flatpak")
             flatpak install -y "$package_name"
             ;;
         "snap")
-            sudo snap install "$package_name"
+            sudo snap install "$package_name" --yes
             ;;
         "nix")
             nix-env -iA "$package_name"
             ;;
         "guix")
-            guix install "$package_name"
+            guix install "$package_name" --yes
             ;;
         "brew")
             brew install "$package_name"
@@ -118,11 +122,11 @@ echo "PKG Manager: $PKG_MNG"
 if [[ "$PKG_MNG" == "apt" ]]; then
     for pkg in jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
         if ! dpkg -s "$pkg" > /dev/null 2>&1; then
-            install_pgk "$PKG_MNG" "$pkg"
+            install_pkg "$PKG_MNG" "$pkg"
         fi
     done
 else
     for pkg in jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
-        install_pgk "$PKG_MNG" "$pkg"
+        install_pkg "$PKG_MNG" "$pkg"
     done
 fi
