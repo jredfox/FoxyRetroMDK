@@ -497,6 +497,7 @@ elif [[ "$mc_ver" == "1.3.2" ]]; then
     guava_url="https://web.archive.org/web/20130313081716if_/http://files.minecraftforge.net:80/fmllibs/guava-12.0.1.jar"
     scala_lib_url=""
     mcp_srg_url="" #MCP_SRG doesn't exist pre 1.5
+    patch_mcp132="T"
 
 elif [[ "$mc_ver" == 1.2* ]]; then
     #Works Mc Forge 1.2.5-3.2.5.125+ Older versions require an older method that involves also downloading mod loader
@@ -646,11 +647,17 @@ if [[ "$patch_21" == "T" ]]; then
     fi
 fi
 
-#Patch MCP 1.4.5's startclient & startserver so that it works without IDE
+#Patch MCP startclient & startserver comamnds so that it works without an IDE
 if [[ "$patch_mcp723" == "T" ]]; then
     mcp_cmds="$mdk_dir/runtime/commands.py"
     echo "Patching MCP 1.4.5 $mcp_cmds"
     python2.7 "$rp" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
+elif [[ "$patch_mcp132" == "T" ]]; then
+    mcp_cmds="$mdk_dir/runtime/commands.py"
+    echo "Patching MCP $mc_ver $mcp_cmds"
+    #Inject Forge's 1.4.3 hotfix for MCP
+    python2.7 "$rp" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:\n            return self.checkbins(CLIENT)\n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):"
+    python2.7 "$rp" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
 fi
 
 # Download Minecraft Resources
