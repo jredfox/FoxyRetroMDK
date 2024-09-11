@@ -23,6 +23,10 @@ if ([string]::IsNullOrEmpty($mdk_dir) -Or ([System.IO.Path]::GetFullPath("$mdk_d
 {
     $mdk_dir = "$PSScriptRoot\MDK-$mc_ver"
 }
+else 
+{
+    $mdk_dir = [System.IO.Path]::GetFullPath("$mdk_dir")
+}
 
 #Set the title
 $host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
@@ -636,7 +640,7 @@ if ($patch_mcp723 -eq "T") {
     (Get-Content "$mcp_cmds").replace("classpath = [self.binclient] + self.cpathclient", "classpath = [self.binclient, self.srcclient] + self.cpathclient").replace("classpath = [self.binserver] + self.cpathserver", "classpath = [self.binclient, self.srcclient] + self.cpathserver") | Set-Content "$mcp_cmds"
 }
 #Patch MCP for MC 1.3.2 - 1.4.1's startclient & startserver by Injecting a combo of Forge's 1.4.3 & 1.4.5 hotfix for MCP
-elseif($patch_mcp72 -eq "T") {
+elseif ($patch_mcp72 -eq "T") {
     $mcp_cmds="$mdk_dir\runtime\commands.py"
     Write-Host "Patching MCP $mc_ver $mcp_cmds"
     (Get-Content "$mcp_cmds").replace("if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):", "if side == SERVER:`r`n            return self.checkbins(CLIENT)`r`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):").replace("classpath = [self.binclient] + self.cpathclient", "classpath = [self.binclient, self.srcshared] + self.cpathclient").replace("classpath = [self.binserver] + self.cpathserver", "classpath = [self.binclient, self.srcshared] + self.cpathserver") | Set-Content "$mcp_cmds"
