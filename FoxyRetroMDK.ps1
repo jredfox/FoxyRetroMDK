@@ -137,7 +137,7 @@ $progress_org = "$ProgressPreference"
 $ProgressPreference = 'SilentlyContinue'
 try
 {
-    $jsonFile = "$temp/assets.json"
+    $jsonFile = "$temp\assets.json"
     Invoke-WebRequest -Uri "$JsonURL" -OutFile "$jsonFile"
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
     $objects = $jsonData.objects
@@ -285,12 +285,12 @@ function DL-Natives
 
     Invoke-WebRequest -Uri "$URL" -OutFile "$temp/$FileName.jar"
     Invoke-WebRequest -Uri "$URL2" -OutFile "$temp/$FileName`2.jar"
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/$FileName.jar", "$temp/natives")
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/$FileName`2.jar", "$temp/natives")
-    [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp/natives", "$mdk_dir/jars/bin/natives/$FileName.jar") # Re-Zips the natives and installs it to the correct
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName.jar", "$temp\natives")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName`2.jar", "$temp\natives")
+    [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp\natives", "$mdk_dir\jars\bin\natives\$FileName.jar") # Re-Zips the natives and installs it to the correct
     #Unzip Windows Natives
     if ($uzip -eq "T") {
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir/jars/bin/natives/$FileName.jar", "$mdk_dir/jars/bin/natives") # Un-Zips all Windows Natives to the correct location
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\natives\$FileName.jar", "$mdk_dir\jars\bin\natives") # Un-Zips all Windows Natives to the correct location
     }
     #Cleanup When Done
     Remove-Item "$temp\natives\*" -Recurse -Force
@@ -536,9 +536,9 @@ Write-Host "Creating Forge MDK for $mc_ver"
 MDK-Cleanup
 
 #Create Directories
-New-Item -Path "$temp/natives" -ItemType "directory" -Force | out-null
-New-Item -Path "$mdk_dir/jars/lib" -ItemType "directory" -Force | out-null
-New-Item -Path "$mdk_dir/jars/bin/natives" -ItemType "directory" -Force | out-null
+New-Item -Path "$temp\natives" -ItemType "directory" -Force | out-null
+New-Item -Path "$mdk_dir\jars\lib" -ItemType "directory" -Force | out-null
+New-Item -Path "$mdk_dir\jars\bin\natives" -ItemType "directory" -Force | out-null
 
 #Download & Extract MCP
 Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
@@ -552,62 +552,62 @@ if ($fernflower_dl -eq "T")
 }
 
 #Download & Extract Forge Source
-Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp/forge.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge.zip", "$mdk_dir")
+Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp\forge.zip"
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", "$mdk_dir")
 
 #Enforce JDK-8 in Path during setup for legacy versions
 Enforce-JDK8 -mcp_dir "$mdk_dir" "F"
 
 #Download Forge lib Folder and Install it
-Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp/forge_lib.zip"
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp/forge_lib.zip", "$mdk_dir/lib")
+Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp\forge_lib.zip"
+[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge_lib.zip", "$mdk_dir\lib")
 if ($bcprov_dev -eq "T")
 {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if ($argo_url -ne "") {
-    Invoke-WebRequest -Uri "$argo_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$argo_url"))
+    Invoke-WebRequest -Uri "$argo_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$argo_url"))
 }
 if ($asm_url -ne "") {
-    Invoke-WebRequest -Uri "$asm_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$asm_url"))
+    Invoke-WebRequest -Uri "$asm_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$asm_url"))
 }
 if ($bcprov_url -ne "") {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 if ($mcp_srg_url -ne "") {
-    Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
+    Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
 }
 if ($guava_url -ne "") {
-    Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$guava_url"))
+    Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$guava_url"))
 }
 if ($scala_lib_url -ne "") {
-    Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mdk_dir/jars/lib/" + [System.IO.Path]::GetFileName("$scala_lib_url"))
+    Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$scala_lib_url"))
 }
 
 #Download minecraft.jar & minecraft_server.jar and Install it
-Invoke-WebRequest -Uri "$mc_url" -OutFile "$mdk_dir/jars/bin/minecraft.jar"
+Invoke-WebRequest -Uri "$mc_url" -OutFile "$mdk_dir\jars\bin\minecraft.jar"
 if (-Not $server_skip -eq "T" ) {
-    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mdk_dir/jars/minecraft_server.jar"
+    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mdk_dir\jars\minecraft_server.jar"
 }
 
 #Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
 if (-Not [string]::IsNullOrEmpty($modloader_url)) {
-    Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp/modloader.zip"
+    Download-Mediafire -mediafire_url "$modloader_url" -mediafire_file "$temp\modloader.zip"
     #Install Mod Loader now
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\minecraft.jar", "$temp\minecraft")
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\modloader.zip", "$temp\modloader")
     Copy-Item -Force -Recurse -Path "$temp\modloader\*" -Destination "$temp\minecraft"
     [System.IO.Directory]::Delete("$temp\minecraft\META-INF", $true)
-    Remove-Item -Path "$mdk_dir/jars/bin/minecraft.jar" -Force -ErrorAction SilentlyContinue
-    Create-Jar -Path "$temp/minecraft" -Jar "$mdk_dir/jars/bin/minecraft.jar"
+    Remove-Item -Path "$mdk_dir\jars\bin\minecraft.jar" -Force -ErrorAction SilentlyContinue
+    Create-Jar -Path "$temp\minecraft" -Jar "$mdk_dir\jars\bin\minecraft.jar"
 }
 
 #Download Minecraft Bin Libs
-Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir/jars/bin/jinput.jar"
-Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir/jars/bin/lwjgl.jar"
-Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir/jars/bin/lwjgl_util.jar"
+Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
+Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir\jars\bin\lwjgl.jar"
+Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir\jars\bin\lwjgl_util.jar"
 
 #Download Windows Natives & Extract then Install
 DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives" "T"
