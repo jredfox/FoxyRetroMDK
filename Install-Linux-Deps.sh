@@ -13,30 +13,51 @@ if command -v apt-get &> /dev/null; then
     sudo apt-get update
 elif command -v dnf &> /dev/null; then
     PKG_MNG="dnf"
+    echo "sudo dnf check-update"
+    sudo dnf check-update
 elif command -v yum &> /dev/null; then
     PKG_MNG="yum"
+    echo "sudo yum check-update"
+    sudo yum check-update
 elif command -v zypper &> /dev/null; then
     PKG_MNG="zypper"
+    echo "sudo zypper refresh"
+    sudo zypper refresh
 elif command -v pacman &> /dev/null; then
     PKG_MNG="pacman"
+    echo "sudo pacman -Sy"
+    sudo pacman -Sy
 elif command -v apk &> /dev/null; then
     PKG_MNG="apk"
+    echo "sudo apk update"
+    sudo apk update
 elif command -v emerge &> /dev/null; then
     PKG_MNG="emerge"
+    echo "sudo emerge --sync"
+    sudo emerge --sync
 elif command -v equo &> /dev/null; then
     PKG_MNG="entropy"
-    echo "sudo eix-sync"
-    sudo eix-sync  # Update Entropy database
+    echo "equo update"
+    sudo equo update
 elif command -v flatpak &> /dev/null; then
     PKG_MNG="flatpak"
+    echo "sudo flatpak update --appstream"
+    sudo flatpak update --appstream
 elif command -v snap &> /dev/null; then
     PKG_MNG="snap"
+    echo "sudo snap refresh"
+    sudo snap refresh
 elif command -v nix-env &> /dev/null; then
     PKG_MNG="nix"
+    echo "nix-channel --update"
+    nix-channel --update
 elif command -v guix &> /dev/null; then
     PKG_MNG="guix"
+    echo "guix pull"
+    guix pull
 elif command -v brew &> /dev/null; then
     PKG_MNG="brew"
+    brew update
 else
     echo "No supported package manager found."
     exit -1
