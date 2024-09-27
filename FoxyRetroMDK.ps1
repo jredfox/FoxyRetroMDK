@@ -279,8 +279,7 @@ function DL-Natives
     param (
         [string]$URL,
         [string]$URL2,
-        [string]$FileName,
-        [string]$uzip
+        [string]$FileName
     )
 
     Invoke-WebRequest -Uri "$URL" -OutFile "$temp/$FileName.jar"
@@ -290,10 +289,10 @@ function DL-Natives
     Remove-Item -Path "$temp\natives\META-INF" -Recurse -Force | out-null
     Get-ChildItem "$temp\natives\*.dylib" | Rename-Item -NewName { $_.Name -replace "\.dylib$",".jnilib" }
     [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp\natives", "$mdk_dir\jars\bin\natives\$FileName.jar") # Re-Zips the natives and installs it to the correct
-    #Unzip Windows Natives
-    if ($uzip -eq "T") {
-        [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\natives\$FileName.jar", "$mdk_dir\jars\bin\natives") # Un-Zips all Windows Natives to the correct location
-    }
+    
+    # Un-Zips all Windows Natives to the correct location
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\natives\$FileName.jar", "$mdk_dir\jars\bin\natives")
+    
     #Cleanup When Done
     Remove-Item "$temp\natives\*" -Recurse -Force
 }
@@ -612,9 +611,9 @@ Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir\jars\bin\lwjgl.jar"
 Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir\jars\bin\lwjgl_util.jar"
 
 #Download Windows Natives & Extract then Install
-DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives" "T"
-DL-Natives -URL "$natives_mac_url" -URL2 "$natives_mac_url2" -FileName "macosx_natives" "F"
-DL-Natives -URL "$natives_linux_url" -URL2 "$natives_linux_url2" -FileName "linux_natives" "F"
+DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives"
+DL-Natives -URL "$natives_mac_url" -URL2 "$natives_mac_url2" -FileName "macosx_natives"
+DL-Natives -URL "$natives_linux_url" -URL2 "$natives_linux_url2" -FileName "linux_natives"
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if ($patch_21 -eq "T")

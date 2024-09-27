@@ -319,7 +319,6 @@ function DL-Natives () {
     local natives_url2="$2"
     local natives_name="$3"
     local natives_name2="${natives_name%.*}2.jar"
-    local uzip="$4"
     curl -L -o "$temp/$natives_name" "$natives_url"
     curl -L -o "$temp/$natives_name2" "$natives_url2"
     unzip -q -o "$temp/$natives_name" -d "$temp/natives"
@@ -333,9 +332,7 @@ function DL-Natives () {
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
-    if [[ "$uzip" == "true" ]]; then
-        unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
-    fi
+	unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
     rm -f "$temp/natives/"*
 
 }
@@ -635,9 +632,9 @@ curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
 
 #Download & Install the natives
-DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar" "false"
-DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar" "$isMac"
-DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar" "$isLinux"
+DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar"
+DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar"
+DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar"
 
 #Make MCP & Forge 1.4x compile with java 7 or higher
 if [[ "$patch_21" == "T" ]]; then
