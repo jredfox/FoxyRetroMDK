@@ -287,6 +287,8 @@ function DL-Natives
     Invoke-WebRequest -Uri "$URL2" -OutFile "$temp/$FileName`2.jar"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName.jar", "$temp\natives")
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName`2.jar", "$temp\natives")
+    Remove-Item -Path "$temp\natives\META-INF" -Recurse -Force | out-null
+    Get-ChildItem "$temp\natives\*.dylib" | Rename-Item -NewName { $_.Name -replace "\.dylib$",".jnilib" }
     [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp\natives", "$mdk_dir\jars\bin\natives\$FileName.jar") # Re-Zips the natives and installs it to the correct
     #Unzip Windows Natives
     if ($uzip -eq "T") {
