@@ -296,7 +296,12 @@ function Install-1.6x {
     curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
 
     # Patch fml.json
-    python2.7 "$rp" "$mdk_dir/fml/fml.json" "http:" "https:"
+    python2.7 "$rp" "$mdk_dir/fml/fml.json" "http:" "https:" "2.9.0" "2.9.1"
+
+    # Upgrade Eclipse to Use LWJGL 2.9.1
+    python2.7 "$rp" "$mdk_dir/fml/eclipse/Minecraft/.classpath" "2.9.0" "2.9.1"
+    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Client/.classpath" "2.9.0" "2.9.1"
+    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Server/.classpath" "2.9.0" "2.9.1"
 
 	# Patch fml.py
     python2.7 "$rp" "$mdk_dir/fml/fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
