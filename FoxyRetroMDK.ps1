@@ -661,8 +661,8 @@ Write-Host "Deleting Temp Folder"
 Remove-Item -Path "$temp" -Recurse -Force | out-null
 
 #Run Forge's Install Script
-Set-Location -Path "$mdk_dir\forge"
 Write-Host "Running Forge install.cmd"
+Set-Location -Path "$mdk_dir\forge"
 & "$mdk_dir\forge\install.cmd"
 Write-Host "Forge MDK Installation Completed"
 
