@@ -251,7 +251,12 @@ function Install-1.6x {
     Invoke-WebRequest "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
 
     #Patch fml.json
-    (Get-Content "$mdk_dir\fml\fml.json").replace("http:", "https:") | Set-Content "$mdk_dir\fml\fml.json"
+    (Get-Content "$mdk_dir\fml\fml.json").replace("http:", "https:").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir\fml\fml.json"
+
+    # Upgrade Eclipse to Use LWJGL 2.9.1
+    (Get-Content "$mdk_dir/fml/eclipse/Minecraft/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/fml/eclipse/Minecraft/.classpath"
+    (Get-Content "$mdk_dir/mcp/eclipse/Client/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/mcp/eclipse/Client/.classpath"
+    (Get-Content "$mdk_dir/mcp/eclipse/Server/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/mcp/eclipse/Server/.classpath"
     
     #Patch fml.py
 	(Get-Content "$mdk_dir\fml\fml.py").replace("http://resources.download.minecraft.net", "$assets_base_url").replace("https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url") | Set-Content "$mdk_dir\fml\fml.py"
