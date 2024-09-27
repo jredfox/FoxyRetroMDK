@@ -272,6 +272,7 @@ function Install-1.6x {
     Write-Host "Running Forge install.cmd"
 	Set-Location -Path "$mdk_dir"
 	Start-Process -FilePath "$mdk_dir\install.cmd" -Wait -NoNewWindow
+    Write-Host "Forge MDK Installation Completed"
 }
 
 function DL-Natives
