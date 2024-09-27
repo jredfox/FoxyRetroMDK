@@ -325,9 +325,11 @@ function DL-Natives () {
     unzip -q -o "$temp/$natives_name" -d "$temp/natives"
     unzip -q -o "$temp/$natives_name2" -d "$temp/natives"
     rm -rf "$temp/natives/META-INF"
-    pushd "$temp/natives" > /dev/null 2>&1
     #prevents openal intialization error. Comment out if an older java or macOS version is throwing a fit
-    mv -f "openal.dylib" "openal.jnilib" > /dev/null 2>&1
+    find "$temp/natives" -type f -name "*.dylib" -print0 | while IFS= read -r -d '' file; do
+        mv "$file" "${file%.dylib}.jnilib"
+    done
+    pushd "$temp/natives" > /dev/null 2>&1
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
