@@ -271,7 +271,7 @@ function Install-1.6x {
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
 	Set-Location -Path "$mdk_dir"
-	Start-Process -FilePath "$mdk_dir\install.cmd" -Wait -NoNewWindow
+	& "$mdk_dir\install.cmd"
     Write-Host "Forge MDK Installation Completed"
 }
 
@@ -663,7 +663,7 @@ Remove-Item -Path "$temp" -Recurse -Force | out-null
 #Run Forge's Install Script
 Set-Location -Path "$mdk_dir\forge"
 Write-Host "Running Forge install.cmd"
-Start-Process -FilePath "$mdk_dir\forge\install.cmd" -Wait -NoNewWindow
+& "$mdk_dir\forge\install.cmd"
 Write-Host "Forge MDK Installation Completed"
 
 }
