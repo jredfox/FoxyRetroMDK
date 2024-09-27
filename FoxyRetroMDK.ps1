@@ -102,7 +102,7 @@ function Create-Jar {
 function Unsupported-Version {
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     pause
-    exit -1
+    exit 1
 }
 
 #cleanup previous installation attempts

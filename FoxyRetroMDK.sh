@@ -310,6 +310,7 @@ function Install-1.6x {
 	echo "Running Forge install.sh"
 	cd "$mdk_dir"
 	bash "$mdk_dir/install.sh"
+    echo "Forge MDK Installation Completed"
 }
 
 #Download Natives & Extract then Install them
