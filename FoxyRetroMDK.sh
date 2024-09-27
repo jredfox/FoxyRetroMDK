@@ -371,7 +371,8 @@ asm_url="https://web.archive.org/web/20160305133607id_/https://files.minecraftfo
 bcprov_url="https://web.archive.org/web/20130708220724id_/http://files.minecraftforge.net/fmllibs/bcprov-jdk15on-148.jar"
 guava_url="https://web.archive.org/web/20150324120717id_/https://files.minecraftforge.net/fmllibs/guava-14.0-rc3.jar"
 scala_lib_url="https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
-jinput_url="https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
+jinput_url="https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
+jutil_url="https://libraries.minecraft.net/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
 lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar"
 lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar"
 natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
@@ -627,9 +628,12 @@ if [ -n "$modloader_url" ]; then
 fi
 
 #Download Minecraft Bin Libs
-curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
 curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
+curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
+curl -L -o "$mdk_dir/jars/bin/jutil.jar" "$jutil_url"
+python2.7 "$SCRIPTPATH/merge-zips.py" "$mdk_dir/jars/bin/jinput.jar" "$mdk_dir/jars/bin/jutil.jar"
+rm -f "$mdk_dir/jars/bin/jutil.jar"
 
 #Download & Install the natives
 DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar"
