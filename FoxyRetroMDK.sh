@@ -72,7 +72,7 @@ function Check-LinuxDeps () {
 
     if [[ "$missing" == "T" ]]; then
         echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
-        exit -1
+        exit 1
     fi
 
     #Create Dep Folders for Deps
@@ -187,7 +187,7 @@ function Download-Mediafire () {
 function Unsupported-Version {
 
     echo "Invalid or Unsupported MC Version $mc_ver" >&2
-    exit -1
+    exit 1
 }
 
 #cleanup previous installation attempts
@@ -548,7 +548,7 @@ elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isLinux" == "true" ]]; then
         echo "Try Installing Wine and then run FoxyRetroMDK.cmd"
     fi
-    exit -1
+    exit 1
 else
     Unsupported-Version
 fi
