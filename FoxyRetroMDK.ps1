@@ -311,7 +311,8 @@ $asm_url = "https://web.archive.org/web/20160305133607id_/https://files.minecraf
 $bcprov_url = "https://web.archive.org/web/20130708220724id_/http://files.minecraftforge.net/fmllibs/bcprov-jdk15on-148.jar"
 $guava_url = "https://web.archive.org/web/20150324120717id_/https://files.minecraftforge.net/fmllibs/guava-14.0-rc3.jar"
 $scala_lib_url = "https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
-$jinput_url = "https://web.archive.org/web/20150608205828if_/http://s3.amazonaws.com/MinecraftDownload/jinput.jar" #This lib Requires the embedded jutils.jar version of jinput pre 1.6 launcher
+$jinput_url = "https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
+$jutil_url = "https://libraries.minecraft.net/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
 $lwjgl_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.3/lwjgl-2.9.3.jar"
 $lwjgl_util_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.3/lwjgl_util-2.9.3.jar"
 #Native URLS
@@ -606,9 +607,13 @@ if (-Not [string]::IsNullOrEmpty($modloader_url)) {
 }
 
 #Download Minecraft Bin Libs
-Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
 Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir\jars\bin\lwjgl.jar"
 Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir\jars\bin\lwjgl_util.jar"
+Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
+Invoke-WebRequest -Uri "$jutil_url" -OutFile "$mdk_dir\jars\bin\jutil.jar"
+& "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\merge-zips.py" "$mdk_dir\jars\bin\jinput.jar" "$mdk_dir\jars\bin\jutil.jar"
+Remove-Item -Path "$mdk_dir\jars\bin\jutil.jar" -Force -ErrorAction SilentlyContinue
+
 
 #Download Windows Natives & Extract then Install
 DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives"
