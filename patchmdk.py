@@ -47,10 +47,11 @@ if __name__ == "__main__":
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):
             with open(file, 'r') as f:
-                lines = (f.read().replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + mcp_sh_patch, 1) ) if isSh else (f.read().replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
+                lines = f.read()
+            lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
             with open(file, 'wb') as f:
                 f.write(lines)
-                print("Patching Path:" + file)
+            print("Patching Path:" + file)
     if mcpInForge:
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py')
@@ -62,18 +63,20 @@ if __name__ == "__main__":
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
                 with open(file, 'r') as f:
-                    lines = ( f.read().replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mdk_sh, 1) ) if isSh else f.read().replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_mdk_cmd, 1)
+                    lines = f.read()
+                lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mdk_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_mdk_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                    print("Patching Path:" + file)
+                print("Patching Path:" + file)
         for file in glob.glob(os.path.normpath(mdk + "/fml/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
                 with open(file, 'r') as f:
-                    lines = ( f.read().replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else f.read().replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                    lines = f.read()
+                lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                    print("Patching Path:" + file)
+                print("Patching Path:" + file)
     else:
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n')
@@ -85,15 +88,17 @@ if __name__ == "__main__":
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
                 with open(file, 'r') as f:
-                    lines = ( f.read().replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_forge_sh, 1) ) if isSh else f.read().replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_forge_cmd, 1)
+                    lines = f.read()
+                lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_forge_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_forge_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                    print("Patching Path:" + file)
+                print("Patching Path:" + file)
         for file in glob.glob(os.path.normpath(mdk + "/forge/fml/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
                 with open(file, 'r') as f:
-                    lines = ( f.read().replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else f.read().replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                    lines = f.read()
+                lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                    print("Patching Path:" + file)
+                print("Patching Path:" + file)
