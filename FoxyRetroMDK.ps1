@@ -251,15 +251,15 @@ function Install-1.6x {
     Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
 
     #Patch fml.json
-    (Get-Content "$mdk_dir\fml\fml.json").replace("http:", "https:").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir\fml\fml.json"
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.json" "http:" "https:" "2.9.0" "2.9.1"
 
     # Upgrade Eclipse to Use LWJGL 2.9.1
-    (Get-Content "$mdk_dir/fml/eclipse/Minecraft/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/fml/eclipse/Minecraft/.classpath"
-    (Get-Content "$mdk_dir/mcp/eclipse/Client/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/mcp/eclipse/Client/.classpath"
-    (Get-Content "$mdk_dir/mcp/eclipse/Server/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/mcp/eclipse/Server/.classpath"
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\eclipse\Minecraft\.classpath" "2.9.0" "2.9.1"
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Client\.classpath" "2.9.0" "2.9.1"
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Server\.classpath" "2.9.0" "2.9.1"
     
     #Patch fml.py
-    (Get-Content "$mdk_dir\fml\fml.py").replace("http://resources.download.minecraft.net", "$assets_base_url").replace("https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url") | Set-Content "$mdk_dir\fml\fml.py"
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
 
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"

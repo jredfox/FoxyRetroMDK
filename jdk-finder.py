@@ -25,7 +25,7 @@ debug = False
 
 def save(jdk_path, cache):
     if cache and not debug:
-        with open(cached_path, "w") as file:
+        with open(cached_path, "wb") as file:
             file.write(jdk_path)
     print(jdk_path)
     sys.exit(0)
@@ -144,7 +144,7 @@ if __name__ == "__main__":
         cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
         if(os.path.isfile(cached_path)):
             with open(cached_path, "r") as file:
-                chk_jdk(file.readline().strip())
+                chk_jdk(file.readline().strip().replace("\r\n", "\n"))
 
     find_jdk()
     sys.exit(0)
