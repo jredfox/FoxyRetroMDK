@@ -9,3 +9,4 @@
 *.cpp text eol=crlf
 *.cfg text eol=crlf
 *.reg text eol=crlf
+*.py text eol=lf
