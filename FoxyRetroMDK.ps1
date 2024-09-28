@@ -243,12 +243,12 @@ function Install-1.6x {
     Invoke-WebRequest "$mcp_url" -OutFile "$mdk_dir\fml\$mcp_ver.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\fml\$mcp_ver.zip", "$mdk_dir\mcp")
 
-    #Enforce JDK-8
-    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
-
     #Download & Install minecraft.jar & minecraft_server.jar
     Invoke-WebRequest "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
     Invoke-WebRequest "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
+
+    #Enforce JDK-8
+    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
 
     #Patch fml.json
     (Get-Content "$mdk_dir\fml\fml.json").replace("http:", "https:").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir\fml\fml.json"
