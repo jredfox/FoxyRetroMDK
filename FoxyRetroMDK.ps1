@@ -100,6 +100,7 @@ function Create-Jar {
 }
 
 function Unsupported-Version {
+    
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
     pause
     exit 1
