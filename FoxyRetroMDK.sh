@@ -17,7 +17,7 @@ rp="$SCRIPTPATH/replace.py"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if [[ -z "$mc_ver" ]]; then
-	mc_ver="1.5.2"
+    mc_ver="1.5.2"
 fi
 
 #Change the Title
@@ -120,25 +120,25 @@ function Check-LinuxDeps () {
 }
 
 function Check-Deps () {
-	if [[ "$isMac" == "true" ]]; then
-		#Patch Python Installer bug that prevents HTTPS from working on macOS
-		bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
+    if [[ "$isMac" == "true" ]]; then
+        #Patch Python Installer bug that prevents HTTPS from working on macOS
+        bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
         if ! output=$(python2.7 "--version" > /dev/null 2>&1); then
-			echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-			curl -ss -L -o "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
-			open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
-			echo "Please re-run the script once Python has been installed"
-			exit 0
-		fi
+            echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
+            curl -ss -L -o "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
+            open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
+            echo "Please re-run the script once Python has been installed"
+            exit 0
+        fi
         if [[ "$dl_rc" == "true" ]] && ! output=$(jq "--version" > /dev/null 2>&1); then
             echo "Installing jq"
             brew install jq
             echo ""
         fi
-	else
+    else
         Check-LinuxDeps
-	fi
+    fi
 }
 
 #Author jredfox
@@ -194,11 +194,11 @@ function Unsupported-Version {
 function MDK-Check {
 
 if [ -d "$mdk_dir" ]; then
-	read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
-	if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
-    	rm -rf "$mdk_dir"
+    read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
+    if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
+        rm -rf "$mdk_dir"
     else
-    	exit 0
+        exit 0
     fi
 fi
 
@@ -230,36 +230,36 @@ function Patch-MDKPY {
 
 function Install-1.6x {
 
-	#Start URL's
-	local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
-	local assets_base_url="https://resources.download.minecraft.net"
-	local python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
-	local forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+    #Start URL's
+    local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
+    local assets_base_url="https://resources.download.minecraft.net"
+    local python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+    local forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
 
-	if [[ "$mc_ver" == "1.6.4" ]]; then
-		mcp_ver="mcp8.11"
-		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
-		forge_url="$forge_164_url"
-		mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
-		mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
-	elif [[ "$mc_ver" == "1.6.3" ]]; then
-		mcp_ver="mcp8.09"
-		mcp_url="https://archive.org/download/mcp809/mcp809.zip"
-		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
-		mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
-		mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
-	elif [[ "$mc_ver" == "1.6.2" ]]; then
-		mcp_ver="mcp8.04"
-		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
-		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
-		mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
-		mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
-	elif [[ "$mc_ver" == "1.6.1" ]]; then
-		mcp_ver="mcp8.03"
-		mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
-		forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
-		mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
-		mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
+    if [[ "$mc_ver" == "1.6.4" ]]; then
+        mcp_ver="mcp8.11"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
+        forge_url="$forge_164_url"
+        mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
+        mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
+    elif [[ "$mc_ver" == "1.6.3" ]]; then
+        mcp_ver="mcp8.09"
+        mcp_url="https://archive.org/download/mcp809/mcp809.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
+        mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
+    elif [[ "$mc_ver" == "1.6.2" ]]; then
+        mcp_ver="mcp8.04"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
+        mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
+    elif [[ "$mc_ver" == "1.6.1" ]]; then
+        mcp_ver="mcp8.03"
+        mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
+        mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
+        mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
     else
         Unsupported-Version
     fi
@@ -280,11 +280,11 @@ function Install-1.6x {
     mv -f "$temp/forge/"* "$mdk_dir"
 
     #Patch fml.py for version 1.6-1.6.3
-	if [[ "$mc_ver" != "1.6.4" ]]; then
+    if [[ "$mc_ver" != "1.6.4" ]]; then
         curl -ss -L -o "$temp/forge164.zip" "$forge_164_url"
         unzip -o -q "$temp/forge164.zip" -d "$temp/forge164"
         rm -f "$mdk_dir/fml/fml.py"
-		cp -f "$temp/forge164/forge/fml/fml.py" "$mdk_dir/fml/fml.py"
+        cp -f "$temp/forge164/forge/fml/fml.py" "$mdk_dir/fml/fml.py"
     fi
 
     #Download & Extract MCP into forge
@@ -303,18 +303,18 @@ function Install-1.6x {
     python2.7 "$rp" "$mdk_dir/mcp/eclipse/Client/.classpath" "2.9.0" "2.9.1"
     python2.7 "$rp" "$mdk_dir/mcp/eclipse/Server/.classpath" "2.9.0" "2.9.1"
 
-	# Patch fml.py
+    # Patch fml.py
     python2.7 "$rp" "$mdk_dir/fml/fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
 
-	#patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
-	Patch-MDKPY "$mdk_dir/mcp"
+    #patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
+    Patch-MDKPY "$mdk_dir/mcp"
 
     #Remove Temp Folder
     rm -rf "$temp"
 
-	echo "Running Forge install.sh"
-	cd "$mdk_dir"
-	bash "$mdk_dir/install.sh"
+    echo "Running Forge install.sh"
+    cd "$mdk_dir"
+    bash "$mdk_dir/install.sh"
     echo "Forge MDK Installation Completed"
 }
 
@@ -338,7 +338,7 @@ function DL-Natives () {
     zip -r "$natives_name" *
     mv -f "$natives_name" "$mdk_dir/jars/bin/natives/$natives_name"
     popd > /dev/null 2>&1
-	unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
+    unzip -q -o "$mdk_dir/jars/bin/natives/$natives_name" -d "$mdk_dir/jars/bin/natives"
     rm -f "$temp/natives/"*
 
 }
@@ -426,7 +426,7 @@ elif [[ "$mc_ver" == "1.5" ]]; then
 
 elif [[ "$mc_ver" == 1.4* ]]; then
 
-	if [[ "$mc_ver" == "1.4.7" ]]; then
+    if [[ "$mc_ver" == "1.4.7" ]]; then
         mcp_ver="mcp726a"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.4.7/mcp726a.zip"
         forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.4.7-6.6.2.534/forge-1.4.7-6.6.2.534-src.zip"
@@ -598,10 +598,10 @@ if [[ "$argo_url" != "" ]]; then
     curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$argo_url")" "$argo_url"
 fi
 if [[ "$asm_url" != "" ]]; then
-	curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url"
 fi
 if [[ "$bcprov_url" != "" ]]; then
-	curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url"
+    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url"
 fi
 if [[ "$mcp_srg_url" != "" ]]; then
     curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$mcp_srg_url")" "$mcp_srg_url"
