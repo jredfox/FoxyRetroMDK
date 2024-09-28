@@ -1,7 +1,7 @@
 param(
-	[string]$mc_ver,
-	[string]$mdk_dir,
-	[string]$skip_rc
+    [string]$mc_ver,
+    [string]$mdk_dir,
+    [string]$skip_rc
 )
 
 #import C# zip tools
@@ -178,39 +178,39 @@ Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.
 function Install-1.6x {
     
     #Start URL's
-	$assets_base_url="https://resources.download.minecraft.net"
-	#$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+    $assets_base_url="https://resources.download.minecraft.net"
+    #$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
     $python_url = "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
-	$forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+    $forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
 
-	if($mc_ver -eq "1.6.4") {
-		$mcp_ver = "mcp8.11"
-		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
-		$forge_url="$forge_164_url"
-		$mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
-		$mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
-	}
-	elseif($mc_ver -eq "1.6.3") {
-		$mcp_ver = "mcp8.09"
-		$mcp_url="https://archive.org/download/mcp809/mcp809.zip"
-		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
-		$mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
-		$mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
-	}
-	elseif($mc_ver -eq "1.6.2") {
-		$mcp_ver = "mcp8.04"
-		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
-		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
-		$mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
-		$mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
-	}
-	elseif($mc_ver -eq "1.6.1") {
-		$mcp_ver = "mcp8.03"
-		$mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
-		$forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
-		$mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
-		$mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
-	}
+    if($mc_ver -eq "1.6.4") {
+        $mcp_ver = "mcp8.11"
+        $mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.4/mcp811.zip"
+        $forge_url="$forge_164_url"
+        $mc_client_url="https://launcher.mojang.com/v1/objects/1703704407101cf72bd88e68579e3696ce733ecd/client.jar"
+        $mc_server_url="https://vault.omniarchive.uk/archive/java/server-release/1.6/1.6.4-201309191549.jar" #weird server jar link look into later
+    }
+    elseif($mc_ver -eq "1.6.3") {
+        $mcp_ver = "mcp8.09"
+        $mcp_url="https://archive.org/download/mcp809/mcp809.zip"
+        $forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.3-9.11.0.878/forge-1.6.3-9.11.0.878-src.zip"
+        $mc_client_url="https://launcher.mojang.com/v1/objects/f9af8a0a0fe24c891c4175a07e9473a92dc71c1a/client.jar"
+        $mc_server_url="https://launcher.mojang.com/v1/objects/5a4c69bdf7c4a9aa9580096805d8497ba7721e05/server.jar"
+    }
+    elseif($mc_ver -eq "1.6.2") {
+        $mcp_ver = "mcp8.04"
+        $mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.2/mcp804.zip"
+        $forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.2-9.10.0.848/forge-1.6.2-9.10.0.848-src.zip"
+        $mc_client_url="https://launcher.mojang.com/v1/objects/b6cb68afde1d9cf4a20cbf27fa90d0828bf440a4/client.jar"
+        $mc_server_url="https://launcher.mojang.com/v1/objects/01b6ea555c6978e6713e2a2dfd7fe19b1449ca54/server.jar"
+    }
+    elseif($mc_ver -eq "1.6.1") {
+        $mcp_ver = "mcp8.03"
+        $mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.6.1/mcp803.zip"
+        $forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.1-8.9.0.775/forge-1.6.1-8.9.0.775-src.zip"
+        $mc_client_url="https://launcher.mojang.com/v1/objects/17e2c28fb54666df5640b2c822ea8042250ef592/client.jar"
+        $mc_server_url="https://launcher.mojang.com/v1/objects/0252918a5f9d47e3c6eb1dfec02134d1374a89b4/server.jar"
+    }
     else {
         Unsupported-Version
     }
@@ -234,9 +234,9 @@ function Install-1.6x {
     if($mc_ver -ne "1.6.4")
     {
         Invoke-WebRequest "$forge_164_url" -OutFile "$temp\forge164.zip"
-		[System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge164.zip", "$temp\forge164")
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge164.zip", "$temp\forge164")
         Remove-Item -Path "$mdk_dir\fml\fml.py" -Force | out-null
-		Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mdk_dir\fml\fml.py" -Force | out-null
+        Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mdk_dir\fml\fml.py" -Force | out-null
     }
 
     #Download & Extract MCP into forge
@@ -259,24 +259,24 @@ function Install-1.6x {
     (Get-Content "$mdk_dir/mcp/eclipse/Server/.classpath").replace("2.9.0", "2.9.1") | Set-Content "$mdk_dir/mcp/eclipse/Server/.classpath"
     
     #Patch fml.py
-	(Get-Content "$mdk_dir\fml\fml.py").replace("http://resources.download.minecraft.net", "$assets_base_url").replace("https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url") | Set-Content "$mdk_dir\fml\fml.py"
+    (Get-Content "$mdk_dir\fml\fml.py").replace("http://resources.download.minecraft.net", "$assets_base_url").replace("https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json", "$assets_json_url") | Set-Content "$mdk_dir\fml\fml.py"
 
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
-	Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
-	Invoke-WebRequest "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
+    Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
+    Invoke-WebRequest "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\python_fml_2.7.9.zip", "$mdk_dir\fml\python")
 
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
     DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Clear the Temp Folder
-	Remove-Item -Path "$temp" -Recurse -Force | out-null
+    Remove-Item -Path "$temp" -Recurse -Force | out-null
 
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
-	Set-Location -Path "$mdk_dir"
-	& "$mdk_dir\install.cmd"
+    Set-Location -Path "$mdk_dir"
+    & "$mdk_dir\install.cmd"
     Write-Host "Forge MDK Installation Completed"
 }
 
