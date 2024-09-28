@@ -634,20 +634,20 @@ if ($patch_21 -eq "T")
     {
         $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
     }
-    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"
+    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$patch_file" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"
 }
 
 #Patch MCP 1.4.5's startclient & startserver so that it works without IDE
 if ($patch_mcp723 -eq "T") {
     $mcp_cmds = "$mdk_dir\runtime\commands.py"
     Write-Host "Patching MCP 1.4.5 $mcp_cmds"
-    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
+    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcclient] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcclient] + self.cpathserver"
 }
 #Patch MCP for MC 1.3.2 - 1.4.1's startclient & startserver by Injecting a combo of Forge's 1.4.3 & 1.4.5 hotfix for MCP
 elseif ($patch_mcp72 -eq "T") {
     $mcp_cmds="$mdk_dir\runtime\commands.py"
     Write-Host "Patching MCP $mc_ver $mcp_cmds"
-    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:`r`n            return self.checkbins(CLIENT)`r`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
+    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:`r`n            return self.checkbins(CLIENT)`r`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
 }
 
 #Download Minecraft Resources
