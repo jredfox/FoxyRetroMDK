@@ -44,7 +44,7 @@ if __name__ == "__main__":
     mcp = (mdk + "/mcp") if mcpInForge else mdk
     
     # Patch MCP commands.py to use java & javac found in PATH
-    commandspy = os.path.join(mcp, "runtime", "commands.py")
+    commandspy = os.path.normpath(mcp + "/runtime/commands.py")
     print("Patching Path:" + commandspy)
     with open(commandspy, 'r') as f:
         data = f.read()
