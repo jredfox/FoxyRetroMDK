@@ -31,7 +31,7 @@ def save(jdk_path, cache):
     sys.exit(0)
 
 def chk_jdk(jdk_path):
-    if jdk_path and jdk_path[1:].startswith(":\\Windows\\"):
+    if jdk_path and jdk_path[1:].startswith(":\\Windows\\") or jdk_path[1:] == ":\\Windows":
         return
     if debug:
         print("checking:" + jdk_path)
@@ -130,6 +130,9 @@ def find_jdk():
         save(jdk_6, False)
 
 if __name__ == "__main__":
+    working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
+    if not os.path.exists(working_dir):
+        os.makedirs(working_dir)
     #Parse Arguments
     if len(sys.argv) >= 2 and sys.argv[1]:
         jdk_ver = sys.argv[1]
@@ -137,19 +140,19 @@ if __name__ == "__main__":
             pfirst = sys.argv[2].lower() == 'true'
     else:
         jdk_ver = "1.8."
-
-    if isWindows:
-        exe = ".exe"
-
+        jdk_targ_file = os.path.join(working_dir, "jdkfinder-target.cfg")
+        if os.path.isfile(jdk_targ_file):
+            with open(jdk_targ_file, "r") as file:
+                jdk_ver = file.readline()
+        with open(jdk_targ_file, "wb") as file: 
+            file.write(jdk_ver)
+    
     #Parsed Cached JDK
-    if not debug:
-        working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
-        if not os.path.exists(working_dir):
-            os.makedirs(working_dir)
-        cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
-        if(os.path.isfile(cached_path)):
-            with open(cached_path, "r") as file:
-                chk_jdk(file.readline().strip().replace("\r\n", "\n"))
+    cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
+    if(os.path.isfile(cached_path)):
+        with open(cached_path, "r") as file:
+            cached_jkd = file.readline().strip().replace("\r\n", "\n")
+        chk_jdk(cached_jkd)
 
     find_jdk()
     sys.exit(0)
