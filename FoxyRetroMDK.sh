@@ -210,6 +210,7 @@ function Patch-MDKPY {
 
     #Copy JDK finder over
     cp -f "$SCRIPTPATH/jdk-finder.py" "$mcp_dir/jdk-finder.py"
+    cp -rf "$SCRIPTPATH/cache" "$mcp_dir/cache"
 
     ## Copy Linux Binaries over to the MDK
     if [[ "$isLinux" == "true" ]]; then
