@@ -95,7 +95,7 @@ function Create-Jar {
     $temp_cd = Get-Location
     Set-Location "$Path"
     Write-Host "Creating Jar $Jar"
-    & "jar" cvf "$Jar" "."
+    & "jar" cf "$Jar" "."
     Set-Location "$temp_cd"
 }
 
