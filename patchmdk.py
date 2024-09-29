@@ -9,32 +9,32 @@ isLinux = not isMac and not isWindows
 
 if isLinux:
     mcp_sh_patch = (
-        '## FoxyRetroMDK START ##\n'
+        '## Foxy Retro MDK START ##\n'
         'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
         'cd "$mdk"\n'
         'isa="$(uname -m)"\n'
         'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '## FoxyRetroMDK END ##\n'
+        '## Foxy Retro MDK END ##\n'
     )
 else:
     mcp_sh_patch = (
-        '## FoxyRetroMDK START ##\n'
+        '## Foxy Retro MDK START ##\n'
         'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
         'cd "$mdk"\n'
         'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '## FoxyRetroMDK END ##\n'
+        '## Foxy Retro MDK END ##\n'
     )
 
 mcp_batch_patch = (
-    'REM ## FoxyForgeMDK JDK-8 START Patch ##\r\n'
+    'REM ## Foxy Retro MDK START ##\r\n'
     'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\r\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\r\n'
     'FOR %%I IN ("%JAVA_DIR%\..") DO SET "JAVA_HOME=%%~fI"\r\n'
-    'REM ## FoxyForgeMDK JDK-8 END Patch ##\r\n'
+    'REM ## Foxy Retro MDK END ##\r\n'
 )
 
 if __name__ == "__main__":
