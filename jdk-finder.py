@@ -31,6 +31,8 @@ def save(jdk_path, cache):
     sys.exit(0)
 
 def chk_jdk(jdk_path):
+    if jdk_path and jdk_path[1:].startswith(":\\Windows\\"):
+        return
     if debug:
         print("checking:" + jdk_path)
     global jdk_ver
@@ -66,6 +68,9 @@ def find_jdk():
 
     #Check JDKs from the PATH first before resorting to mac & linux madness
     path_dirs = os.getenv('PATH', '').split(os.pathsep)
+    if not ( '' in path_dirs ):
+        path_dirs.append('')
+    
     if pfirst:
         for directory in path_dirs:
             chk_jdk(directory)
