@@ -45,6 +45,7 @@ if __name__ == "__main__":
     
     # Patch MCP commands.py to use java & javac found in PATH
     commandspy = os.path.join(mcp, "runtime", "commands.py")
+    print("Patching Path:" + commandspy)
     with open(commandspy, 'r') as f:
         data = f.read()
     data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
