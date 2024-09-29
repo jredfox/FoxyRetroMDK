@@ -42,7 +42,15 @@ if __name__ == "__main__":
     mdk = os.path.normpath(sys.argv[1])
     mcpInForge = sys.argv[2][0].lower() == 't'
     mcp = (mdk + "/mcp") if mcpInForge else mdk
-
+    
+    # Patch MCP commands.py to use java & javac found in PATH
+    commandspy = os.path.join(mcp, "runtime", "commands.py")
+    with open(commandspy, 'r') as f:
+        data = f.read()
+    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy RetroMDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'\'\n            if self.osname == \'win\':\n                exe = \'.exe\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy RetroMDK End ##', 1)
+    with open(commandspy, 'wb') as f:
+        f.write(data)
+    
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):
