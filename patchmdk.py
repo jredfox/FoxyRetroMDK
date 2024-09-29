@@ -47,7 +47,7 @@ if __name__ == "__main__":
     commandspy = os.path.join(mcp, "runtime", "commands.py")
     with open(commandspy, 'r') as f:
         data = f.read()
-    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy RetroMDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'\'\n            if self.osname == \'win\':\n                exe = \'.exe\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy RetroMDK End ##', 1)
+    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
     with open(commandspy, 'wb') as f:
         f.write(data)
     
