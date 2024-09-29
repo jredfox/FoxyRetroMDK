@@ -16,11 +16,11 @@ jdk_8 = None
 jdk_7 = None
 jdk_6 = None
 pfirst = True
-exe = ""
 cached_path = None
 isWindows = os.name == 'nt'
 isMac = sys.platform.lower() == 'darwin'
 isLinux = not isMac and not isWindows
+exe = '.exe' if isWindows else ''
 debug = False
 
 def save(jdk_path, cache):
