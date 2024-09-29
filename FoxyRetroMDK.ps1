@@ -168,12 +168,12 @@ function Enforce-JDK8 {
         [string]$onesix
     )
 
-$JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py").Trim()
-$env:PATH = "$JDK8;$env:PATH"
-$env:JAVA_HOME = Split-Path "$JDK8" -Parent
-& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
-Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
-
+    $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py").Trim()
+    $env:PATH = "$JDK8;$env:PATH"
+    $env:JAVA_HOME = Split-Path "$JDK8" -Parent
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
+    Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
+    Copy-Item -Path "$PSScriptRoot\cache" -Destination "$mcp_dir\cache" -Recurse -Force | out-null
 }
 
 function Install-1.6x {
