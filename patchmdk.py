@@ -17,7 +17,6 @@ if isLinux:
         'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '' + oneone + ''
         '## Foxy Retro MDK END ##\n'
     )
 else:
@@ -28,7 +27,6 @@ else:
         'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '' + oneone + ''
         '## Foxy Retro MDK END ##\n'
     )
 
@@ -55,13 +53,14 @@ if __name__ == "__main__":
     with open(commandspy, 'wb') as f:
         f.write(data)
     
+    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', '## Foxy Retro MDK END ##\n' + oneone)
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):
             print("Patching Path:" + file)
             with open(file, 'r') as f:
                 lines = f.read()
-            lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
+            lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
             with open(file, 'wb') as f:
                 f.write(lines)
             
