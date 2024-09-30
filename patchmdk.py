@@ -6,6 +6,7 @@ import glob
 isWindows = os.name == 'nt'
 isMac = sys.platform.lower() == 'darwin'
 isLinux = not isMac and not isWindows
+oneone = "python2.7 patchoneone.py\n" if ( os.getenv("patchoneone") == "T" ) else ""
 
 if isLinux:
     mcp_sh_patch = (
@@ -16,6 +17,7 @@ if isLinux:
         'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
+        '' + oneone + ''
         '## Foxy Retro MDK END ##\n'
     )
 else:
@@ -26,6 +28,7 @@ else:
         'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
         'export PATH="$JDK8:$PATH"\n'
         'export JAVA_HOME=$(dirname "$JDK8")\n'
+        '' + oneone + ''
         '## Foxy Retro MDK END ##\n'
     )
 

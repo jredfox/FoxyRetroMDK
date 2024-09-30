@@ -174,6 +174,9 @@ function Enforce-JDK8 {
     & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
     Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
     Copy-Item -Path "$PSScriptRoot\cache" -Destination "$mcp_dir\cache" -Recurse -Force | out-null
+    if($env:patchoneone -eq "T") {
+        Copy-Item -Path "$PSScriptRoot\patchoneone.py" -Destination "$mcp_dir\patchoneone.py" -Force | out-null
+    }
 }
 
 function Install-1.6x {
@@ -533,6 +536,7 @@ elseif ($mc_ver -eq "1.1")
 
     $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+    $env:patchoneone = "T" #When Patching MDK Shells flag it to also call patchoneone.py
 }
 else
 {
