@@ -14,7 +14,7 @@ mcp_sh_patch = (
     '    xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n'
     'else\n'
     '    isa="$(uname -m)"\n'
-    '    export PATH="$mcp/bin_linux/$isa/python2.7/bin:$mcp/bin_linux/$isa/astyle:$PATH"\n'
+    '    export PATH="$mcp/bin_linux/$isa/python2.7:$mcp/bin_linux/$isa/astyle:$PATH"\n'
     '    chmod -R 777 "$mcp/runtime/bin"\n'
     '    chmod -R 777 "$mcp/bin_linux"\n'
     'fi\n'
