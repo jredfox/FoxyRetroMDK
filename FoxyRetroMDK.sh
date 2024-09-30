@@ -98,22 +98,24 @@ function Check-LinuxDeps () {
     fi
 
     #Download Compile & Install python2.7
-    export PATH="$dir_bin/python2.7:$PATH"
+    export PATH="$dir_bin/python2.7/bin:$PATH"
     if [[ ! -e "$dir_bin/python2.7" ]]; then
         py_ver="2.7.15"
         echo "Installing python $py_ver to $dir_bin/python2.7"
         curl -L -o "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
-        pushd "$tmp_deps" > /dev/null 2>&1 
+        pushd "$tmp_deps" > /dev/null 2>&1
         tar xzf "$tmp_deps/Python-${py_ver}.tgz"
-        popd > /dev/null 2>&1 
+        popd > /dev/null 2>&1
 
-        pushd "$tmp_deps/Python-${py_ver}" > /dev/null 2>&1 
+        builds_py="$tmp_deps/Python-${py_ver}/builds_py"
         echo "Compiling Python ${py_ver}"
-        sh ./configure
-        make -j$(nproc)
+        mkdir -p "$builds_py"
+        pushd "$tmp_deps/Python-${py_ver}" > /dev/null 2>&1
+        sh ./configure "--prefix=$builds_py"
+        make -j$(nproc) install
         cp -f "python" "python2.7"
-        popd > /dev/null 2>&1 
-        cp -rfL "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
+        popd > /dev/null 2>&1
+        cp -rfL "$builds_py" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
         chmod 777 -R "$dir_bin/python2.7"
     fi
 
