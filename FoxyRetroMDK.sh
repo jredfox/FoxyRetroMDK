@@ -231,11 +231,6 @@ function Patch-MDKPY {
     fi
     python2.7 "$SCRIPTPATH/patchmdk.py" "$mdk_dir" "$onesixflag"
     
-    #Make all Files Executeable
-    if [[ "$isMac" == "true" ]]; then
-        xattr -r -d com.apple.quarantine "$mcp_dir/runtime/bin"
-    fi
-    chmod -R 777 "$mcp_dir/runtime/bin"
 }
 
 function Install-1.6x {
