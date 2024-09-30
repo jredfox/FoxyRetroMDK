@@ -72,7 +72,7 @@ def find_jdk():
     if not ( '' in path_dirs ):
         path_dirs.append('')
     if jhome:
-        path_dirs.append(os.path.join(jhome + 'bin'))
+        path_dirs.append(os.path.join(jhome, 'bin'))
     
     if pfirst:
         for directory in path_dirs:
