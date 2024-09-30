@@ -53,7 +53,7 @@ if __name__ == "__main__":
     with open(commandspy, 'wb') as f:
         f.write(data)
     
-    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', '## Foxy Retro MDK END ##\n' + oneone)
+    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', oneone + '\n## Foxy Retro MDK END ##\n')
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):
