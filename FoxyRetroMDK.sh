@@ -111,8 +111,9 @@ function Check-LinuxDeps () {
         echo "Compiling Python ${py_ver}"
         sh ./configure
         make -j$(nproc)
+        mv -f "Python" "Python_Dir"
         cp -f "python" "python2.7"
-        popd > /dev/null 2>&1 
+        popd > /dev/null 2>&1
         cp -rfL "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
         chmod 777 -R "$dir_bin/python2.7"
     fi
