@@ -3,38 +3,32 @@ import sys
 import glob
 
 #global vars
-isWindows = os.name == 'nt'
-isMac = sys.platform.lower() == 'darwin'
-isLinux = not isMac and not isWindows
 oneone = "python2.7 patchoneone.py\n" if ( os.getenv("patchoneone") == "T" ) else ""
 
-if isLinux:
-    mcp_sh_patch = (
-        '## Foxy Retro MDK START ##\n'
-        'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
-        'cd "$mdk"\n'
-        'isa="$(uname -m)"\n'
-        'JDK8=$("$mdk/bin_linux/$isa/python2.7/python2.7" "$mdk/jdk-finder.py" | xargs)\n'
-        'export PATH="$JDK8:$mdk/bin_linux/$isa/python2.7:$mdk/bin_linux/$isa/astyle:$PATH"\n'
-        'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '## Foxy Retro MDK END ##\n'
-    )
-else:
-    mcp_sh_patch = (
-        '## Foxy Retro MDK START ##\n'
-        'mdk="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
-        'cd "$mdk"\n'
-        'JDK8=$("python2.7" "$mdk/jdk-finder.py" | xargs)\n'
-        'export PATH="$JDK8:$PATH"\n'
-        'export JAVA_HOME=$(dirname "$JDK8")\n'
-        '## Foxy Retro MDK END ##\n'
-    )
+mcp_sh_patch = (
+    '## Foxy Retro MDK START ##\n'
+    'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+    'cd "$mcp"\n'
+    'if [[ "$(echo "$(uname)" | tr \'[:upper:]\' \'[:lower:]\')" == "darwin" ]]; then\n'
+    '    xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n'
+    '    chmod -R 777 "$mcp/runtime/bin"\n'
+    'else\n'
+    '    isa="$(uname -m)"\n'
+    '    export PATH="$mcp/bin_linux/$isa/python2.7:$mcp/bin_linux/$isa/astyle:$PATH"\n'
+    '    chmod -R 777 "$mcp/runtime/bin"\n'
+    '    chmod -R 777 "$mcp/bin_linux"\n'
+    'fi\n'
+    'JDK8=$("python2.7" "$mcp/jdk-finder.py" | xargs)\n'
+    'export PATH="$JDK8:$PATH"\n'
+    'export JAVA_HOME=$(dirname "$JDK8")\n'
+    '## Foxy Retro MDK END ##\n'
+)
 
 mcp_batch_patch = (
     'REM ## Foxy Retro MDK START ##\r\n'
     'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\r\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\r\n'
-    'FOR %%I IN ("%JAVA_DIR%\..") DO SET "JAVA_HOME=%%~fI"\r\n'
+    'FOR %%I IN ("%JAVA_DIR%\\..") DO SET "JAVA_HOME=%%~fI"\r\n'
     'REM ## Foxy Retro MDK END ##\r\n'
 )
 
@@ -66,9 +60,9 @@ if __name__ == "__main__":
             
     if mcpInForge:
         #Modify Patches based on Directory
-        str_mdk_sh = mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py')
+        str_mdk_sh = replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
+        str_fml_sh = replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\nmcp="${mcp}/mcp"\n')
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
-        str_fml_sh = mcp_sh_patch.replace('bin_linux', 'mcp/bin_linux').replace('jdk-finder.py', 'mcp/jdk-finder.py').replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n')
         str_fml_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\mcp\\runtime\\bin\\python\\python_mcp.exe" "..\\mcp\\jdk-finder.py"')
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
@@ -93,9 +87,9 @@ if __name__ == "__main__":
                 
     else:
         #Modify Patches based on Directory
-        str_forge_sh = mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\n')
+        str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mdk")"\n')
+        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mdk")"\nmcp="$(dirname "$mdk")"\n')
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
-        str_fml_sh = mcp_sh_patch.replace('cd "$mdk"\n', 'cd "$mdk"\nmdk="$(dirname "$mdk")"\nmdk="$(dirname "$mdk")"\n')
         str_fml_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\..\\runtime\\bin\\python\\python_mcp.exe" "..\\..\\jdk-finder.py"')
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):

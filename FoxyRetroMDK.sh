@@ -94,6 +94,7 @@ function Check-LinuxDeps () {
         mkdir -p "$dir_bin/astyle"
         cp -f "bin/astyle" "$dir_bin/astyle/astyle"
         popd > /dev/null 2>&1
+        chmod 777 "$dir_bin/astyle/astyle"
     fi
 
     #Download Compile & Install python2.7
@@ -113,6 +114,7 @@ function Check-LinuxDeps () {
         cp -f "python" "python2.7"
         popd > /dev/null 2>&1 
         cp -rfL "$tmp_deps/Python-${py_ver}" "$dir_bin/python2.7" #copy from temp_deps to the bins folder
+        chmod 777 -R "$dir_bin/python2.7"
     fi
 
     #Delete temp_deps Dir
