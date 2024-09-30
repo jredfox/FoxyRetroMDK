@@ -68,8 +68,11 @@ def find_jdk():
 
     #Check JDKs from the PATH first before resorting to mac & linux madness
     path_dirs = os.getenv('PATH', '').split(os.pathsep)
+    jhome = os.getenv('JAVA_HOME')
     if not ( '' in path_dirs ):
         path_dirs.append('')
+    if jhome:
+        path_dirs.append(jhome)
     
     if pfirst:
         for directory in path_dirs:
