@@ -1,6 +1,7 @@
 MDK-*
 bin/*
 test.*
+*.cfg
 *.pkg
 *.DS_Store
 FoxyRetroMDK - Copy.cmd
