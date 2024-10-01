@@ -1,0 +1,18 @@
+# Troubleshooting
+- Add JDK 6 or JDK 7 or JDK 8 First Into your System Environment Path example "C:\Program Files\Java\jdk1.6.0_45\bin"
+- Open FoxyRetroMDK/cache/jdkfinder-target.cfg with notepad and change the Target to JDK 6 "1.6." or JDK 7 "1.7." or JDK 8 "1.8." (This Only Effects JDK when Installing MDK)
+- Optional Windows Only: Open Command Prompt As Admin then run these commands. (Java Doesn't Need to be In System32 this is Confusing MCP)
+	del /F /Q /A C:\Windows\System32\java.exe
+	del /F /Q /A C:\Windows\System32\javaw.exe
+	del /F /Q /A C:\Windows\System32\javaws.exe
+	del /F /Q /A C:\Windows\System32\javac.exe
+- Backup your sources found under MDK/src/minecraft then move it to a safe spot outside the MDK
+- Re-Install MDK using FoxyRetroMDK.cmd and apply previous source
+
+# Changing to JDK 6 or 7 of Already Installed MDK
+- Add JDK 6 or JDK 7 First Into your System Environment Path example "C:\Program Files\Java\jdk1.6.0_45\bin"
+- Open MDK/cache/jdkfinder-target.cfg with notepad and change the Target to JDK 6 "1.6." or JDK 7 "1.7."
+
+# Changing to JDK 6 or 7 when Installing MDK
+- Add JDK 6 or JDK 7 First Into your System Environment Path example "C:\Program Files\Java\jdk1.6.0_45\bin"
+- Open FoxyRetroMDK/cache/jdkfinder-target.cfg with notepad and change the Target to JDK 6 "1.6." or JDK 7 "1.7."
