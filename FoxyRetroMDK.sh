@@ -180,7 +180,7 @@ function Download-Mediafire () {
 
     # Output the download link
     echo "Downloading file:$downloadLink"
-    curl -ss -L -o "$mediafire_file" "$downloadLink"
+    curl -A "Mozilla" -ss -L -o "$mediafire_file" "$downloadLink"
 
     # Delete temp HTML file
     rm -f "$mediafire_html"
