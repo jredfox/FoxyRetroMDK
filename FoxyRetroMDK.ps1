@@ -56,7 +56,7 @@ function Download-Mediafire {
     $mediafire_html = "$mediafire_file.html"
 
     #Download the temp HTML file
-    Invoke-WebRequest -Uri "$mediafire_url" -OutFile "$mediafire_html"
+    Invoke-WebRequest -Uri "$mediafire_url" -OutFile "$mediafire_html" -UserAgent "Mozilla"
     $lines = Get-Content "$mediafire_html" #Parse Lines
 
     # Loop through each line of the file
