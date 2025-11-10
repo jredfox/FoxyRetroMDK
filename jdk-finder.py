@@ -31,6 +31,8 @@ def save(jdk_path, cache):
     sys.exit(0)
 
 def chk_jdk(jdk_path):
+    if not jdk_path:
+        jdk_path = os.path.abspath(jdk_path)
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
     if not os.path.isdir(os.path.join(parent, 'lib')) and not os.path.isdir(os.path.join(parent, 'libs')):
