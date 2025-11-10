@@ -103,7 +103,6 @@ def find_jdk():
             '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
             '/usr/java/*/bin', #Some oracle Installations
             '/etc/alternatives/*/bin', #RPM redhat linux
-            '/usr/java/*/bin', #RPM redhat linux
             #Check opt Installations by user or some programs
             '/opt/j*/bin', #Covers /opt/java.*/bin /opt/jre.*/bin /opt/jdk.*/bin /opt/jvm.*/bin
             '/opt/jre*/*/bin',
