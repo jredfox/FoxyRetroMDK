@@ -169,6 +169,11 @@ function Enforce-JDK8 {
     )
 
     $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py").Trim()
+    if([string]::IsNullOrWhiteSpace($JDK8)) {
+        Write-Error "JDK-8 or lower isn't found in the PATH!"
+        pause
+        exit 1
+    }
     $env:PATH = "$JDK8;$env:PATH"
     $env:JAVA_HOME = Split-Path "$JDK8" -Parent
     & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"

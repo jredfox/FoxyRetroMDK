@@ -380,6 +380,10 @@ temp="$mdk_dir/tmp"
 
 #Enforce JDK-8 is being used
 JDK8=$("python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)
+if [[ -z "$JDK8" ]]; then
+    echo "JDK-8 or lower isn't found in the PATH!"
+    exit 1
+fi
 export PATH="$JDK8:$PATH"
 export JAVA_HOME=$(dirname "$JDK8")
 

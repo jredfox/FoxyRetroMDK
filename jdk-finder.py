@@ -161,4 +161,4 @@ if __name__ == "__main__":
         chk_jdk(cached_jkd)
 
     find_jdk()
-    sys.exit(0)
+    sys.exit(1)
