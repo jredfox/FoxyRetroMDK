@@ -134,6 +134,10 @@ function Check-Deps () {
             echo "Please re-run the script once Python has been installed"
             exit 0
         fi
+        if [[ "$dl_rc" == "true" ]] && ! output=$(brew "--help" > /dev/null 2>&1); then
+            echo "Installing brew"
+            sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
         if [[ "$dl_rc" == "true" ]] && ! output=$(jq "--version" > /dev/null 2>&1); then
             echo "Installing jq"
             brew install jq
