@@ -136,7 +136,7 @@ function Check-Deps () {
         fi
         if [[ "$dl_rc" == "true" ]] && ! output=$(brew "--help" > /dev/null 2>&1); then
             echo "Installing brew"
-            bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
         if [[ "$dl_rc" == "true" ]] && ! output=$(jq "--version" > /dev/null 2>&1); then
             echo "Installing jq"
