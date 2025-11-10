@@ -1,10 +1,16 @@
 @ECHO OFF
+setlocal enabledelayedexpansion
 REM ## Get MC Version ##
-if "%mc_ver%" EQU "" (
+if "!mc_ver!" EQU "" (
     set /p mc_ver="Enter Minecraft Version [1.1 - 1.6.4]: "
 )
 REM ## Remove Quotes & Spaces ##
-set mc_ver=%mc_ver:"=%
-set mc_ver=%mc_ver: =%
+if "!mc_ver!" EQU "" (
+    set mc_ver= 
+)
+set mc_ver=!mc_ver:"=!
+set mc_ver=!mc_ver: =!
+
 REM ## Run Main Script ##
-powershell -ExecutionPolicy Bypass -File "%~dp0\FoxyRetroMDK.ps1" -mc_ver "%mc_ver%" -skip_rc "F"
+powershell -ExecutionPolicy Bypass -File "%~dp0\FoxyRetroMDK.ps1" -mc_ver "!mc_ver!" -skip_rc "F"
+endlocal
