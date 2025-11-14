@@ -38,7 +38,7 @@ def chk_jdk(jdk_path):
         jdk_path = os.path.realpath(jdk_path)
     if isWindows:
         low = jdk_path.lower()
-        if low and (low[1:].startswith(":\\windows\\") or low[1:] == ":\\windows"):
+        if ":" in low and (low.split(":", 1)[1].startswith('\\windows') ):
             return
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
