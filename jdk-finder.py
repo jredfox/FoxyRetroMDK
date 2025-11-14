@@ -34,6 +34,8 @@ def chk_jdk(jdk_path):
     #Get the Real Absolute Path of the File / Directory Always
     if not os.path.isabs(jdk_path):
         jdk_path = os.path.realpath(os.path.join(os.getcwd(), jdk_path))
+    else:
+        jdk_path = os.path.realpath(jdk_path)
     if isWindows:
         low = jdk_path.lower()
         if low and (low[1:].startswith(":\\windows\\") or low[1:] == ":\\windows"):
