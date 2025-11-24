@@ -21,6 +21,10 @@ isWindows = os.name == 'nt'
 isMac = sys.platform.lower() == 'darwin'
 isLinux = not isMac and not isWindows
 exe = '.exe' if isWindows else ''
+VOLUME_WIN_REGEX = re.compile(
+    '\\\\\\\\.{1}\\\\Volume\{[0-9a-f\-]+\}\\\\Windows(?:\\\\|$)',
+    re.IGNORECASE
+)
 debug = False
 
 def save(jdk_path, cache):
@@ -76,7 +80,6 @@ def chk_jdk(jdk_path):
             return
 
 def find_jdk():
-
     #Check JDKs from the PATH first before resorting to mac & linux madness
     path_dirs = os.getenv('PATH', '').split(os.pathsep)
     jhome = os.getenv('JAVA_HOME')
@@ -143,6 +146,11 @@ def find_jdk():
         save(jdk_6, False)
 
 if __name__ == "__main__":
+    p = '\\\\?\\Volume{263eee56-b1c8-408e-991a-8f0b5dae1e4b}/windows'
+    print(p.replace('/', '\\'))
+    print(bool(VOLUME_WIN_REGEX.match(p)))
+    sys.exit(0)
+    
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)
