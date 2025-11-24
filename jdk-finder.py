@@ -22,7 +22,7 @@ isMac = sys.platform.lower() == 'darwin'
 isLinux = not isMac and not isWindows
 exe = '.exe' if isWindows else ''
 VOLUME_WIN_REGEX = re.compile(
-    '\\\\\\\\.{1}\\\\Volume\{[0-9a-f\-]+\}\\\\Windows(?:\\\\|$)',
+    r'(\\\\|\\)[\?\.]{1,2}\\Volume\{[0-9a-f\-]+\}\\Windows(?:\\|$)',
     re.IGNORECASE
 )
 debug = False
