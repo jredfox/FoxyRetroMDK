@@ -40,9 +40,12 @@ def chk_jdk(jdk_path):
         jdk_path = os.path.realpath(os.path.join(os.getcwd(), jdk_path))
     else:
         jdk_path = os.path.realpath(jdk_path)
+    #Skip "C:\Windows\*" or "C:\Windows\System32\java*" to prevent false postive JDK installations on Windows
     if isWindows:
-        low = jdk_path.lower()
+        low = jdk_path.lower().replace('/', '\\')
         if ":" in low and (low.split(":", 1)[1].startswith('\\windows') ):
+            return
+        elif bool(VOLUME_WIN_REGEX.match(low)):
             return
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
@@ -146,11 +149,6 @@ def find_jdk():
         save(jdk_6, False)
 
 if __name__ == "__main__":
-    p = '\\\\?\\Volume{263eee56-b1c8-408e-991a-8f0b5dae1e4b}/windows'
-    print(p.replace('/', '\\'))
-    print(bool(VOLUME_WIN_REGEX.match(p)))
-    sys.exit(0)
-    
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)
