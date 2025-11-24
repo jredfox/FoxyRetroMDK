@@ -50,7 +50,7 @@ def chk_jdk(jdk_path):
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
     if not os.path.isdir(os.path.join(parent, 'lib')) and not os.path.isdir(os.path.join(parent, 'libs')):
-            return
+        return
     if debug:
         print("checking:" + jdk_path)
     global jdk_ver
