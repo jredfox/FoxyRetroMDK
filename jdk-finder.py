@@ -40,13 +40,12 @@ def chk_jdk(jdk_path):
         jdk_path = os.path.realpath(os.path.join(os.getcwd(), jdk_path))
     else:
         jdk_path = os.path.realpath(jdk_path)
-    #Skip "C:\Windows\*" or "C:\Windows\System32\java*" to prevent false postive JDK installations on Windows
+    #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
     if isWindows:
         low = jdk_path.lower().replace('/', '\\')
         if ":" in low:
             win_str = low.split(":", 1)[1]
             if (win_str.startswith('\\windows\\') or win_str == '\\windows'):
-                print('Skipping:' + jdk_path)
                 return
         elif bool(VOLUME_WIN_REGEX.match(low)):
             return
