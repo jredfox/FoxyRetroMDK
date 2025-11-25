@@ -43,8 +43,11 @@ def chk_jdk(jdk_path):
     #Skip "C:\Windows\*" or "C:\Windows\System32\java*" to prevent false postive JDK installations on Windows
     if isWindows:
         low = jdk_path.lower().replace('/', '\\')
-        if ":" in low and (low.split(":", 1)[1].startswith('\\windows') ):
-            return
+        if ":" in low:
+            win_str = low.split(":", 1)[1]
+            if (win_str.startswith('\\windows\\') or win_str == '\\windows'):
+                print('Skipping:' + jdk_path)
+                return
         elif bool(VOLUME_WIN_REGEX.match(low)):
             return
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
