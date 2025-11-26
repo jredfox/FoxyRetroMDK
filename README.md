@@ -8,6 +8,8 @@
  * Enter the minecraft version
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
+ * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
+ * If Eclipse Refuses to work Compiling for Java version '1.6' is no longer supported. Minimal supported version is '1.8' then use Eclipse Neon 3 Found here https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers . **This is caused by an Eclipse 2024-2025 Bug It was fixed at one point but it appears to be back**
 
 # How to use mac and linux
  * Download & install JDK 8 with JDK 8 being first in your path
@@ -16,6 +18,8 @@
  * Run `bash FoxyRetroMDK.sh "mc_version"` replacing mc_version with what you need
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
+ * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
+ * If Eclipse Refuses to work Compiling for Java version '1.6' is no longer supported. Minimal supported version is '1.8' then use Eclipse Neon 3 Found here https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers . **This is caused by an Eclipse 2024-2025 Bug It was fixed at one point but it appears to be back**
 
 # MDK's Portability
 * Linux --> Mac
