@@ -10,7 +10,7 @@
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8 (If not added add it) <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
  * Newer Eclipse Make sure that the new Alternate JDK Matches the JDK you just added. You may have to go back and rename the Alternative JDK If there are duplicate naming entries.
- * Newer Eclipse If not (Compiling / Running) right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
+ * Newer Eclipse If not (Compiling / Running) right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6. Now DO Project --> Refresh Fallowed by Project --> Clean
 
 # How to use mac and linux
  * Download & install JDK 8 with JDK 8 being first in your path
@@ -21,7 +21,7 @@
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8 (If not added add it) <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
  * Newer Eclipse Make sure that the new Alternate JDK Matches the JDK you just added. You may have to go back and rename the Alternative JDK If there are duplicate naming entries.
- * Newer Eclipse If not (Compiling / Running) right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
+ * Newer Eclipse If not (Compiling / Running) right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6. Now DO Project --> Refresh Fallowed by Project --> Clean
 
 # MDK's Portability
 * Linux --> Mac
