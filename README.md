@@ -8,8 +8,9 @@
  * Enter the minecraft version
  * Download [Eclipse 2024-06-R](https://www.eclipse.org/downloads/packages/release/2024-06/r/eclipse-ide-java-developers) or Lower (Newest Ones have a bug where you can't compile for Java 6 or Java 7 even when given a JDK-6 or JDK-7)
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
- * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
+ * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8 (If not added add it)
  <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
+ * Newer Eclipse Make sure that the new Alternate JDK Matches the JDK you just added. You may have to go back and rename the Alternative JDK If there are duplicate naming entries.
 
 # How to use mac and linux
  * Download & install JDK 8 with JDK 8 being first in your path
@@ -20,6 +21,7 @@
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
  <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
+ * Newer Eclipse Make sure that the new Alternate JDK Matches the JDK you just added. You may have to go back and rename the Alternative JDK If there are duplicate naming entries.
 
 # MDK's Portability
 * Linux --> Mac
