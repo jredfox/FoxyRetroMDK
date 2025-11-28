@@ -9,7 +9,7 @@
  * Download [Eclipse 2024-06-R](https://www.eclipse.org/downloads/packages/release/2024-06/r/eclipse-ide-java-developers) or Lower (Newest Ones have a bug where you can't compile for Java 6 or Java 7 even when given a JDK-6 or JDK-7)
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
- * <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
+ <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
  * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
 
 # How to use mac and linux
@@ -20,7 +20,7 @@
  * Download [Eclipse 2024-06-R](https://www.eclipse.org/downloads/packages/release/2024-06/r/eclipse-ide-java-developers) or Lower (Newest Ones have a bug where you can't compile for Java 6 or Java 7 even when given a JDK-6 or JDK-7)
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
- * * <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
+ <img width="1670" height="898" alt="Screenshot 2025-11-27 195610" src="https://github.com/user-attachments/assets/d0746654-0c54-4d2d-ab13-23bd15b0802a" />
  * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
 
 # MDK's Portability
