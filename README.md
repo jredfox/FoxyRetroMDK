@@ -6,20 +6,20 @@
  * Extract zip to "FoxyRetroMDK"
  * Double click FoxyRetroMDK.cmd
  * Enter the minecraft version
+ * Download [Eclipse 2024-06-R](https://www.eclipse.org/downloads/packages/release/2024-06/r/eclipse-ide-java-developers) or Lower (Newest Ones have a bug where you can't compile for Java 6 or Java 7 even when given a JDK-6 or JDK-7)
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
  * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
- * If Eclipse Refuses to work Compiling for Java version '1.6' is no longer supported. Minimal supported version is '1.8' then use Eclipse Neon 3 Found here https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers . **This is caused by an Eclipse 2024-2025 Bug It was fixed at one point but it appears to be back**
 
 # How to use mac and linux
  * Download & install JDK 8 with JDK 8 being first in your path
  * Extract zip to "FoxyRetroMDK"
  * Open terminal and run these commands `cd FoxyRetroMDK` (linux only: `sudo bash Install-Linux-Deps.sh`)
  * Run `bash FoxyRetroMDK.sh "mc_version"` replacing mc_version with what you need
+ * Download [Eclipse 2024-06-R](https://www.eclipse.org/downloads/packages/release/2024-06/r/eclipse-ide-java-developers) or Lower (Newest Ones have a bug where you can't compile for Java 6 or Java 7 even when given a JDK-6 or JDK-7)
  * Link eclipse to the MDK/eclipse for 1.5.2 or lower and MDK/mcp/eclipse for 1.6x
  * Newer Eclipse's right click --> project --> properties --> java build path --> libraries --> select use alternative JDK --> select JDK 8
  * Newer Eclipse right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6
- * If Eclipse Refuses to work Compiling for Java version '1.6' is no longer supported. Minimal supported version is '1.8' then use Eclipse Neon 3 Found here https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers . **This is caused by an Eclipse 2024-2025 Bug It was fixed at one point but it appears to be back**
 
 # MDK's Portability
 * Linux --> Mac
