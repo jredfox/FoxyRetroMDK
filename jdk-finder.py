@@ -165,15 +165,6 @@ def find_jdk():
         save(jdk_6, False)
 
 if __name__ == "__main__":
-    linux_paths = [
-        '/usr/lib/jvm/*/bin',
-        '/usr/lib*/jvm/*/bin'
-    ]
-    for path in linux_paths:
-        for jdk_path in glob.glob(path):
-            #if os.path.isdir(jdk_path):
-            print(jdk_path)
-    sys.exit(0)
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)
