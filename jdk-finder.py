@@ -172,13 +172,15 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2 and sys.argv[1]:
         jdk_ver = sys.argv[1]
         if len(sys.argv) > 2:
-            pfirst = sys.argv[2].lower() == 'true'
+            pfirst = sys.argv[2].lower().startswith('t')
     else:
         jdk_ver = "1.8."
         jdk_targ_file = os.path.join(working_dir, "jdkfinder-target.cfg")
         if os.path.isfile(jdk_targ_file):
             with open(jdk_targ_file, "r") as file:
-                jdk_ver = file.readline()
+                jdk_ver = file.readline().strip()
+                if jdk_ver == '':
+                    jdk_ver = '1.8.'
         with open(jdk_targ_file, "wb") as file: 
             file.write(jdk_ver)
     
