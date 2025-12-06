@@ -116,8 +116,7 @@ def find_jdk():
     if isLinux:
         linux_paths = [
             #Standard Installations
-            '/usr/lib/jvm/*/bin', #Most Common installations and seems to be the new standard
-            '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
+            '/usr/lib*/jvm*/*/bin', #Most Common installations and seems to be the new standard. Also Search for lib32 lib64 etc...
             '/usr/java/*/bin', #Some oracle Installations
             '/etc/alternatives/j*/bin', #RPM redhat linux
             #Check opt Installations by user or some programs
@@ -128,7 +127,6 @@ def find_jdk():
             '/opt/jre*/*/bin',
             #Non Standard Installations
             '/usr/lib/j*/bin', #Covers /usr/lib/java.*/bin /usr/lib/jre.*/bin /usr/lib/jdk.*/bin /usr/lib/jvm.*/bin /usr/lib/j.1.8.0_450/bin
-            '/usr/lib/jvm*/*/bin',
             '/usr/lib/jdk*/*/bin',
             '/usr/lib/java*/*/bin',
             '/usr/lib/jre*/*/bin',
@@ -156,6 +154,15 @@ def find_jdk():
         save(jdk_6, False)
 
 if __name__ == "__main__":
+    linux_paths = [
+        '/usr/lib/jvm/*/bin',
+        '/usr/lib*/jvm/*/bin'
+    ]
+    for path in linux_paths:
+        for jdk_path in glob.glob(path):
+            #if os.path.isdir(jdk_path):
+            print(jdk_path)
+    sys.exit(0)
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)
