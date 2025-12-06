@@ -25,6 +25,7 @@ VOLUME_WIN_REGEX = re.compile(
     r'(\\\\|\\)[\?\.]{1,2}\\Volume\{[0-9a-f\-]+\}\\Windows(?:\\|$)',
     re.IGNORECASE
 )
+checked = [ "" ]
 debug = False
 #Change this to False if "JDK/bin/javac" is a symlink (non standard openjdk specification)
 resolve_javac = True
@@ -48,7 +49,12 @@ def chk_jdk(jdk_path):
         if not os.path.isfile(jc):
             return
         jdk_path = os.path.dirname(os.path.realpath(jc))
+    #Skip Already checked paths for faster JDK result
     low = jdk_path.lower()
+    if low not in checked:
+        checked.append(low)
+    else:
+        return
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
     if isWindows:
         low = low.replace('/', '\\')
