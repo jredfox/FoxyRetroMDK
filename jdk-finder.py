@@ -140,7 +140,7 @@ def find_jdk():
             '/opt/*jre*/*/bin',
             #Non Standard Installations
             '/usr/lib/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.d.k-xxx/bin etc...
-            '/usr/lib/*jvm*/bin',
+            '/usr/lib/*jvm*/bin', #Causes Duplication search since we need to check for graavaljvm-8u50/bin
             '/usr/lib/*jdk*/bin',
             '/usr/lib/*java*/bin',
             '/usr/lib/*jre*/bin',
