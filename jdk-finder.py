@@ -119,22 +119,24 @@ def find_jdk():
             '/usr/lib/jvm/*/bin', #Most Common installations and seems to be the new standard
             '/usr/lib*/jvm/*/bin', #lib64 and lib32 etc may also exist
             '/usr/java/*/bin', #Some oracle Installations
-            '/etc/alternatives/*/bin', #RPM redhat linux
+            '/etc/alternatives/j*/bin', #RPM redhat linux
             #Check opt Installations by user or some programs
             '/opt/j*/bin', #Covers /opt/java.*/bin /opt/jre.*/bin /opt/jdk.*/bin /opt/jvm.*/bin
-            '/opt/jre*/*/bin',
+            '/opt/jvm*/*/bin',
             '/opt/jdk*/*/bin',
             '/opt/java*/*/bin',
-            '/opt/jvm*/*/bin',
+            '/opt/jre*/*/bin',
             #Non Standard Installations
-            '/usr/lib/java*/*/bin',
-            '/usr/lib/jdk*/*/bin',
-            '/usr/lib/jre*/*/bin',
+            '/usr/lib/j*/bin', #Covers /usr/lib/java.*/bin /usr/lib/jre.*/bin /usr/lib/jdk.*/bin /usr/lib/jvm.*/bin /usr/lib/j.1.8.0_450/bin
             '/usr/lib/jvm*/*/bin',
-            '/usr/local/java*/*/bin',
+            '/usr/lib/jdk*/*/bin',
+            '/usr/lib/java*/*/bin',
+            '/usr/lib/jre*/*/bin',
+            '/usr/local/j*/bin', #Covers /usr/local/java.*/bin /usr/local/jre.*/bin /usr/local/jdk.*/bin /usr/local/jvm.*/bin
+            '/usr/local/jvm*/*/bin',
             '/usr/local/jdk*/*/bin',
-            '/usr/local/jre*/*/bin',
-            '/usr/local/jvm*/*/bin'
+            '/usr/local/java*/*/bin',
+            '/usr/local/jre*/*/bin'
         ]
         for path in linux_paths:
             for jdk_path in glob.glob(path):
