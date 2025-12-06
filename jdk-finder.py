@@ -26,6 +26,8 @@ VOLUME_WIN_REGEX = re.compile(
     re.IGNORECASE
 )
 debug = False
+#Change this to False if "JDK/bin/javac" is a symlink (non standard openjdk specification)
+resolve_javac = True
 
 def save(jdk_path, cache):
     if cache and not debug:
@@ -41,10 +43,11 @@ def chk_jdk(jdk_path):
     else:
         jdk_path = os.path.realpath(jdk_path)
     #Resolve Symbolic Links from java executable
-    jc = os.path.join(jdk_path, 'javac' + exe)
-    if not os.path.isfile(jc):
-        return
-    jdk_path = os.path.dirname(os.path.realpath(jc))
+    if resolve_javac:
+        jc = os.path.join(jdk_path, 'javac' + exe)
+        if not os.path.isfile(jc):
+            return
+        jdk_path = os.path.dirname(os.path.realpath(jc))
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
     if isWindows:
         low = jdk_path.lower().replace('/', '\\')
