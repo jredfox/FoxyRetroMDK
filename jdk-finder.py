@@ -127,11 +127,14 @@ def find_jdk():
             '/opt/java*/*/bin',
             '/opt/jvm*/*/bin',
             #Non Standard Installations
-            '/usr/lib/java/*/bin',
+            '/usr/lib/java*/*/bin',
             '/usr/lib/jdk*/*/bin',
             '/usr/lib/jre*/*/bin',
             '/usr/lib/jvm*/*/bin',
-            '/usr/local/java/*/bin'
+            '/usr/local/java*/*/bin',
+            '/usr/local/jdk*/*/bin',
+            '/usr/local/jre*/*/bin',
+            '/usr/local/jvm*/*/bin'
         ]
         for path in linux_paths:
             for jdk_path in glob.glob(path):
