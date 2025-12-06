@@ -49,6 +49,9 @@ def chk_jdk(jdk_path):
                 return
         elif bool(VOLUME_WIN_REGEX.match(low)):
             return
+    #Skip "/usr/bin" to to Prevent False Postive JDK Installations on Unix(linux / macOS)
+    elif jdk_path == '/usr/bin':
+        return
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
     if not os.path.isdir(os.path.join(parent, 'lib')) and not os.path.isdir(os.path.join(parent, 'libs')):
