@@ -48,17 +48,18 @@ def chk_jdk(jdk_path):
         if not os.path.isfile(jc):
             return
         jdk_path = os.path.dirname(os.path.realpath(jc))
+    low = jdk_path.lower()
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
     if isWindows:
-        low = jdk_path.lower().replace('/', '\\')
+        low = low.replace('/', '\\')
         if ":" in low:
             win_str = low.split(":", 1)[1]
             if (win_str.startswith('\\windows\\') or win_str == '\\windows'):
                 return
         elif bool(VOLUME_WIN_REGEX.match(low)):
             return
-    #Skip "/usr/bin" to to Prevent False Postive JDK Installations on Unix(linux / macOS)
-    elif jdk_path.lower() == '/usr/bin':
+    #Skip "/usr/bin" & "/bin" to to Prevent False Postive JDK Installations on Unix(linux / macOS)
+    elif low == '/usr/bin' or low == '/bin':
         return
     #Skip Fake JDK Installations as we need the actual installation folder with the lib dir
     parent = os.path.dirname(jdk_path)
