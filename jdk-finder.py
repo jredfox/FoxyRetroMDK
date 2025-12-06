@@ -40,6 +40,10 @@ def chk_jdk(jdk_path):
         jdk_path = os.path.realpath(os.path.join(os.getcwd(), jdk_path))
     else:
         jdk_path = os.path.realpath(jdk_path)
+    #Resolve Symbolic Links from java executable
+    jpath = os.path.join(jdk_path, 'java' + exe)
+    if os.path.isfile(jpath):
+        jdk_path = os.path.dirname(os.path.realpath(jpath))
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
     if isWindows:
         low = jdk_path.lower().replace('/', '\\')
