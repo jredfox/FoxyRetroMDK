@@ -104,9 +104,7 @@ def find_jdk():
             '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
             '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
             '/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin',
-            '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin',
-            '/usr/local/java/*/Contents/Home/bin',
-            '/opt/java/*/Contents/Home/bin'
+            '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin'
         ]
         for path in mac_paths:
             for jdk_path in glob.glob(path):
@@ -120,21 +118,34 @@ def find_jdk():
             '/usr/java/*/bin', #Some oracle Installations
             '/etc/alternatives/j*/bin', #RPM redhat linux
             #Check opt Installations by user or some programs
-            '/opt/j*/bin', #Covers /opt/java.*/bin /opt/jre.*/bin /opt/jdk.*/bin /opt/jvm.*/bin
-            '/opt/jvm*/*/bin',
-            '/opt/jdk*/*/bin',
-            '/opt/java*/*/bin',
-            '/opt/jre*/*/bin',
+            '/opt/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.r.e-xxx/bin etc...
+            '/opt/*jvm*/bin',
+            '/opt/*jdk*/bin',
+            '/opt/*java*/bin',
+            '/opt/*jre*/bin',
+            '/opt/*jvm*/*/bin',
+            '/opt/*jdk*/*/bin',
+            '/opt/*java*/*/bin',
+            '/opt/*jre*/*/bin',
             #Non Standard Installations
-            '/usr/lib/j*/bin', #Covers /usr/lib/java.*/bin /usr/lib/jre.*/bin /usr/lib/jdk.*/bin /usr/lib/jvm.*/bin /usr/lib/j.1.8.0_450/bin
-            '/usr/lib/jdk*/*/bin',
-            '/usr/lib/java*/*/bin',
-            '/usr/lib/jre*/*/bin',
+            '/usr/lib/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.d.k-xxx/bin etc...
+            '/usr/lib/*jvm*/bin',
+            '/usr/lib/*jdk*/bin',
+            '/usr/lib/*java*/bin',
+            '/usr/lib/*jre*/bin',
+            '/usr/lib/*jvm*/*/bin',
+            '/usr/lib/*jdk*/*/bin',
+            '/usr/lib/*java*/*/bin',
+            '/usr/lib/*jre*/*/bin',
             '/usr/local/j*/bin', #Covers /usr/local/java.*/bin /usr/local/jre.*/bin /usr/local/jdk.*/bin /usr/local/jvm.*/bin
-            '/usr/local/jvm*/*/bin',
-            '/usr/local/jdk*/*/bin',
-            '/usr/local/java*/*/bin',
-            '/usr/local/jre*/*/bin'
+            '/usr/local/*jvm*/bin',
+            '/usr/local/*jdk*/bin',
+            '/usr/local/*java*/bin',
+            '/usr/local/*jre*/bin',
+            '/usr/local/*jvm*/*/bin',
+            '/usr/local/*jdk*/*/bin',
+            '/usr/local/*java*/*/bin',
+            '/usr/local/*jre*/*/bin'
         ]
         for path in linux_paths:
             for jdk_path in glob.glob(path):
