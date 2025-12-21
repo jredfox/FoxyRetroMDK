@@ -54,7 +54,7 @@ def chk_jdk(jdk_path):
         return
     checked.append(jdk_path)
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
-    low = jdk_path.lower() if isWindows else jdk_path.lower()
+    low = jdk_path.lower()
     if isWindows:
         if ":" in low:
             win_str = low.split(":", 1)[1]
