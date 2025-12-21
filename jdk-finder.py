@@ -132,7 +132,7 @@ def find_jdk():
     if isLinux:
         linux_paths = [
             #Standard Installations
-            '/usr/lib/jvm*/*/bin',   #Most Common installations and seems to be the new standard
+            '/usr/lib/jvm*/*/bin', #Most Common installations and seems to be the new standard
             '/usr/lib*/jvm*/*/bin', #Also Search for lib32 lib64 etc...
             '/usr/java/*/bin', #Some oracle Installations
             '/etc/alternatives/j*/bin', #RPM redhat linux
