@@ -11,7 +11,6 @@ import re
 import subprocess
 
 jdk_ver = None
-jdk_targ = None
 jdk_8 = None
 jdk_7 = None
 jdk_6 = None
@@ -71,8 +70,6 @@ def chk_jdk(jdk_path):
         return
     if debug:
         print("checking:" + jdk_path)
-    global jdk_ver
-    global jdk_targ
     global jdk_8
     global jdk_7
     global jdk_6
@@ -87,7 +84,6 @@ def chk_jdk(jdk_path):
             version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1) #version_info = line.split()[1]
             
             if version_info.startswith(jdk_ver):
-                jdk_targ = jdk_path
                 save(jdk_path, True)
             if jdk_8 is None and version_info.startswith('1.8.'):
                 jdk_8 = jdk_path
