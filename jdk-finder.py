@@ -96,7 +96,7 @@ def chk_jdk(jdk_path):
             elif jdk_6 is None and version_info.startswith('1.6.'):
                 jdk_6 = jdk_path
 
-        except Exception as e: 
+        except Exception as e:
             print(e)
             return
 
@@ -197,7 +197,7 @@ if __name__ == "__main__":
                 jdk_ver = file.readline().strip()
                 if jdk_ver == '':
                     jdk_ver = '1.8.'
-        with open(jdk_targ_file, "wb") as file: 
+        with open(jdk_targ_file, "wb") as file:
             file.write(jdk_ver)
     
     #Parsed Cached JDK
