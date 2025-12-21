@@ -89,7 +89,7 @@ def chk_jdk(jdk_path):
             if version_info.startswith(jdk_ver):
                 jdk_targ = jdk_path
                 save(jdk_path, True)
-            elif jdk_8 is None and version_info.startswith('1.8.'):
+            if jdk_8 is None and version_info.startswith('1.8.'):
                 jdk_8 = jdk_path
             elif jdk_7 is None and version_info.startswith('1.7.'):
                 jdk_7 = jdk_path
