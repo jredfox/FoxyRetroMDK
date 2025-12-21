@@ -168,7 +168,7 @@ def find_jdk():
         ]
         for path in linux_paths:
             for jdk_path in glob.glob(path):
-                if os.path.isdir(jdk_path):
+                if os.path.isdir(jdk_path) and not jdk_path in checked:
                     chk_jdk(jdk_path)
     
     if not pfirst:
