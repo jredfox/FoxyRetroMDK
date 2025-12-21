@@ -50,12 +50,11 @@ def chk_jdk(jdk_path):
             return
         jdk_path = os.path.dirname(os.path.realpath(jc))
     #Skip Already checked paths for faster JDK result
-    low = jdk_path.lower().replace('/', '\\') if isWindows else jdk_path.lower()
-    if low not in checked:
-        checked.append(low)
-    else:
+    if jdk_path in checked:
         return
+    checked.append(jdk_path)
     #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
+    low = jdk_path.lower() if isWindows else jdk_path.lower()
     if isWindows:
         if ":" in low:
             win_str = low.split(":", 1)[1]
