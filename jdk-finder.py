@@ -120,7 +120,9 @@ def find_jdk():
             '/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin',
             '/Applications/Java/JavaVirtualMachines/*/Contents/Home/bin',
             '/Library/PreferencePanes/JavaControlPanel.prefPane/Contents/Home/bin',
-            '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin'
+            '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin',
+            '/usr/local/java/*/Contents/Home/bin',
+            '/opt/java/*/Contents/Home/bin'
         ]
         for path in mac_paths:
             for jdk_path in glob.glob(path):
