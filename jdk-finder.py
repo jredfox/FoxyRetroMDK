@@ -132,34 +132,23 @@ def find_jdk():
     if isLinux:
         linux_paths = [
             #Standard Installations
-            '/usr/lib*/jvm*/*/bin', #Most Common installations and seems to be the new standard. Also Search for lib32 lib64 etc...
+            '/usr/lib/jvm*/*/bin',   #Most Common installations and seems to be the new standard
+            '/usr/lib*/jvm*/*/bin', #Also Search for lib32 lib64 etc...
             '/usr/java/*/bin', #Some oracle Installations
             '/etc/alternatives/j*/bin', #RPM redhat linux
             #Check opt Installations by user or some programs
-            '/opt/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.r.e-xxx/bin etc...
-            '/opt/*jvm*/bin',
-            '/opt/*jdk*/bin',
-            '/opt/*java*/bin',
-            '/opt/*jre*/bin',
+            '/opt/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.r.e-xxx/bin etc... as well as /opt/jvm*/bin
             '/opt/*jvm*/*/bin',
             '/opt/*jdk*/*/bin',
             '/opt/*java*/*/bin',
             '/opt/*jre*/*/bin',
             #Non Standard Installations
             '/usr/lib/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.d.k-xxx/bin etc...
-            '/usr/lib/*jvm*/bin', #Causes Duplication search since we need to check for graavaljvm-8u50/bin
-            '/usr/lib/*jdk*/bin',
-            '/usr/lib/*java*/bin',
-            '/usr/lib/*jre*/bin',
             '/usr/lib/*jvm*/*/bin',
             '/usr/lib/*jdk*/*/bin',
             '/usr/lib/*java*/*/bin',
             '/usr/lib/*jre*/*/bin',
             '/usr/local/j*/bin', #Covers /usr/local/java.*/bin /usr/local/jre.*/bin /usr/local/jdk.*/bin /usr/local/jvm.*/bin
-            '/usr/local/*jvm*/bin',
-            '/usr/local/*jdk*/bin',
-            '/usr/local/*java*/bin',
-            '/usr/local/*jre*/bin',
             '/usr/local/*jvm*/*/bin',
             '/usr/local/*jdk*/*/bin',
             '/usr/local/*java*/*/bin',
