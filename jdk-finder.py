@@ -40,7 +40,7 @@ def save(jdk_path, cache):
 
 def chk_jdk(jdk_path):
     #Get the Real Absolute Path of the File / Directory Always
-    if( not os.path.isabs(jdk_path) and not (isWindows and ":" in jdk_path) ):
+    if( not os.path.isabs(jdk_path) and not (isWindows and (":" in jdk_path or jdk_path.startswith('\\\\') or jdk_path.startswith('\\??'))) ):
         jdk_path = os.path.realpath(os.path.join(os.getcwd(), jdk_path))
     else:
         jdk_path = os.path.realpath(jdk_path)
