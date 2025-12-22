@@ -170,7 +170,7 @@ def find_jdk():
             for jdk_path in glob.glob(path):
                 if not jdk_path in lpaths:
                     lpaths.append(jdk_path)
-                    chk_jdk(jdk_path)
+                chk_jdk(jdk_path)
     
     if not pfirst:
         for directory in path_dirs:
