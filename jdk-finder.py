@@ -226,7 +226,7 @@ if __name__ == "__main__":
     cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
     if os.path.isfile(cached_path):
         with open(cached_path, "r") as file:
-            cached_jkd = file.readline().strip().replace("\r\n", "\n")
+            cached_jkd = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
         chk_jdk(cached_jkd)
 
     find_jdk()
