@@ -165,10 +165,13 @@ def find_jdk():
             '/usr/local/*java*/*/bin',
             '/usr/local/*jre*/*/bin'
         ]
+        lpaths = set()
         for path in linux_paths:
             for jdk_path in glob.glob(path):
-                if os.path.isdir(jdk_path):
-                    chk_jdk(jdk_path)
+                lpaths.add(jdk_path)
+        for jdk_path in lpaths:
+            if os.path.isdir(jdk_path):
+                chk_jdk(jdk_path)
     
     if not pfirst:
         for directory in path_dirs:
