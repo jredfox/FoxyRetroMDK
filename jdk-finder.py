@@ -215,7 +215,7 @@ if __name__ == "__main__":
         jdk_targ_file = os.path.join(working_dir, "jdkfinder-target.cfg")
         if os.path.isfile(jdk_targ_file):
             with open(jdk_targ_file, "r") as file:
-                jdk_ver = file.readline()
+                jdk_ver = file.readline().replace("\r\n", "\n")
             jdk_ver = jdk_ver.strip().strip('"').strip("'")
             if jdk_ver.strip() == '':
                 jdk_ver = '1.8.'
@@ -226,8 +226,15 @@ if __name__ == "__main__":
     cached_path = os.path.join(working_dir, "jdkfinder-" + jdk_ver.strip('.') + ".cfg")
     if os.path.isfile(cached_path):
         with open(cached_path, "r") as file:
-            cached_jkd = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
-        chk_jdk(cached_jkd)
+            cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
+        chk_jdk(cached_jdk)
+    else:
+        major = get_major(jdk_ver)
+        cached_major = os.path.join(working_dir, "jdkfinder-" + ('1.' if major < 9 else '') + str(major) + ".cfg")
+        if os.path.exists(cached_major):
+            with open(cached_major, "r") as file:
+                cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
+            chk_jdk(cached_jdk)
 
     find_jdk()
     sys.exit(1)
