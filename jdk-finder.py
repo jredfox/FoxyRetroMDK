@@ -215,9 +215,10 @@ if __name__ == "__main__":
         jdk_targ_file = os.path.join(working_dir, "jdkfinder-target.cfg")
         if os.path.isfile(jdk_targ_file):
             with open(jdk_targ_file, "r") as file:
-                jdk_ver = file.readline().strip()
-                if jdk_ver == '':
-                    jdk_ver = '1.8.'
+                jdk_ver = file.readline()
+            jdk_ver = jdk_ver.strip().strip('"').strip("'")
+            if jdk_ver.strip() == '':
+                jdk_ver = '1.8.'
         with open(jdk_targ_file, "wb") as file:
             file.write(jdk_ver)
     
