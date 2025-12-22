@@ -1,5 +1,5 @@
 ############################################################################################################
-### @purpose to find JDK-<target> and if no target is found it tries to get JDK 6 - 8 with 8 being prefered
+### @purpose to find JDK-<target> and if no target is found it tries to get JDK 6 - 8 with 8 being preferred
 ### @author jredfox
 ### @notes: not python 3 compatible, doesn't detect JDK 5 or lower or any JRE
 ### Feel Free to copy, modify, distribute and publically display this script
@@ -54,7 +54,7 @@ def chk_jdk(jdk_path):
     if jdk_path in checked:
         return
     checked.append(jdk_path)
-    #Skip "C:\Windows\*" to Prevent False Postive JDK Installations on Windows
+    #Skip "C:\Windows\*" to Prevent False Positive JDK Installations on Windows
     low = jdk_path.lower()
     if isWindows:
         if ":" in low:
@@ -146,7 +146,7 @@ def find_jdk():
             '/opt/*jre*/*/bin',
             #Non Standard Installations
             '/usr/lib/j*/bin', #Covers odd installations like j8u40/bin, j.8xx/bin, j.d.k-xxx/bin etc...
-            '/usr/lib/*jvm*/bin', #Causes Duplication search since we need to check for graavaljvm-8u50/bin
+            '/usr/lib/*jvm*/bin', #Causes Duplication search since we need to check for graaljvm-8u50/bin
             '/usr/lib/*jdk*/bin',
             '/usr/lib/*java*/bin',
             '/usr/lib/*jre*/bin',
