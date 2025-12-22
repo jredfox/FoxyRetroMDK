@@ -191,10 +191,7 @@ def get_major(v):
         parts = v.replace('-', '.').replace('_', '.').split('.')
         major = int(parts[0])
         if major < 2:
-            if len(parts) < 2 or parts[1].strip() == '':
-                major = 8
-            else:
-                major = int(parts[1])
+            return int(parts[1])
         return major
     except Exception as e:
         pass
