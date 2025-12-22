@@ -173,7 +173,7 @@ def find_jdk():
         for directory in path_dirs:
             chk_jdk(directory)
 
-    #If Target cannot be found print JDK-8 without saving it to the cache
+    #If Target cannot be found print JDK-6, JDK-7 or JDK-8 without saving it to the cache
     major = get_major(jdk_ver)
     if major <= 6 and jdk_6:
         save(jdk_6, False)
