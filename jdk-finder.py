@@ -1,7 +1,7 @@
 ############################################################################################################
 ### @purpose to find JDK-<target> and if no target is found it tries to get JDK 6 - 8 with 8 being prefered
 ### @author jredfox
-### @python 2.7x compatible not python 3 compatible
+### @notes: not python 3 compatible, doesn't detect JDK 5 or lower or any JRE
 ### Feel Free to copy, modify, distribute and publically display this script
 #############################################################################################################
 
@@ -11,6 +11,7 @@ import glob
 import re
 import subprocess
 
+VERSION = '1.0.12'
 jdk_ver = None
 jdk_8 = None
 jdk_7 = None
@@ -173,12 +174,31 @@ def find_jdk():
             chk_jdk(directory)
 
     #If Target cannot be found print JDK-8 without saving it to the cache
-    if jdk_8:
+    major = get_major(jdk_ver)
+    if major <= 6 and jdk_6:
+        save(jdk_6, False)
+    elif major <= 7 and jdk_7:
+        save(jdk_7, False)
+    elif jdk_8:
         save(jdk_8, False)
     elif jdk_7:
         save(jdk_7, False)
     elif jdk_6:
         save(jdk_6, False)
+
+def get_major(v):
+    try:
+        parts = v.replace('-', '.').replace('_', '.').split('.')
+        major = int(parts[0])
+        if major < 2:
+            if len(parts) < 2 or parts[1].strip() == '':
+                major = 8
+            else:
+                major = int(parts[1])
+        return major
+    except Exception as e:
+        pass
+    return 8
 
 if __name__ == "__main__":
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
