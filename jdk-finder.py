@@ -30,6 +30,7 @@ checked = [ "" ]
 debug = False
 #Change this to False if "JDK/bin/javac" is a symlink (non standard openjdk specification)
 resolve_javac = True
+working_dir = None
 
 def save(jdk_path, cache):
     if cache and not debug:
