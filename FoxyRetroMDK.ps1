@@ -38,6 +38,7 @@ $temp = "$mdk_dir\tmp"
 $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
+$Mozilla = "Mozilla"
 
 ################# Functions Start #################
 
@@ -56,7 +57,7 @@ function Download-Mediafire {
     $mediafire_html = "$mediafire_file.html"
 
     #Download the temp HTML file
-    Invoke-WebRequest -Uri "$mediafire_url" -OutFile "$mediafire_html" -UserAgent "Mozilla"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mediafire_url" -OutFile "$mediafire_html"
     $lines = Get-Content "$mediafire_html" #Parse Lines
 
     # Loop through each line of the file
@@ -80,7 +81,7 @@ function Download-Mediafire {
 
     # Output the download link
     Write-Output "Download file:$downloadLink"
-    Invoke-WebRequest -Uri "$downloadLink" -OutFile "$mediafire_file"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$downloadLink" -OutFile "$mediafire_file"
 
     # Delete temp HTML file
     Remove-Item -Path "$mediafire_html" -Force -ErrorAction SilentlyContinue
@@ -139,7 +140,7 @@ $ProgressPreference = 'SilentlyContinue'
 try
 {
     $jsonFile = "$temp\assets.json"
-    Invoke-WebRequest -Uri "$JsonURL" -OutFile "$jsonFile"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$JsonURL" -OutFile "$jsonFile"
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
     $objects = $jsonData.objects
     foreach ($key in $objects.PSObject.Properties.Name) 
@@ -150,7 +151,7 @@ try
         Write-Output "Downloading Resource URL:$resource"
         $rd = Split-Path "$resource_file" -Parent #build resource directory path
         New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Invoke-WebRequest -Uri "$resource" -OutFile "$resource_file"
+        Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$resource" -OutFile "$resource_file"
     }
 }
 catch
@@ -236,26 +237,26 @@ function Install-1.6x {
     New-Item -Path "$mdk_dir\mcp\jars\versions\$mc_ver" -ItemType "directory" -Force | out-null
 
     #Download & Extract Forge
-    Invoke-WebRequest "$forge_url" -OutFile "$temp\forge.zip"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$forge_url" -OutFile "$temp\forge.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", $temp)
     Move-Item -Path "$temp\forge\*" -Destination "$mdk_dir" -Force | out-null
 
     #Patch fml.py for version 1.6-1.6.3
     if($mc_ver -ne "1.6.4")
     {
-        Invoke-WebRequest "$forge_164_url" -OutFile "$temp\forge164.zip"
+        Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$forge_164_url" -OutFile "$temp\forge164.zip"
         [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge164.zip", "$temp\forge164")
         Remove-Item -Path "$mdk_dir\fml\fml.py" -Force | out-null
         Copy-Item -Path "$temp\forge164\forge\fml\fml.py" -Destination "$mdk_dir\fml\fml.py" -Force | out-null
     }
 
     #Download & Extract MCP into forge
-    Invoke-WebRequest "$mcp_url" -OutFile "$mdk_dir\fml\$mcp_ver.zip"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mcp_url" -OutFile "$mdk_dir\fml\$mcp_ver.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\fml\$mcp_ver.zip", "$mdk_dir\mcp")
 
     #Download & Install minecraft.jar & minecraft_server.jar
-    Invoke-WebRequest "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
-    Invoke-WebRequest "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
 
     #Enforce JDK-8
     Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
@@ -274,7 +275,7 @@ function Install-1.6x {
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
     Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
-    Invoke-WebRequest "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\python_fml_2.7.9.zip", "$mdk_dir\fml\python")
 
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
@@ -298,8 +299,8 @@ function DL-Natives
         [string]$FileName
     )
 
-    Invoke-WebRequest -Uri "$URL" -OutFile "$temp/$FileName.jar"
-    Invoke-WebRequest -Uri "$URL2" -OutFile "$temp/$FileName`2.jar"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$URL" -OutFile "$temp/$FileName.jar"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$URL2" -OutFile "$temp/$FileName`2.jar"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName.jar", "$temp\natives")
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$FileName`2.jar", "$temp\natives")
     Remove-Item -Path "$temp\natives\META-INF" -Recurse -Force | out-null
@@ -560,55 +561,55 @@ New-Item -Path "$mdk_dir\jars\lib" -ItemType "directory" -Force | out-null
 New-Item -Path "$mdk_dir\jars\bin\natives" -ItemType "directory" -Force | out-null
 
 #Download & Extract MCP
-Invoke-WebRequest -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mcp_url" -OutFile "$temp\$mcp_ver.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\$mcp_ver.zip", "$mdk_dir")
 #Download FernFlower for MCP 1.1-1.2.5 Forge
 if ($fernflower_dl -eq "T")
 {
-    Invoke-WebRequest -Uri "$mcp72_url" -OutFile "$temp\mcp72.zip"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mcp72_url" -OutFile "$temp\mcp72.zip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\mcp72.zip", "$temp\mcp72")
     Copy-Item -Path "$temp\mcp72\runtime\bin\fernflower.jar" -Destination "$mdk_dir\runtime\bin\fernflower.jar" -Force | out-null
 }
 
 #Download & Extract Forge Source
-Invoke-WebRequest -Uri "$forge_url" -OutFile "$temp\forge.zip"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$forge_url" -OutFile "$temp\forge.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", "$mdk_dir")
 
 #Enforce JDK-8 in Path during setup for legacy versions
 Enforce-JDK8 -mcp_dir "$mdk_dir" "F"
 
 #Download Forge lib Folder and Install it
-Invoke-WebRequest -Uri "$forge_lib_url" -OutFile "$temp\forge_lib.zip"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$forge_lib_url" -OutFile "$temp\forge_lib.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge_lib.zip", "$mdk_dir\lib")
 if ($bcprov_dev -eq "T")
 {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$bcprov_url" -OutFile ("$mdk_dir\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if ($argo_url -ne "") {
-    Invoke-WebRequest -Uri "$argo_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$argo_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$argo_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$argo_url"))
 }
 if ($asm_url -ne "") {
-    Invoke-WebRequest -Uri "$asm_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$asm_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$asm_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$asm_url"))
 }
 if ($bcprov_url -ne "") {
-    Invoke-WebRequest -Uri "$bcprov_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$bcprov_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))
 }
 if ($mcp_srg_url -ne "") {
-    Invoke-WebRequest -Uri "$mcp_srg_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mcp_srg_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$mcp_srg_url"))
 }
 if ($guava_url -ne "") {
-    Invoke-WebRequest -Uri "$guava_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$guava_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$guava_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$guava_url"))
 }
 if ($scala_lib_url -ne "") {
-    Invoke-WebRequest -Uri "$scala_lib_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$scala_lib_url"))
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$scala_lib_url" -OutFile ("$mdk_dir\jars\lib\" + [System.IO.Path]::GetFileName("$scala_lib_url"))
 }
 
 #Download minecraft.jar & minecraft_server.jar and Install it
-Invoke-WebRequest -Uri "$mc_url" -OutFile "$mdk_dir\jars\bin\minecraft.jar"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mc_url" -OutFile "$mdk_dir\jars\bin\minecraft.jar"
 if (-Not $server_skip -eq "T" ) {
-    Invoke-WebRequest -Uri "$mc_server_url" -OutFile "$mdk_dir\jars\minecraft_server.jar"
+    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$mc_server_url" -OutFile "$mdk_dir\jars\minecraft_server.jar"
 }
 
 #Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
@@ -624,10 +625,10 @@ if (-Not [string]::IsNullOrEmpty($modloader_url)) {
 }
 
 #Download Minecraft Bin Libs
-Invoke-WebRequest -Uri "$lwjgl_url" -OutFile "$mdk_dir\jars\bin\lwjgl.jar"
-Invoke-WebRequest -Uri "$lwjgl_util_url" -OutFile "$mdk_dir\jars\bin\lwjgl_util.jar"
-Invoke-WebRequest -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
-Invoke-WebRequest -Uri "$jutil_url" -OutFile "$mdk_dir\jars\bin\jutil.jar"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$lwjgl_url" -OutFile "$mdk_dir\jars\bin\lwjgl.jar"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$lwjgl_util_url" -OutFile "$mdk_dir\jars\bin\lwjgl_util.jar"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
+Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$jutil_url" -OutFile "$mdk_dir\jars\bin\jutil.jar"
 & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\merge-zips.py" "$mdk_dir\jars\bin\jinput.jar" "$mdk_dir\jars\bin\jutil.jar"
 Remove-Item -Path "$mdk_dir\jars\bin\jutil.jar" -Force -ErrorAction SilentlyContinue
 
