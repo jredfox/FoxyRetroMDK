@@ -11,7 +11,7 @@ import glob
 import re
 import subprocess
 
-VERSION = '1.0.12'
+VERSION = '1.0.14'
 jdk_ver = None
 jdk_8 = None
 jdk_7 = None
@@ -180,15 +180,15 @@ def find_jdk():
     #If Target cannot be found print JDK-6, JDK-7 or JDK-8 without saving it to the cache
     major = get_major(jdk_ver)
     if major <= 6 and jdk_6:
-        save(jdk_6, False)
+        saveM(jdk_6, 6)
     elif major <= 7 and jdk_7:
-        save(jdk_7, False)
+        saveM(jdk_7, 7)
     elif jdk_8:
-        save(jdk_8, False)
+        saveM(jdk_8, 8)
     elif jdk_7:
-        save(jdk_7, False)
+        saveM(jdk_7, 7)
     elif jdk_6:
-        save(jdk_6, False)
+        saveM(jdk_6, 6)
 
 def get_major(v):
     try:
@@ -200,6 +200,14 @@ def get_major(v):
     except Exception as e:
         pass
     return 8
+
+def saveM(jdk_path, major):
+    cached_major = os.path.join(working_dir, "jdkfinder-" + ('1.' if major < 9 else '') + str(major) + ".cfg")
+    if not os.path.exists(cached_major) and not debug:
+        with open(cached_major, "wb") as file:
+            file.write(jdk_path)
+    print(jdk_path)
+    sys.exit(0)
 
 if __name__ == "__main__":
     working_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cache")
@@ -228,6 +236,8 @@ if __name__ == "__main__":
         with open(cached_path, "r") as file:
             cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
         chk_jdk(cached_jdk)
+        if not os.path.exists(cached_jdk):
+            os.remove(cached_path)
     else:
         major = get_major(jdk_ver)
         cached_major = os.path.join(working_dir, "jdkfinder-" + ('1.' if major < 9 else '') + str(major) + ".cfg")
@@ -235,6 +245,8 @@ if __name__ == "__main__":
             with open(cached_major, "r") as file:
                 cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
             chk_jdk(cached_jdk)
+            if not os.path.exists(cached_jdk):
+                os.remove(cached_major)
 
     find_jdk()
     sys.exit(1)
