@@ -96,7 +96,8 @@ def chk_jdk(jdk_path):
                 jdk_6 = jdk_path
 
         except Exception as e:
-            print(e)
+            if debug:
+                print(e)
             return
 
 def find_jdk():
