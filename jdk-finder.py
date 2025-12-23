@@ -236,7 +236,7 @@ if __name__ == "__main__":
         with open(cached_path, "r") as file:
             cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
         chk_jdk(cached_jdk)
-        if not os.path.exists(cached_jdk):
+        if cached_jdk.strip() == '' or not os.path.exists(cached_jdk):
             os.remove(cached_path)
     else:
         major = get_major(jdk_ver)
@@ -245,7 +245,7 @@ if __name__ == "__main__":
             with open(cached_major, "r") as file:
                 cached_jdk = file.readline().replace("\r\n", "\n").strip().strip('"').strip("'")
             chk_jdk(cached_jdk)
-            if not os.path.exists(cached_jdk):
+            if cached_jdk.strip() == '' or not os.path.exists(cached_jdk):
                 os.remove(cached_major)
 
     find_jdk()
