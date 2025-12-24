@@ -50,7 +50,7 @@ function Download {
         [string]$Uri,  # URL to Download From
         [string]$OutFile # File Save As
     )
-    $MaxTries = 25
+    $MaxTries = 3
     $BaseDelay = 4
     for ($i = 1; $i -le $MaxTries; $i++)
     {
@@ -64,14 +64,23 @@ function Download {
             $status = 0
             if ($_.Exception.Response)
             {
+                $ex = $_.Exception
                 try {
-                    # PowerShell 7+ (HttpResponseException)
-                    if ($_.Exception.Response.StatusCode -is [int]) {
-                        $status = [int]$_.Exception.Response.StatusCode
+                    # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
+                    if ($ex.Response.StatusCode.value__) {
+                        $status = [int]($_.Exception.Response.StatusCode.value__.ToString())
                     }
-                    # Windows PowerShell (WebException -> HttpWebResponse)
-                    elseif ($_.Exception.Response.StatusCode.value__) {
-                        $status = [int]$_.Exception.Response.StatusCode.value__
+                    # PowerShell 7+ (HttpResponseException)
+                    elseif ($ex.Response.StatusCode) {
+                        $status = [int]($_.Exception.Response.StatusCode.ToString())
+                    }
+                    # 3. Some HttpRequestException cases: StatusCode directly on the exception
+                    elseif ($ex.StatusCode) {
+                        $status = [int]($ex.StatusCode.ToString())
+                    }
+                    # 4. Or on the inner exception
+                    elseif ($ex.InnerException -and $ex.InnerException.StatusCode) {
+                        $status = [int]($ex.InnerException.StatusCode.ToString())
                     }
                 }
                 catch {
@@ -101,7 +110,7 @@ function Download {
     }
 }
 
-Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
