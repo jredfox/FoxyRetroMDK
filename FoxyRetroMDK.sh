@@ -32,8 +32,24 @@ if [[ "$(echo "$NAME_OS" | tr '[:upper:]' '[:lower:]')" == "darwin" ]]; then
 else
     isLinux=true
 fi
+Mozilla="Mozilla"
 
 ################# Functions Start #################
+
+#Download With Curl & Agent
+function Download () {
+
+    local URL="$1"
+    local OutFile="$2"
+    local Silent="$3"
+
+    if [ "$Silent" = "true" ]; then
+        curl -A "$Mozilla" -sS -L -o "$OutFile" "$URL"
+    else
+        curl -A "$Mozilla" -L -o "$OutFile" "$URL"
+    fi
+    
+}
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
