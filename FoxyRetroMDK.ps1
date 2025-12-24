@@ -61,7 +61,29 @@ function Download {
         }
         catch
         {
-            Write-Host "Failed to Download: $URL $_.Exception.Message"
+            $status = 0
+            if ($_.Exception.Response) 
+            {
+                try {
+                    # PowerShell 7+ (HttpResponseException)
+                    if ($_.Exception.Response.StatusCode -is [int]) {
+                        $status = [int]$_.Exception.Response.StatusCode
+                    }
+                    # Windows PowerShell (WebException -> HttpWebResponse)
+                    elseif ($_.Exception.Response.StatusCode.value__) {
+                        $status = [int]$_.Exception.Response.StatusCode.value__
+                    }
+                }
+                catch {
+                    Write-Host "Unknown exception occurred: $($_.Exception.Message)"
+                }
+            }
+            if ($i -ge 2 -and ($status -eq 404 -or $status -eq 410))
+            {
+                Write-Host "Download Failed: $Uri $status"
+                break
+            }
+            Write-Host "HTTP Error: $status for $Uri"
             Start-Sleep -Seconds $BaseDelay
         }
     }
@@ -70,6 +92,8 @@ function Download {
         exit 1
     }
 }
+
+Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
