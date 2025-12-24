@@ -39,8 +39,8 @@ Mozilla="Mozilla"
 #Download With Curl & Agent
 function Download () {
 
-    local URL="$1"
-    local OutFile="$2"
+    local OutFile="$1"
+    local URL="$2"
     local Silent="$3"
 
     if [[ "$Silent" == "true" ]]; then
@@ -101,7 +101,7 @@ function Check-LinuxDeps () {
     export PATH="$dir_bin/astyle:$PATH"
     if [[ ! -e "$dir_bin/astyle/astyle" ]]; then
         echo "Installing astyle to $dir_bin/astyle/astyle"
-        curl -L -o "$tmp_deps/astyle-src.tar.gz" "https://launchpadlibrarian.net/139196778/astyle_2.02.1.orig.tar.gz"
+        Download "$tmp_deps/astyle-src.tar.gz" "https://launchpadlibrarian.net/139196778/astyle_2.02.1.orig.tar.gz"
         pushd "$tmp_deps" > /dev/null 2>&1
         tar -xvzf "astyle-src.tar.gz"
         popd > /dev/null 2>&1
@@ -118,7 +118,7 @@ function Check-LinuxDeps () {
     if [[ ! -e "$dir_bin/python2.7" ]]; then
         py_ver="2.7.15"
         echo "Installing python $py_ver to $dir_bin/python2.7"
-        curl -L -o "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
+        Download "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
         pushd "$tmp_deps" > /dev/null 2>&1 
         tar xzf "$tmp_deps/Python-${py_ver}.tgz"
         popd > /dev/null 2>&1 
@@ -145,7 +145,7 @@ function Check-Deps () {
 
         if ! output=$(python2.7 "--version" > /dev/null 2>&1); then
             echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-            curl -ss -L -o "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
+            Download "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg" "true"
             open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
             echo "Please re-run the script once Python has been installed"
             exit 0
@@ -177,7 +177,7 @@ function Download-Mediafire () {
     local mediafire_html="$mediafire_file.html"
 
     #Download the temp HTML file
-    curl -ss -o "$mediafire_html" "$mediafire_url"
+    Download "$mediafire_html" "$mediafire_url" "true"
 
     # Read the file line by line
     while IFS= read -r line; do
@@ -200,7 +200,7 @@ function Download-Mediafire () {
 
     # Output the download link
     echo "Downloading file:$downloadLink"
-    curl -A "Mozilla" -ss -L -o "$mediafire_file" "$downloadLink"
+    Download "$mediafire_file" "$downloadLink" "true"
 
     # Delete temp HTML file
     rm -f "$mediafire_html"
@@ -309,25 +309,25 @@ function Install-1.6x {
     mkdir -p "$mdk_dir/mcp/jars/versions/$mc_ver"
 
     #Download & Extract Forge
-    curl -ss -L -o "$temp/forge.zip" "$forge_url"
+    Download "$temp/forge.zip" "$forge_url" "true"
     unzip -q -o "$temp/forge.zip" -d "$temp"
     mv -f "$temp/forge/"* "$mdk_dir"
 
     #Patch fml.py for version 1.6-1.6.3
     if [[ "$mc_ver" != "1.6.4" ]]; then
-        curl -ss -L -o "$temp/forge164.zip" "$forge_164_url"
+        Download "$temp/forge164.zip" "$forge_164_url" "true"
         unzip -o -q "$temp/forge164.zip" -d "$temp/forge164"
         rm -f "$mdk_dir/fml/fml.py"
         cp -f "$temp/forge164/forge/fml/fml.py" "$mdk_dir/fml/fml.py"
     fi
 
     #Download & Extract MCP into forge
-    curl -ss -L -o "$mdk_dir/fml/$mcp_ver.zip" "$mcp_url"
+    Download "$mdk_dir/fml/$mcp_ver.zip" "$mcp_url" "true"
     unzip -q -o "$mdk_dir/fml/$mcp_ver.zip" -d "$mdk_dir/mcp"
 
     #Download & Install minecraft.jar & minecraft_server.jar
-    curl -ss -L -o "$mdk_dir/mcp/jars/versions/$mc_ver/${mc_ver}.jar" "$mc_client_url"
-    curl -ss -L -o "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url"
+    Download "$mdk_dir/mcp/jars/versions/$mc_ver/${mc_ver}.jar" "$mc_client_url" "true"
+    Download "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url" "true"
 
     # Patch fml.json
     python2.7 "$rp" "$mdk_dir/fml/fml.json" "http:" "https:" "2.9.0" "2.9.1"
@@ -359,8 +359,8 @@ function DL-Natives () {
     local natives_url2="$2"
     local natives_name="$3"
     local natives_name2="${natives_name%.*}2.jar"
-    curl -L -o "$temp/$natives_name" "$natives_url"
-    curl -L -o "$temp/$natives_name2" "$natives_url2"
+    Download "$temp/$natives_name" "$natives_url"
+    Download "$temp/$natives_name2" "$natives_url2"
     unzip -q -o "$temp/$natives_name" -d "$temp/natives"
     unzip -q -o "$temp/$natives_name2" -d "$temp/natives"
     rm -rf "$temp/natives/META-INF"
@@ -608,53 +608,53 @@ mkdir -p "$mdk_dir/jars/lib"
 mkdir -p "$mdk_dir/jars/bin/natives"
 
 #Download & Extract MCP
-curl -L -o "$temp/$mcp_ver.zip" "$mcp_url"
+Download "$temp/$mcp_ver.zip" "$mcp_url"
 unzip -q -o "$temp/$mcp_ver.zip" -d "$mdk_dir"
 #Download FernFlower for MCP 1.1-1.2.5 Forge
 if [[ "$fernflower_dl" == "T" ]]; then
-    curl -ss -L -o "$temp/mcp72.zip" "$mcp72_url"
+    Download "$temp/mcp72.zip" "$mcp72_url" "true"
     unzip -q -o "$temp/mcp72.zip" -d "$temp/mcp72"
     cp -f "$temp/mcp72/runtime/bin/fernflower.jar" "$mdk_dir/runtime/bin/fernflower.jar"
 fi
 
 #Download & Extract Forge Source
-curl -L -o "$temp/forge.zip" "$forge_url"
+Download "$temp/forge.zip" "$forge_url"
 unzip -q -o "$temp/forge.zip" -d "$mdk_dir"
 
 #patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
 Patch-MDKPY "$mdk_dir"
 
 #Download Forge lib Folder and Install it
-curl -L -o "$temp/forge_lib.zip" "$forge_lib_url"
+Download "$temp/forge_lib.zip" "$forge_lib_url"
 unzip -q -o "$temp/forge_lib.zip" -d "$mdk_dir/lib"
 if [[ "$bcprov_dev" == "T" ]]; then
-    curl -L -o "${mdk_dir}/lib/$(basename "$bcprov_url")" "$bcprov_url"
+    Download "${mdk_dir}/lib/$(basename "$bcprov_url")" "$bcprov_url"
 fi
 
 #Download & Install Forge Runtime Libs if they Exist for this MC & Forge Version
 if [[ "$argo_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$argo_url")" "$argo_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$argo_url")" "$argo_url" "true"
 fi
 if [[ "$asm_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$asm_url")" "$asm_url" "true"
 fi
 if [[ "$bcprov_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$bcprov_url")" "$bcprov_url" "true"
 fi
 if [[ "$mcp_srg_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$mcp_srg_url")" "$mcp_srg_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$mcp_srg_url")" "$mcp_srg_url" "true"
 fi
 if [[ "$guava_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$guava_url")" "$guava_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$guava_url")" "$guava_url" "true"
 fi
 if [[ "$scala_lib_url" != "" ]]; then
-    curl -ss -L -o "${mdk_dir}/jars/lib/$(basename "$scala_lib_url")" "$scala_lib_url"
+    Download "${mdk_dir}/jars/lib/$(basename "$scala_lib_url")" "$scala_lib_url" "true"
 fi
 
 #Download minecraft.jar & minecraft_server.jar and Install it
-curl -ss -L -o "$mdk_dir/jars/bin/minecraft.jar" "$mc_url"
+Download "$mdk_dir/jars/bin/minecraft.jar" "$mc_url" "true"
 if [[ "$server_skip" != "T" ]]; then
-    curl -ss -L -o "$mdk_dir/jars/minecraft_server.jar" "$mc_server_url"
+    Download "$mdk_dir/jars/minecraft_server.jar" "$mc_server_url" "true"
 fi
 
 #Download and install Modloader for 1.1 - 1.2.4 as Forge requires Modloader in these versions
@@ -672,10 +672,10 @@ if [ -n "$modloader_url" ]; then
 fi
 
 #Download Minecraft Bin Libs
-curl -L -o "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
-curl -L -o "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
-curl -L -o "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
-curl -L -o "$mdk_dir/jars/bin/jutil.jar" "$jutil_url"
+Download "$mdk_dir/jars/bin/lwjgl.jar" "$lwjgl_url"
+Download "$mdk_dir/jars/bin/lwjgl_util.jar" "$lwjgl_util_url"
+Download "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
+Download "$mdk_dir/jars/bin/jutil.jar" "$jutil_url"
 python2.7 "$SCRIPTPATH/merge-zips.py" "$mdk_dir/jars/bin/jinput.jar" "$mdk_dir/jars/bin/jutil.jar"
 rm -f "$mdk_dir/jars/bin/jutil.jar"
 
@@ -716,7 +716,7 @@ fi
 # Download Minecraft Resources
 if [[ "$dl_rc" == "true" ]]; then
     jsonFile="$temp/assets.json"
-    curl -ss -L -o "$jsonFile" "$legacy_assets_url"
+    Download "$jsonFile" "$legacy_assets_url" "true"
 
     # Parse JSON & Download Resources
     appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
@@ -730,7 +730,7 @@ if [[ "$dl_rc" == "true" ]]; then
       mkdir -p "$rd"
 
       # Download the resource file
-      curl -ss -L -o "$resource_file" "$resource"
+      Download "$resource_file" "$resource" "true"
     done <<< "${appls}"
 fi
 
