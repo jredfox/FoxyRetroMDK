@@ -47,12 +47,12 @@ function Download () {
     SLEEP=4
     MAX_TRIES=25
     for (( i=1; i<=MAX_TRIES; i++ )); do
-        status=0
         if [[ "$Silent" == "true" ]]; then
             status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
         else
             status=$(curl -A "$Mozilla" -L -o "$OutFile" -w "%{http_code}" "$URL")
         fi
+        status=${status:-0}
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status"
@@ -72,7 +72,7 @@ function Download () {
     return 0
 }
 
-Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar" "true"
+Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
 exit 1
 
 #Checks linux Pre-Installed Requirements
