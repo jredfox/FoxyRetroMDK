@@ -63,7 +63,6 @@ function Download () {
             rm -f "$OutFile"
             sleep "$SLEEP"
         else
-            echo "HTTP $status"
             return 1
         fi
     done
