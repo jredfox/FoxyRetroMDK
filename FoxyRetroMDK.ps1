@@ -50,7 +50,7 @@ function Download {
         [string]$Uri,  # URL to Download From
         [string]$OutFile # File Save As
     )
-    $MaxTries = 3
+    $MaxTries = 25
     $BaseDelay = 4
     for ($i = 1; $i -le $MaxTries; $i++)
     {
