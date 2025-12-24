@@ -36,7 +36,8 @@ Mozilla="Mozilla"
 
 ################# Functions Start #################
 
-#Download With Curl & Agent
+#Download With Curl & Agent. Returns 1 on success and 0 on Failure. 
+#Stops on the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 function Download () {
 
     local OutFile="$1"
@@ -53,17 +54,23 @@ function Download () {
             status=$(curl -A "$Mozilla" -L -o "$OutFile" -w "%{http_code}" "$URL")
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
+            if [ "$status" -eq 404 ] || [ "$status" -eq 410 ]; then
+                 if [ "$i" -ge 2 ]; then
+                    echo "Download Failed: HTTP $status"
+                    return 0
+                fi
+            fi
             echo "ERROR: $status for $URL"
             sleep "$SLEEP"
         else
             echo "HTTP $status"
-            return
+            return 1
         fi
     done
 
 }
 
-Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar" "true"
+Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
 exit 1
 
 #Checks linux Pre-Installed Requirements
