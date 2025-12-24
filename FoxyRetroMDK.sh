@@ -745,6 +745,7 @@ fi
 
 # Download Minecraft Resources
 if [[ "$dl_rc" == "true" ]]; then
+    ExitOnDLFail="false"
     jsonFile="$temp/assets.json"
     Download "$jsonFile" "$legacy_assets_url" "true"
 
@@ -762,6 +763,7 @@ if [[ "$dl_rc" == "true" ]]; then
       # Download the resource file
       Download "$resource_file" "$resource" "true"
     done <<< "${appls}"
+    ExitOnDLFail="true"
 fi
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
