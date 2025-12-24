@@ -50,10 +50,10 @@ $ExitOnDLFail="true"
 function Download {
     param (
         [string]$Uri,  # URL to Download From
-        [string]$OutFile # File Save As
+        [string]$OutFile, # File Save As
+        [int]$MaxTries = 25, # Max Amount Of Tries
+        [int]$BaseDelay = 4 # Time in Seconds to Sleep
     )
-    $MaxTries = 25
-    $BaseDelay = 4
     for ($i = 1; $i -le $MaxTries; $i++)
     {
         try
