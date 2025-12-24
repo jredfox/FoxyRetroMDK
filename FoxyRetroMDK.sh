@@ -71,9 +71,6 @@ function Download () {
     return 0
 }
 
-Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
-exit 1
-
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
 
