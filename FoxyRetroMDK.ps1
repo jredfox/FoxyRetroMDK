@@ -41,6 +41,7 @@ $resources_url = "https://resources.download.minecraft.net/"
 
 #Set UserAgent for Downloads
 $Mozilla = "Mozilla"
+$ExitOnDLFail="true"
 
 ################# Functions Start #################
 
@@ -64,7 +65,10 @@ function Download {
             Start-Sleep -Seconds $BaseDelay
         }
     }
-    exit 1
+    if ($ExitOnDLFail -eq "true")
+    {
+        exit 1
+    }
 }
 
 #Author jredfox
@@ -161,7 +165,9 @@ if($skip_rc -like "T*") {
 }
 
 $progress_org = "$ProgressPreference"
+$ExitOnDLFailOrg = $ExitOnDLFail
 $ProgressPreference = 'SilentlyContinue'
+$ExitOnDLFail="false"
 try
 {
     $jsonFile = "$temp\assets.json"
@@ -184,6 +190,7 @@ catch
     Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $Resources"
 }
 $ProgressPreference = "$progress_org"
+$ExitOnDLFail="$ExitOnDLFailOrg"
 
 }
 
