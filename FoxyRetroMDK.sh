@@ -44,8 +44,10 @@ function Download () {
     local URL="$2"
     local Silent="$3"
 
-    SLEEP=4
-    MAX_TRIES=25
+    local SLEEP=4
+    local MAX_TRIES=25
+    local i status
+
     for (( i=1; i<=MAX_TRIES; i++ )); do
         if [[ "$Silent" == "true" ]]; then
             status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
@@ -70,6 +72,9 @@ function Download () {
     echo "Download Failed After $MAX_TRIES for $URL to $OutFile"
     return 1
 }
+
+Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
+exit 1
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
