@@ -760,7 +760,7 @@ if [[ "$dl_rc" == "true" ]]; then
       mkdir -p "$rd"
 
       # Download the resource file
-      curl -A "$Mozilla" -sS -L -o "$resource_file" "$resource"
+      Download "$resource_file" "$resource" "true"
     done <<< "${appls}"
 fi
 
