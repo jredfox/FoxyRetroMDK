@@ -53,8 +53,12 @@ function Download {
         [string]$OutFile, # File Save As
         [int]$MaxTries = 25, # Max Amount Of Tries
         [int]$BaseDelay = 4, # Time in Seconds to Sleep
-        [string]$Exit = "$ExitOnDLFail"
+        [string]$Exit = ""
     )
+    if ([string]::IsNullOrWhiteSpace($Exit))
+    {
+        $Exit = "$ExitOnDLFail"
+    }
     for ($i = 1; $i -le $MaxTries; $i++)
     {
         try
@@ -71,19 +75,21 @@ function Download {
                 try {
                     # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
                     if ($ex.Response.StatusCode.value__) {
-                        $status = [int]($_.Exception.Response.StatusCode.value__.ToString())
+                        Write-Host "here value__"
+                        $status = [int] $_.Exception.Response.StatusCode.value__
                     }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
-                        $status = [int]($_.Exception.Response.StatusCode.ToString())
+                        Write-Host "here Status Code"
+                        $status = [int] $_.Exception.Response.StatusCode
                     }
                     # 3. Some HttpRequestException cases: StatusCode directly on the exception
                     elseif ($ex.StatusCode) {
-                        $status = [int]($ex.StatusCode.ToString())
+                        $status = [int] $ex.StatusCode
                     }
                     # 4. Or on the inner exception
                     elseif ($ex.InnerException -and $ex.InnerException.StatusCode) {
-                        $status = [int]($ex.InnerException.StatusCode.ToString())
+                        $status = [int] $ex.InnerException.StatusCode
                     }
                 }
                 catch {
@@ -113,7 +119,7 @@ function Download {
     }
 }
 
-Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 1
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
