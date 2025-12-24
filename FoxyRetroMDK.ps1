@@ -45,6 +45,8 @@ $ExitOnDLFail="true"
 
 ################# Functions Start #################
 
+#Downloads a File with Max Tries and Base Delay Supports Poweershell 5.1x & PowerShell 7x
+#On Download Failure If $ExitOnDLFail is true program will exit with code 1
 function Download {
     param (
         [string]$Uri,  # URL to Download From
