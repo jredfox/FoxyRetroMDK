@@ -69,22 +69,24 @@ function Download {
         catch
         {
             $status = 0
-            if ($_.Exception.Response)
+            $ex = $_.Exception
+            try 
             {
-                $ex = $_.Exception
-                try {
+                if ($_.Exception.Response)
+                {
                     # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
                     if ($ex.Response.StatusCode.value__) {
-                        Write-Host "here value__"
                         $status = [int] $_.Exception.Response.StatusCode.value__
                     }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
-                        Write-Host "here Status Code"
                         $status = [int] $_.Exception.Response.StatusCode
                     }
+                }
+                if ($status -eq 0)
+                {
                     # 3. Some HttpRequestException cases: StatusCode directly on the exception
-                    elseif ($ex.StatusCode) {
+                    if ($ex.StatusCode) {
                         $status = [int] $ex.StatusCode
                     }
                     # 4. Or on the inner exception
@@ -92,9 +94,10 @@ function Download {
                         $status = [int] $ex.InnerException.StatusCode
                     }
                 }
-                catch {
-                    Write-Warning "Unknown exception occurred: $($_.Exception.Message)"
-                }
+            }
+            catch 
+            {
+                Write-Warning "Unknown exception occurred: $($_.Exception.Message)"
             }
             if ($i -ge 2 -and ($status -eq 404 -or $status -eq 410))
             {
