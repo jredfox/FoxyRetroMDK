@@ -37,7 +37,7 @@ Mozilla="Mozilla"
 ################# Functions Start #################
 
 #Download With Curl & Agent. Returns 1 on success and 0 on Failure.
-#Stops on the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
+#Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 function Download () {
 
     local OutFile="$1"
