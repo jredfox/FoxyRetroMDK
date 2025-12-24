@@ -36,7 +36,7 @@ Mozilla="Mozilla"
 
 ################# Functions Start #################
 
-#Download With Curl & Agent. Returns 1 on success and 0 on Failure.
+#Download With Curl & Agent. Returns 0 on success and 1 on Failure.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 function Download () {
 
@@ -57,18 +57,18 @@ function Download () {
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status"
                 rm -f "$OutFile"
-                return 0
+                return 1
             fi
             echo "ERROR: $status for $URL"
             rm -f "$OutFile"
             sleep "$SLEEP"
         else
-            return 1
+            return 0
         fi
     done
 
     echo "Download Failed After $MAX_TRIES for $URL to $OutFile"
-    return 0
+    return 1
 }
 
 #Checks linux Pre-Installed Requirements
