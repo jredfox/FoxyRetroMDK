@@ -62,7 +62,7 @@ function Download {
         catch
         {
             $status = 0
-            if ($_.Exception.Response) 
+            if ($_.Exception.Response)
             {
                 try {
                     # PowerShell 7+ (HttpResponseException)
@@ -98,7 +98,7 @@ function Download {
     }
 }
 
-Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
+#Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
