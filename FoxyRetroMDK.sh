@@ -54,11 +54,9 @@ function Download () {
             status=$(curl -A "$Mozilla" -L -o "$OutFile" -w "%{http_code}" "$URL")
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
-            if [ "$status" -eq 404 ] || [ "$status" -eq 410 ]; then
-                 if [ "$i" -ge 2 ]; then
-                    echo "Download Failed: HTTP $status"
-                    return 0
-                fi
+            if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
+                echo "Download Failed: HTTP $status"
+                return 0
             fi
             echo "ERROR: $status for $URL"
             sleep "$SLEEP"
