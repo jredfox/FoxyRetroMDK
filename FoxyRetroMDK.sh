@@ -37,7 +37,7 @@ ExitOnDLFail="true"
 
 ################# Functions Start #################
 
-#Download With Curl & Agent. Returns 0 on success and 1 on Failure.
+#Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFailure is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 function Download () {
 
