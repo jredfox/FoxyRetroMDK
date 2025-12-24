@@ -46,8 +46,7 @@ function Download () {
 
     SLEEP=4
     MAX_TRIES=25
-    for i in $(seq 1 $MAX_TRIES);
-    do
+    for (( i=1; i<=MAX_TRIES; i++ )); do
         status=0
         if [[ "$Silent" == "true" ]]; then
             status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
@@ -69,6 +68,8 @@ function Download () {
         fi
     done
 
+    echo "Download Failed After $MAX_TRIES for $URL to $OutFile"
+    return 0
 }
 
 Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
