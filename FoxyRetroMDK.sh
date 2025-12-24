@@ -59,7 +59,7 @@ function Download () {
         status=${status:-0}
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
-                echo "Download Failed: HTTP $status"
+                echo "Download Failed: HTTP $status for $URL"
                 rm -f "$OutFile"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
                     exit 1
@@ -74,7 +74,7 @@ function Download () {
         fi
     done
 
-    echo "Download Failed After $MAX_TRIES for $URL to $OutFile"
+    echo "Download Failed After $MAX_TRIES tries for $URL to $OutFile"
     if [[ "$ExitOnDLFail" == "true" ]]; then
         exit 1
     fi

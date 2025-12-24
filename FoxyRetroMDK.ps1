@@ -91,7 +91,7 @@ function Download {
             Start-Sleep -Seconds $BaseDelay
         }
     }
-    Write-Error "Download Failed After $MaxTries for $Uri to $OutFile"
+    Write-Error "Download Failed After $MaxTries tries for $Uri to $OutFile"
     if ($ExitOnDLFail -eq "true")
     {
         exit 1
