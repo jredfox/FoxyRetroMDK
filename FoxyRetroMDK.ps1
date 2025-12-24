@@ -165,7 +165,7 @@ $ProgressPreference = 'SilentlyContinue'
 try
 {
     $jsonFile = "$temp\assets.json"
-    Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$JsonURL" -OutFile "$jsonFile"
+    Download -Uri "$JsonURL" -OutFile "$jsonFile"
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
     $objects = $jsonData.objects
     foreach ($key in $objects.PSObject.Properties.Name)
@@ -176,7 +176,7 @@ try
         Write-Output "Downloading Resource URL:$resource"
         $rd = Split-Path "$resource_file" -Parent #build resource directory path
         New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$resource" -OutFile "$resource_file"
+        Download -Uri "$resource" -OutFile "$resource_file"
     }
 }
 catch
