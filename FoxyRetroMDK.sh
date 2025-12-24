@@ -43,7 +43,7 @@ function Download () {
     local OutFile="$2"
     local Silent="$3"
 
-    if [ "$Silent" = "true" ]; then
+    if [[ "$Silent" == "true" ]]; then
         curl -A "$Mozilla" -sS -L -o "$OutFile" "$URL"
     else
         curl -A "$Mozilla" -L -o "$OutFile" "$URL"
