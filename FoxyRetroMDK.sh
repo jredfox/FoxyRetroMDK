@@ -46,8 +46,8 @@ function Download () {
 
     local SLEEP=4
     local MAX_TRIES=25
-    local i
     local status
+    local i
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         if [[ "$Silent" == "true" ]]; then
