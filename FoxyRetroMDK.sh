@@ -33,6 +33,7 @@ else
     isLinux=true
 fi
 Mozilla="Mozilla"
+ExitOnDLFail="true"
 
 ################# Functions Start #################
 
@@ -60,6 +61,9 @@ function Download () {
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status"
                 rm -f "$OutFile"
+                if [[ "$ExitOnDLFail" == "true" ]]; then
+                    exit 1
+                fi
                 return 1
             fi
             echo "ERROR: $status for $URL"
@@ -71,6 +75,9 @@ function Download () {
     done
 
     echo "Download Failed After $MAX_TRIES for $URL to $OutFile"
+    if [[ "$ExitOnDLFail" == "true" ]]; then
+        exit 1
+    fi
     return 1
 }
 
