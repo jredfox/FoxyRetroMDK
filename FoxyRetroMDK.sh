@@ -72,7 +72,7 @@ function Download () {
     return 0
 }
 
-Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.0.jar" "true"
+Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar" "true"
 exit 1
 
 #Checks linux Pre-Installed Requirements
@@ -754,7 +754,7 @@ if [[ "$dl_rc" == "true" ]]; then
       mkdir -p "$rd"
 
       # Download the resource file
-      Download "$resource_file" "$resource" "true"
+      curl -A "$Mozilla" -sS -L -o "$resource_file" "$resource"
     done <<< "${appls}"
 fi
 
