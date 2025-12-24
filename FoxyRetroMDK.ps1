@@ -75,18 +75,23 @@ function Download {
                     }
                 }
                 catch {
-                    Write-Host "Unknown exception occurred: $($_.Exception.Message)"
+                    Write-Warning "Unknown exception occurred: $($_.Exception.Message)"
                 }
             }
             if ($i -ge 2 -and ($status -eq 404 -or $status -eq 410))
             {
-                Write-Host "Download Failed: $Uri $status"
-                break
+                Write-Error "Download Failed: HTTP $status for $Uri"
+                if ($ExitOnDLFail -eq "true")
+                {
+                    exit 1
+                }
+                return
             }
-            Write-Host "HTTP Error: $status for $Uri"
+            Write-Warning "HTTP Error: $status for $Uri"
             Start-Sleep -Seconds $BaseDelay
         }
     }
+    Write-Error "Download Failed After $MaxTries for $Uri to $OutFile"
     if ($ExitOnDLFail -eq "true")
     {
         exit 1
