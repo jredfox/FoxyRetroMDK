@@ -48,6 +48,7 @@ function Download () {
     MAX_TRIES=25
     for i in $(seq 1 $MAX_TRIES);
     do
+        status=0
         if [[ "$Silent" == "true" ]]; then
             status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
         else
@@ -56,9 +57,11 @@ function Download () {
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status"
+                rm -f "$OutFile"
                 return 0
             fi
             echo "ERROR: $status for $URL"
+            rm -f "$OutFile"
             sleep "$SLEEP"
         else
             echo "HTTP $status"
