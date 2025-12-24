@@ -87,8 +87,11 @@ function Download {
                 }
                 return
             }
-            Write-Warning "HTTP Error: $status for $Uri"
-            Start-Sleep -Seconds $BaseDelay
+            if($i -lt $MaxTries)
+            {
+                Write-Warning "HTTP Error: $status for $Uri"
+                Start-Sleep -Seconds $BaseDelay
+            }
         }
     }
     Write-Error "Download Failed After $MaxTries tries for $Uri to $OutFile"
@@ -98,7 +101,7 @@ function Download {
     }
 }
 
-#Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
+Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9_JJJJJJJJJ.zip" -OutFile "test.zip"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
