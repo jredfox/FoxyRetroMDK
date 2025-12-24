@@ -43,13 +43,28 @@ function Download () {
     local URL="$2"
     local Silent="$3"
 
-    if [[ "$Silent" == "true" ]]; then
-        curl -A "$Mozilla" -sS -L -o "$OutFile" "$URL"
-    else
-        curl -A "$Mozilla" -L -o "$OutFile" "$URL"
-    fi
-    
+    SLEEP=4
+    MAX_TRIES=25
+    for i in $(seq 1 $MAX_TRIES);
+    do
+        if [[ "$Silent" == "true" ]]; then
+            status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
+        else
+            status=$(curl -A "$Mozilla" -L -o "$OutFile" -w "%{http_code}" "$URL")
+        fi
+        if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
+            echo "ERROR: $status for $URL"
+            sleep "$SLEEP"
+        else
+            echo "HTTP $status"
+            return
+        fi
+    done
+
 }
+
+Download "a spaced out/test jar.jar" "https://web.archive.org/web/20160305211940id_/https://files.minecraftforge.net/fmllibs/argo-small-3.2.jar" "true"
+exit 1
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
