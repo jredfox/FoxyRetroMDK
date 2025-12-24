@@ -41,18 +41,19 @@ $resources_url = "https://resources.download.minecraft.net/"
 
 #Set UserAgent for Downloads
 $Mozilla = "Mozilla"
-$ExitOnDLFail="true"
+$ExitOnDLFail = "true"
 
 ################# Functions Start #################
 
 #Downloads a File with Max Tries and Base Delay Supports Poweershell 5.1x & PowerShell 7x
-#On Download Failure If $ExitOnDLFail is true program will exit with code 1
+#On Download Failure If $Exit is true exit 1 gets called
 function Download {
     param (
         [string]$Uri,  # URL to Download From
         [string]$OutFile, # File Save As
         [int]$MaxTries = 25, # Max Amount Of Tries
-        [int]$BaseDelay = 4 # Time in Seconds to Sleep
+        [int]$BaseDelay = 4, # Time in Seconds to Sleep
+        [string]$Exit = "$ExitOnDLFail"
     )
     for ($i = 1; $i -le $MaxTries; $i++)
     {
@@ -92,7 +93,7 @@ function Download {
             if ($i -ge 2 -and ($status -eq 404 -or $status -eq 410))
             {
                 Write-Error "Download Failed: HTTP $status for $Uri"
-                if ($ExitOnDLFail -eq "true")
+                if ($Exit -eq "true")
                 {
                     exit 1
                 }
@@ -106,13 +107,13 @@ function Download {
         }
     }
     Write-Error "Download Failed After $MaxTries tries for $Uri to $OutFile"
-    if ($ExitOnDLFail -eq "true")
+    if ($Exit -eq "true")
     {
         exit 1
     }
 }
 
-Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip"
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 1
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
@@ -208,13 +209,11 @@ if($skip_rc -like "T*") {
 }
 
 $progress_org = "$ProgressPreference"
-$ExitOnDLFailOrg = $ExitOnDLFail
 $ProgressPreference = 'SilentlyContinue'
-$ExitOnDLFail="false"
 try
 {
     $jsonFile = "$temp\assets.json"
-    Download -Uri "$JsonURL" -OutFile "$jsonFile"
+    Download -Uri "$JsonURL" -OutFile "$jsonFile" -Exit "false"
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
     $objects = $jsonData.objects
     foreach ($key in $objects.PSObject.Properties.Name)
@@ -225,7 +224,7 @@ try
         Write-Output "Downloading Resource URL:$resource"
         $rd = Split-Path "$resource_file" -Parent #build resource directory path
         New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Download -Uri "$resource" -OutFile "$resource_file"
+        Download -Uri "$resource" -OutFile "$resource_file" -Exit "false"
     }
 }
 catch
@@ -233,7 +232,6 @@ catch
     Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $Resources"
 }
 $ProgressPreference = "$progress_org"
-$ExitOnDLFail="$ExitOnDLFailOrg"
 
 }
 
