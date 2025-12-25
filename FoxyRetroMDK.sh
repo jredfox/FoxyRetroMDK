@@ -44,9 +44,11 @@ function Download () {
     local OutFile="$1"
     local URL="$2"
     local Silent="$3"
-
-    local SLEEP=4
-    local MAX_TRIES=25
+    local MAX_TRIES="${4:-25}"
+    local SLEEP="${5:-4}"
+    
+    echo "MAX $MAX_TRIES SLEEP $SLEEP"
+    
     local status
     local i
 
@@ -80,6 +82,8 @@ function Download () {
     fi
     return 1
 }
+
+#Download "test.zip" "https://httpbin.org/status/404" "true" "50" "3"
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
