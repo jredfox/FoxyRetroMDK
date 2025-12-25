@@ -72,15 +72,15 @@ function Download {
             $ex = $_.Exception
             try 
             {
-                if ($_.Exception.Response)
+                if ($ex.Response)
                 {
                     # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
                     if ($ex.Response.StatusCode.value__) {
-                        $status = [int] $_.Exception.Response.StatusCode.value__
+                        $status = [int] $ex.Response.StatusCode.value__
                     }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
-                        $status = [int] $_.Exception.Response.StatusCode
+                        $status = [int] $ex.Response.StatusCode
                     }
                 }
                 if ($status -eq 0)
