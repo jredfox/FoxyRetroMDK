@@ -130,7 +130,7 @@ function Download {
     }
 }
 
-Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2 -BaseDelay 2
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip"
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
