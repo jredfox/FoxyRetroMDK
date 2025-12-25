@@ -106,10 +106,6 @@ function Check-LinuxDeps () {
         echo "tr command not found"
         missing="T"
     fi
-    if ! output=$(jq "--help" > /dev/null 2>&1); then
-        echo "jq command not found"
-        missing="T"
-    fi
     if ! output=$(make "--help" > /dev/null 2>&1); then
         echo "make command not found"
         missing="T"
@@ -120,7 +116,7 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: jq build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
         exit 1
     fi
 
@@ -182,15 +178,6 @@ function Check-Deps () {
             open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
             echo "Please re-run the script once Python has been installed"
             exit 0
-        fi
-        if [[ "$dl_rc" == "true" ]] && ! output=$(brew "--version" > /dev/null 2>&1); then
-            echo "Installing brew"
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        fi
-        if [[ "$dl_rc" == "true" ]] && ! output=$(jq "--version" > /dev/null 2>&1); then
-            echo "Installing jq"
-            brew install jq
-            echo ""
         fi
     else
         Check-LinuxDeps
@@ -751,21 +738,17 @@ if [[ "$dl_rc" == "true" ]]; then
     ExitOnDLFail="false"
     jsonFile="$temp/assets.json"
     Download "$jsonFile" "$legacy_assets_url" "true" "10"
+    python2.7 "$SCRIPTPATH/resources.py" "$jsonFile" "$resources_url"
 
     # Parse JSON & Download Resources
-    appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
-    while IFS=, read -r key hash; do
-      resource="$resources_url${hash:0:2}/$hash"
-      resource_file="$mdk_dir/jars/resources/$key"
-      echo "Downloading Resource URL: $resource"
-
-      # Create necessary directories
-      rd=$(dirname "$resource_file")
-      mkdir -p "$rd"
-
-      # Download the resource file
-      Download "$resource_file" "$resource" "true" "4"
-    done <<< "${appls}"
+    while IFS=, read -r key resource; do
+        resource_file="$mdk_dir/jars/resources/$key"
+        echo "Downloading Resource URL: $resource"
+        #Create necessary directories
+        rd=$(dirname "$resource_file")
+        mkdir -p "$rd"
+        Download "$resource_file" "$resource" "true" "4"
+    done < "${jsonFile}.txt"
     ExitOnDLFail="true"
 fi
 
