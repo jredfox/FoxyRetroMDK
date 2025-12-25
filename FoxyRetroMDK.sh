@@ -68,9 +68,11 @@ function Download () {
                 fi
                 return 1
             fi
-            echo "ERROR: $status for $URL"
+            echo "HTTP Error: $status for $URL"
             rm -f "$OutFile"
-            sleep "$SLEEP"
+            if [[ $i -lt $MAX_TRIES ]]; then
+                sleep "$SLEEP"
+            fi
         else
             return 0
         fi
@@ -83,7 +85,7 @@ function Download () {
     return 1
 }
 
-Download "test.zip" "https://httpbin.org/status/404" "true" "50" "3"
+Download "test.zip" "https://httpbin.org/status/429" "true" "3" "2"
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
