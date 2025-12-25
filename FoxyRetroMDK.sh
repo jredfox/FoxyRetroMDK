@@ -60,16 +60,15 @@ function Download () {
         fi
         status=${status:-0}
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
+            rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
-                rm -f "$OutFile"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
                     exit 1
                 fi
                 return 1
             fi
             echo "HTTP Error: $status for $URL"
-            rm -f "$OutFile"
             if [[ "$i" -lt "$MAX_TRIES" ]]; then
                 sleep "$SLEEP"
             fi
@@ -753,7 +752,7 @@ fi
 if [[ "$dl_rc" == "true" ]]; then
     ExitOnDLFail="false"
     jsonFile="$temp/assets.json"
-    Download "$jsonFile" "$legacy_assets_url" "true"
+    Download "$jsonFile" "$legacy_assets_url" "true" "10"
 
     # Parse JSON & Download Resources
     appls=$(jq -c -r '.objects | to_entries[] | "\(.key),\(.value.hash)"' "${jsonFile}")
@@ -767,7 +766,7 @@ if [[ "$dl_rc" == "true" ]]; then
       mkdir -p "$rd"
 
       # Download the resource file
-      Download "$resource_file" "$resource" "true"
+      Download "$resource_file" "$resource" "true" "4"
     done <<< "${appls}"
     ExitOnDLFail="true"
 fi
