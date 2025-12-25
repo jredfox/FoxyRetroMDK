@@ -69,6 +69,7 @@ function Download {
         catch
         {
             $status = 0
+            $setStatus = ""
             $ex = $_.Exception
             try 
             {
@@ -76,14 +77,16 @@ function Download {
                 {
                     # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
                     if ($ex.Response.StatusCode.value__) {
+                        setStatus = "T"
                         $status = [int] $ex.Response.StatusCode.value__
                     }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
+                        setStatus = "T"
                         $status = [int] $ex.Response.StatusCode
                     }
                 }
-                if ($status -eq 0)
+                if ($setStatus -nq "T")
                 {
                     # 3. Some HttpRequestException cases: StatusCode directly on the exception
                     if ($ex.StatusCode) {
