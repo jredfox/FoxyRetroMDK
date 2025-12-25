@@ -90,12 +90,10 @@ function Download {
                 {
                     # 3. Some HttpRequestException cases: StatusCode directly on the exception
                     if ($ex.StatusCode) {
-                        Write-Host "HERE EX"
                         $status = [int] $ex.StatusCode
                     }
                     # 4. Or on the inner exception
                     elseif ($ex.InnerException -and $ex.InnerException.StatusCode) {
-                        Write-Host "HERE Inner"
                         $status = [int] $ex.InnerException.StatusCode
                     }
                 }
