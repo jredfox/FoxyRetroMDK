@@ -47,8 +47,6 @@ function Download () {
     local MAX_TRIES="${4:-25}"
     local SLEEP="${5:-4}"
     
-    echo "MAX $MAX_TRIES SLEEP $SLEEP"
-    
     local status
     local i
 
