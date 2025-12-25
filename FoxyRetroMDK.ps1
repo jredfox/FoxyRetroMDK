@@ -230,7 +230,7 @@ $ProgressPreference = 'SilentlyContinue'
 try
 {
     $jsonFile = "$temp\assets.json"
-    Download -Uri "$JsonURL" -OutFile "$jsonFile" -Exit "false"
+    Download -Uri "$JsonURL" -OutFile "$jsonFile" -Exit "false" -MaxTries 10
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
     $objects = $jsonData.objects
     foreach ($key in $objects.PSObject.Properties.Name)
@@ -241,7 +241,7 @@ try
         Write-Output "Downloading Resource URL:$resource"
         $rd = Split-Path "$resource_file" -Parent #build resource directory path
         New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Download -Uri "$resource" -OutFile "$resource_file" -Exit "false"
+        Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
     }
 }
 catch
