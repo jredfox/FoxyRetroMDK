@@ -70,7 +70,7 @@ function Download () {
             fi
             echo "HTTP Error: $status for $URL"
             rm -f "$OutFile"
-            if [[ $i -lt $MAX_TRIES ]]; then
+            if [[ "$i" -lt "$MAX_TRIES" ]]; then
                 sleep "$SLEEP"
             fi
         else
