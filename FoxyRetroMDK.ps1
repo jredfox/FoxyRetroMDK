@@ -77,23 +77,25 @@ function Download {
                 {
                     # Windows PowerShell 5.1x (WebException -> HttpWebResponse)
                     if ($ex.Response.StatusCode.value__) {
-                        setStatus = "T"
+                        $setStatus = "T"
                         $status = [int] $ex.Response.StatusCode.value__
                     }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
-                        setStatus = "T"
+                        $setStatus = "T"
                         $status = [int] $ex.Response.StatusCode
                     }
                 }
-                if ($setStatus -nq "T")
+                if ($setStatus -ne "T")
                 {
                     # 3. Some HttpRequestException cases: StatusCode directly on the exception
                     if ($ex.StatusCode) {
+                        Write-Host "HERE EX"
                         $status = [int] $ex.StatusCode
                     }
                     # 4. Or on the inner exception
                     elseif ($ex.InnerException -and $ex.InnerException.StatusCode) {
+                        Write-Host "HERE Inner"
                         $status = [int] $ex.InnerException.StatusCode
                     }
                 }
