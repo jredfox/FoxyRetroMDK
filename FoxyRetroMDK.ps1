@@ -45,7 +45,7 @@ $ExitOnDLFail = "true"
 
 ################# Functions Start #################
 
-#Downloads a File with Max Tries and Base Delay Supports Poweershell 5.1x & PowerShell 7x
+#Downloads a File with Max Tries and Base Delay Supports Powershell 5.1x & PowerShell 7x
 #On Download Failure If $Exit is true exit 1 gets called
 function Download {
     param (
@@ -53,17 +53,22 @@ function Download {
         [string]$OutFile, # File Save As
         [int]$MaxTries = 25, # Max Amount Of Tries
         [int]$BaseDelay = 4, # Time in Seconds to Sleep
-        [string]$Exit = ""
+        [string]$Exit = "",
+        [string]$Agent = ""
     )
     if ([string]::IsNullOrWhiteSpace($Exit))
     {
         $Exit = "$ExitOnDLFail"
     }
+    if ([string]::IsNullOrWhiteSpace($Agent))
+    {
+        Agent = "$Mozilla"
+    }
     for ($i = 1; $i -le $MaxTries; $i++)
     {
         try
         {
-            Invoke-WebRequest -UserAgent "$Mozilla" -Uri "$Uri" -OutFile "$OutFile" -ErrorAction Stop
+            Invoke-WebRequest -UserAgent "$Agent" -Uri "$Uri" -OutFile "$OutFile" -ErrorAction Stop
             return
         }
         catch
@@ -125,7 +130,7 @@ function Download {
     }
 }
 
-Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2 -BaseDelay 10
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
