@@ -62,7 +62,7 @@ function Download {
     }
     if ([string]::IsNullOrWhiteSpace($Agent))
     {
-        Agent = "$Mozilla"
+        $Agent = "$Mozilla"
     }
     for ($i = 1; $i -le $MaxTries; $i++)
     {
@@ -130,7 +130,7 @@ function Download {
     }
 }
 
-Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2 -BaseDelay 10
+Download -Uri "https://httpbin.org/status/429" -OutFile "test.zip" -MaxTries 2 -BaseDelay 2
 
 #Author jredfox
 #This Download-Mediafire function is free to use, copy, and distribute
