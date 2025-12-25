@@ -84,7 +84,7 @@ function Download () {
     return 1
 }
 
-Download "test.zip" "https://httpbin.org/status/429" "true" "3" "2"
+#Download "test.zip" "https://httpbin.org/status/429" "true" "3" "2"
 
 #Checks linux Pre-Installed Requirements
 function Check-LinuxDeps () {
