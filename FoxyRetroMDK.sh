@@ -738,9 +738,9 @@ if [[ "$dl_rc" == "true" ]]; then
     ExitOnDLFail="false"
     jsonFile="$temp/assets.json"
     Download "$jsonFile" "$legacy_assets_url" "true" "10"
-    python2.7 "$SCRIPTPATH/resources.py" "$jsonFile" "$resources_url"
 
     # Parse JSON & Download Resources
+    python2.7 "$SCRIPTPATH/resources.py" "$jsonFile" "$resources_url"
     while IFS=, read -r key resource; do
         resource_file="$mdk_dir/jars/resources/$key"
         echo "Downloading Resource URL: $resource"
