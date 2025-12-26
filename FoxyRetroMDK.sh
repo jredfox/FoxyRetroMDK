@@ -147,7 +147,7 @@ function Check-LinuxDeps () {
     if [[ ! -e "$dir_bin/python2.7" ]]; then
         py_ver="2.7.15"
         echo "Installing python $py_ver to $dir_bin/python2.7"
-        Download "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/$py_ver/Python-$py_ver.tgz"
+        Download "$tmp_deps/Python-${py_ver}.tgz" "https://www.python.org/ftp/python/${py_ver}/Python-${py_ver}.tgz"
         pushd "$tmp_deps" > /dev/null 2>&1 
         tar xzf "$tmp_deps/Python-${py_ver}.tgz"
         popd > /dev/null 2>&1 
