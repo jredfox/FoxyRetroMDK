@@ -11,7 +11,7 @@ import glob
 import re
 import subprocess
 
-VERSION = '1.0.14'
+VERSION = '1.0.15'
 jdk_ver = None
 jdk_8 = None
 jdk_7 = None
@@ -38,6 +38,48 @@ def save(jdk_path, cache):
             file.write(jdk_path)
     print(jdk_path)
     sys.exit(0)
+
+VERSION_UQ = re.compile(
+    r'(\d+(?:\.\d+)+(?:[\.\_\-\+\:\#\*][0-9A-Za-z]+)*)'
+)
+BUILD_REG = re.compile(
+    r'\bbuild\b', 
+    re.IGNORECASE
+)
+
+#Extract a Version String from single or double quotes. Removes any internal quotes
+def getVerString(s):
+    l = len(s)
+    inq = False
+    q = ''
+    sb = ''
+    i = -1
+    for c in s:
+        i = i + 1
+        if (c == '"' or c == "'") and (not inq or q == c) and not s[i-1:i] == '\\':
+            q = c if not inq else ''
+            inq = not inq
+        elif inq:
+            sb = sb + c
+        if sb and (not inq or (i+1 == l)):
+            sb = sb.replace('\\"', '').replace("\\'", "").replace('\\\\', '\\').replace("'", '').replace('"', '')
+            #Scans for "\d+\.\d+" at start of string
+            if sb[0:1].isdigit() and '.' in sb:
+               parts = sb.replace('-', '.').replace('_', '.').split('.')
+               if len(parts) > 1 and parts[0].isdigit() and parts[1].isdigit():
+                   return sb
+            sb = ''
+    return None
+
+#Throws exception one version cannot be parsed
+def get_ver(line):
+    m = getVerString(line)
+    if m:
+        return m
+    build = BUILD_REG.search(line)
+    if build:
+        line = line[build.start()+5:]
+    return VERSION_UQ.search(line).group(1)
 
 def chk_jdk(jdk_path):
     #Get the Real Absolute Path of the File / Directory Always
@@ -84,7 +126,7 @@ def chk_jdk(jdk_path):
             # Run 'java -version' command to check the version
             version_output = subprocess.check_output([java_path, '-version'], stderr=subprocess.STDOUT)
             line = version_output.decode('utf-8').splitlines()[0]  # Get the first line of the output
-            version_info = re.search(r'"(.*?)(?<!\\)"', line).group(1) #version_info = line.split()[1]
+            version_info = get_ver(line) #version_info = line.split()[1]
             
             if version_info.startswith(jdk_ver):
                 save(jdk_path, True)
