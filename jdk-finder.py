@@ -31,14 +31,6 @@ debug = False
 #Change this to False if "JDK/bin/javac" is a symlink (non standard openjdk specification)
 resolve_javac = True
 working_dir = None
-
-def save(jdk_path, cache):
-    if cache and not debug:
-        with open(cached_path, "wb") as file:
-            file.write(jdk_path)
-    print(jdk_path)
-    sys.exit(0)
-
 VERSION_UQ = re.compile(
     r'(\d+(?:\.\d+)+(?:[\.\_\-\+\:\#\*][0-9A-Za-z]+)*)'
 )
@@ -46,6 +38,13 @@ BUILD_REG = re.compile(
     r'\bbuild\b', 
     re.IGNORECASE
 )
+
+def save(jdk_path, cache):
+    if cache and not debug:
+        with open(cached_path, "wb") as file:
+            file.write(jdk_path)
+    print(jdk_path)
+    sys.exit(0)
 
 #Extract a Version String from single or double quotes. Removes any internal quotes
 def getVerString(s):
