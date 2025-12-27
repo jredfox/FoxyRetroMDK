@@ -184,7 +184,9 @@ function isMavericsOrHigher () {
 }
 
 function Check-Deps () {
+
     local pyurl pyfile output
+    
     if [[ "$isMac" == "true" ]]; then
         #Patch Python Installer bug that prevents HTTPS from working on macOS
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
