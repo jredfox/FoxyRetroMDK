@@ -190,8 +190,8 @@ function Check-Deps () {
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
         if ! output=$(python2.7 "--version" > /dev/null 2>&1); then
-            echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-            if [[ "$(isMavericsOrHigher)" == "T" ]];
+            echo "Python 2.7.15 Is Required for running MCP & Forge. Installing Python 2.7.15 ISA: x64"
+            if [[ "$(isMavericsOrHigher)" == "T" ]]; then
                 pyurl="https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
                 pyfile="$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
             else
