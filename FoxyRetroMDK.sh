@@ -362,6 +362,12 @@ function Install-1.6x {
 
     #patch MCP & Forge python calls to python2.7 which enforces 2.7x is called and not python3+ is called
     Patch-MDKPY "$mdk_dir/mcp"
+    
+    #Upgrade python for windows to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
+    echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
+    rm -rf "$mdk_dir/fml/python/"*
+    Download "$temp\python_fml_2.7.9.zip" "$python_url"
+    unzip -q -o "$temp/python_fml_2.7.9.zip" "$mdk_dir/fml/python"
 
     #Remove Temp Folder
     rm -rf "$temp"
