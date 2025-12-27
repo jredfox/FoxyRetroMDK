@@ -167,15 +167,39 @@ function Check-LinuxDeps () {
     rm -rf "$tmp_deps" > /dev/null 2>&1
 }
 
+function isMavericsOrHigher () {
+    local ver major minor patch
+    ver=$(sw_vers -productVersion 2>/dev/null)
+    IFS=. read -r major minor patch <<< "$ver"
+    major=${major:-0}
+    minor=${minor:-0}
+
+    if [ "$major" -ge 11 ] || { [ "$major" -eq 10 ] && [ "$minor" -ge 9 ]; }; then
+        echo "T"
+        return 0
+    else
+        echo "F"
+        return 1
+    fi
+}
+
 function Check-Deps () {
+    local pyurl pyfile output
     if [[ "$isMac" == "true" ]]; then
         #Patch Python Installer bug that prevents HTTPS from working on macOS
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
 
         if ! output=$(python2.7 "--version" > /dev/null 2>&1); then
             echo "Python 2.7.15 Is Required to running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-            Download "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg" "https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg" "true"
-            open "$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
+            if [[ "$(isMavericsOrHigher)" == "T" ]];
+                pyurl="https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
+                pyfile="$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
+            else
+                pyurl="https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.6.pkg"
+                pyfile="$SCRIPTPATH/python-2.7.15-macosx10.6.pkg"
+            fi
+            Download "$pyfile" "$pyurl" "true"
+            open "$pyfile"
             echo "Please re-run the script once Python has been installed"
             exit 0
         fi
