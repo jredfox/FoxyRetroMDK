@@ -287,7 +287,7 @@ function Install-1.6x {
     #Start URL's
     local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
     local assets_base_url="https://resources.download.minecraft.net"
-    local python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
+    local python_url="https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
     local forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
 
     if [[ "$mc_ver" == "1.6.4" ]]; then
@@ -365,9 +365,10 @@ function Install-1.6x {
     
     #Upgrade python for windows to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
-    rm -rf "$mdk_dir/fml/python/"*
-    Download "$temp\python_fml_2.7.9.zip" "$python_url"
-    unzip -q -o "$temp/python_fml_2.7.9.zip" "$mdk_dir/fml/python"
+    rm -rf "$mdk_dir/fml/python"
+    mkdir "$mdk_dir/fml/python"
+    Download "$temp/python_fml_2.7.9.zip" "$python_url"
+    unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
 
     #Remove Temp Folder
     rm -rf "$temp"
