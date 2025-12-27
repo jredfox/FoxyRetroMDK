@@ -21,6 +21,7 @@ mcp_sh_patch = (
     'JDK8=$("python2.7" "$mcp/jdk-finder.py" | xargs)\n'
     'export PATH="$JDK8:$PATH"\n'
     'export JAVA_HOME=$(dirname "$JDK8")\n'
+    'export JDKFINDER=T\n'
     '## Foxy Retro MDK END ##\n'
 )
 
@@ -29,6 +30,7 @@ mcp_batch_patch = (
     'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\r\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\r\n'
     'FOR %%I IN ("%JAVA_DIR%\\..") DO SET "JAVA_HOME=%%~fI"\r\n'
+    'set JDKFINDER=T\r\n'
     'REM ## Foxy Retro MDK END ##\r\n'
 )
 
@@ -43,7 +45,7 @@ if __name__ == "__main__":
     print("Patching Path:" + commandspy)
     with open(commandspy, 'r') as f:
         data = f.read()
-    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
+    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if \'JDKFINDER\' in os.environ:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
     with open(commandspy, 'wb') as f:
         f.write(data)
     
