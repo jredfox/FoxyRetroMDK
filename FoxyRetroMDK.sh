@@ -49,14 +49,24 @@ function Download () {
     
     local status
     local i
+    local k=""
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         if [[ "$Silent" == "true" ]]; then
-            status=$(curl -A "$Mozilla" -sS -L -o "$OutFile" -w "%{http_code}" "$URL")
+            status=$(curl -A "$Mozilla" -sS -L${k} -o "$OutFile" -w "%{http_code}" "$URL")
         else
-            status=$(curl -A "$Mozilla" -L -o "$OutFile" -w "%{http_code}" "$URL")
+            status=$(curl -A "$Mozilla" -L${k} -o "$OutFile" -w "%{http_code}" "$URL")
         fi
         status=${status:-0}
+        #IF CURL returns 0 try --insecure on the same attempt iteration
+        if [[ -z "$k" && "$status" -eq 0 ]]; then
+            k=" --insecure"
+            if [[ "$i" -ne 0 ]]; then
+                ((i--))
+                echo "re-trying with --insecure as a SSL / TLS Cert error was encountered"
+            fi
+            continue
+        fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
             rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
