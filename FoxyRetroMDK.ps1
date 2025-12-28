@@ -69,10 +69,12 @@ function Download {
         try
         {
             Invoke-WebRequest -UserAgent "$Agent" -Uri "$Uri" -OutFile "$OutFile" -ErrorAction Stop
+            Write-Progress -Activity " " -Completed
             return
         }
         catch
         {
+            Write-Progress -Activity " " -Completed
             $status = 0
             $setStatus = ""
             $ex = $_.Exception

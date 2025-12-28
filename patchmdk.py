@@ -45,7 +45,7 @@ if __name__ == "__main__":
     print("Patching Path:" + commandspy)
     with open(commandspy, 'r') as f:
         data = f.read()
-    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if os.getenv("JDKFINDER") == "T":\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
+    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        if os.getenv("JDKFINDER") == "T":\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
     with open(commandspy, 'wb') as f:
         f.write(data)
     
@@ -57,6 +57,8 @@ if __name__ == "__main__":
             with open(file, 'r') as f:
                 lines = f.read()
             lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
+            if not isSh:
+                lines = (lines if not lines.endswith('\n') else lines[:-1]) + "\nREM ## FOXY Retro MDK Cleanup ##\nset JDKFINDER=\n"
             with open(file, 'wb') as f:
                 f.write(lines)
             
@@ -74,6 +76,8 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mdk_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_mdk_cmd, 1)
+                if not isSh:
+                    lines = (lines if not lines.endswith('\n') else lines[:-1]) + "\nREM ## FOXY Retro MDK Cleanup ##\nset JDKFINDER=\n"
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
@@ -84,6 +88,8 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                if not isSh:
+                    lines = (lines if not lines.endswith('\n') else lines[:-1]) + "\nREM ## FOXY Retro MDK Cleanup ##\nset JDKFINDER=\n"
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
@@ -101,6 +107,8 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_forge_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_forge_cmd, 1)
+                if not isSh:
+                    lines = (lines if not lines.endswith('\n') else lines[:-1]) + "\nREM ## FOXY Retro MDK Cleanup ##\nset JDKFINDER=\n"
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
@@ -111,6 +119,8 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                if not isSh:
+                    lines = (lines if not lines.endswith('\n') else lines[:-1]) + "\nREM ## FOXY Retro MDK Cleanup ##\nset JDKFINDER=\n"
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
