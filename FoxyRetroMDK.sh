@@ -188,9 +188,6 @@ function Check-Deps () {
     local pyurl pyfile output
     
     if [[ "$isMac" == "true" ]]; then
-        #Patch Python Installer bug that prevents HTTPS from working on macOS
-        bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
-
         if ! output=$(python2.7 "-c" "import sys;version_info = sys.version_info;major = version_info.major;minor = version_info.minor;patch = version_info.micro;sys.exit(1 if (not major == 2 or minor < 7 or minor == 7 and patch < 15) else 0)" > /dev/null 2>&1); then
             echo "Python 2.7.15 Is Required for running MCP & Forge. Installing Python 2.7.15 ISA: x64"
             if [[ "$(isMavericsOrHigher)" == "T" ]]; then
@@ -205,6 +202,8 @@ function Check-Deps () {
             echo "Please re-run the script once Python has been installed"
             exit 0
         fi
+        #Patch Python Installer bug that prevents HTTPS from working on macOS
+        bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
     else
         Check-LinuxDeps
     fi
