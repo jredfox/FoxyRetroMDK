@@ -46,11 +46,12 @@ function Download () {
     local Silent="$3"
     local MAX_TRIES="${4:-25}"
     local SLEEP="${5:-4}"
+    local FLAGS="$5"
     
     local status
     local i
     local k=""
-    local ops="-L"
+    local ops="-L" + FLAGS
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
     fi
@@ -58,13 +59,6 @@ function Download () {
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         status=${status:-0}
-        #IF CURL returns 0 try --insecure on the same attempt iteration
-        if [[ -z "$k" && "$status" -eq 0 ]]; then
-            k="t"
-            ops+=" --insecure"
-            ((i--))
-            continue
-        fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
             rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
@@ -400,7 +394,7 @@ function Install-1.6x {
     echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
     rm -rf "$mdk_dir/fml/python"
     mkdir "$mdk_dir/fml/python"
-    Download "$temp/python_fml_2.7.9.zip" "$python_url"
+    Download "$temp/python_fml_2.7.9.zip" "$python_url" "25" "4" " -k"
     unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
 
     #Remove Temp Folder
