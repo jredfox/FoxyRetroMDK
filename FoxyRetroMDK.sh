@@ -66,19 +66,19 @@ function Download () {
             for code in "${codes[@]}"; do
                 if [[ "$code" -eq "$ecode" ]]; then
                     echo "SSL Error Code Detected CURL Error:$ecode for $URL"
-                    ops="$ops -k"
                     hasSSL="T"
                     break
                 fi
             done
             if [[ "$hasSSL" == "T" ]]; then
+                ops="$ops -k"
                 ((i--))
                 continue
             fi
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
-	     echo $ecode $status $URL $ops
+         echo $ecode $status $URL $ops
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
