@@ -56,7 +56,7 @@ function Download () {
         ops="-sS $ops"
     fi
 
-    codes=(34 35 50 51 53 54 58 59 60 64 66 77 80 91 96 98)
+    codes=(34 35 50 51 53 54 58 59 60 64 66 77 80 82 83 90 91 96 98)
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         ecode=$?
