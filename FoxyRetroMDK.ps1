@@ -1,7 +1,7 @@
 param(
     [string]$mc_ver,
     [string]$mdk_dir,
-    [string]$skip_rc
+    [string]$skip_rc="F"
 )
 
 #import C# zip tools
