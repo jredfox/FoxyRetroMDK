@@ -50,7 +50,7 @@ function Download () {
     
     local status
     local i
-    local k=""
+    local ecode
     local ops="-L$FLAGS"
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
