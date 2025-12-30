@@ -56,10 +56,18 @@ function Download () {
         ops="-sS $ops"
     fi
 
+    codes=(34 35 50 51 53 54 58 59 60 64 66 77 80 91 96 98)
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         ecode=$?
         status=${status:-0}
+        if [ "$ecode" -ne 0 ]; then
+            for code in "${codes[@]}"; do
+                if [[ "$code" -eq "$err" ]]; then
+                    echo "SSL Error Code for $URL Detected CURL Error:$ecode"
+                fi
+            done
+        fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
