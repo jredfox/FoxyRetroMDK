@@ -51,7 +51,7 @@ function Download () {
     local status
     local i
     local ecode
-    local hasSSL
+    local hasSSL=""
     local ops="-L$FLAGS"
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
