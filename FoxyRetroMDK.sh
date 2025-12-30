@@ -58,8 +58,7 @@ function Download () {
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
-	ecode=$?
-	 echo "$status $ecode $URL"
+        ecode=$?
         status=${status:-0}
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
@@ -402,9 +401,9 @@ function Install-1.6x {
     Download "$temp/python_fml_2.7.9.zip" "$python_url" "true" "2" "2" " -k"
     ExitOnDLFail="true"
     if [ -e "$temp/python_fml_2.7.9.zip" ]; then
-    	rm -rf "$mdk_dir/fml/python"
-    	mkdir "$mdk_dir/fml/python"
-    	unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
+        rm -rf "$mdk_dir/fml/python"
+        mkdir "$mdk_dir/fml/python"
+        unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
     fi
 
     #Remove Temp Folder
