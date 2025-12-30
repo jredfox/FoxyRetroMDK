@@ -72,6 +72,12 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mdk_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_mdk_cmd, 1)
+                if isSh and not '$@' in lines:
+                    print('debug:' + file)
+                    lines = lines.replace('python2.7 install.py', 'python2.7 install.py "$@"')
+                elif not isSh and not '%*' in lines:
+                    print('debug:' + file)
+                    lines = lines.replace('python_fml install.py', 'python_fml install.py %*')
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
@@ -82,6 +88,12 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                if isSh and not '$@' in lines:
+                    print('debug:' + file)
+                    lines = lines.replace('python2.7 install.py', 'python2.7 install.py "$@"')
+                elif not isSh and not '%*' in lines:
+                    print('debug:' + file)
+                    lines = lines.replace('python_fml install.py', 'python_fml install.py %*')
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
