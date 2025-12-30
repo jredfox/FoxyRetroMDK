@@ -63,7 +63,7 @@ function Download () {
         status=${status:-0}
         if [[ "$ecode" -ne 0 && "$ops" != *"-k"* ]]; then
             for code in "${codes[@]}"; do
-                if [[ "$code" -eq "$err" ]]; then
+                if [[ "$code" -eq "$ecode" ]]; then
                     echo "SSL Error Code for $URL Detected CURL Error:$ecode"
                     ops="$ops -k"
                     ((i--))
