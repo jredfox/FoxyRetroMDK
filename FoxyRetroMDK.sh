@@ -51,6 +51,7 @@ function Download () {
     local status
     local i
     local ecode
+    local hasSSL
     local ops="-L$FLAGS"
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
@@ -64,15 +65,20 @@ function Download () {
         if [[ "$ecode" -ne 0 && "$ops" != *"-k"* ]]; then
             for code in "${codes[@]}"; do
                 if [[ "$code" -eq "$ecode" ]]; then
-                    echo "SSL Error Code for $URL Detected CURL Error:$ecode"
+                    echo "SSL Error Code Detected CURL Error:$ecode for $URL"
                     ops="$ops -k"
-                    ((i--))
-                    continue
+                    hasSSL="T"
+                    break
                 fi
             done
+            if [[ "$hasSSL" == "T" ]]; then
+                ((i--))
+                continue
+            fi
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
+	     echo $ecode $status $URL $ops
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
