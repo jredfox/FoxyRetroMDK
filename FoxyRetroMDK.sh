@@ -210,7 +210,7 @@ function Check-Deps () {
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
         if [[ ! -e "/Applications/Python 2.7/Install Certificates.command" ]]; then
             chmod 777 "$SCRIPTPATH/Install Certificates.command"
-	     bash "$SCRIPTPATH/Install Certificates.command" > /dev/null 2>&1
+            bash "$SCRIPTPATH/Install Certificates.command" > /dev/null 2>&1
         fi
     else
         Check-LinuxDeps
