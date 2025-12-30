@@ -5,3 +5,4 @@ sudo rm -f /usr/local/bin/pip2.7
 sudo rm -rf /Library/Python/2.7
 sudo find /usr/local -name '*python*2.7*' -exec rm -rf {} \;
 sudo rm -f /Library/LaunchDaemons/org.python.Python.plist
+sudo rm -rf /Applications/Python\ 2.7

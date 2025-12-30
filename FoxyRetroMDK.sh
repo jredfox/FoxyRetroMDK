@@ -37,7 +37,7 @@ ExitOnDLFail="true"
 
 ################# Functions Start #################
 
-#Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFailure is false else it calls exit 1.
+#Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 function Download () {
 
@@ -46,20 +46,22 @@ function Download () {
     local Silent="$3"
     local MAX_TRIES="${4:-25}"
     local SLEEP="${5:-4}"
-    local FLAGS="$5"
+    local FLAGS="$6"
     
     local status
     local i
     local k=""
-    local ops="-L" + FLAGS
+    local ops="-L$FLAGS"
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
     fi
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
+	ecode=$?
+	 echo "$status $ecode $URL"
         status=${status:-0}
-        if [ "$status" -ge 400 ] || [ "$status" -eq 0 ]; then
+        if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
@@ -190,7 +192,7 @@ function Check-Deps () {
     local pyurl pyfile output
     
     if [[ "$isMac" == "true" ]]; then
-        if ! output=$(python2.7 "-c" "import sys;version_info = sys.version_info;major = version_info.major;minor = version_info.minor;patch = version_info.micro;sys.exit(1 if (not major == 2 or minor < 7 or minor == 7 and patch < 10) else 0)" > /dev/null 2>&1); then
+        if ! output=$(python2.7 "-c" "import sys;version_info = sys.version_info;major = version_info.major;minor = version_info.minor;patch = version_info.micro;sys.exit(1 if (not major == 2 or minor < 7 or minor == 7 and patch < 15) else 0)" > /dev/null 2>&1); then
             echo "Python 2.7.10 or Higher Is Required for running MCP & Forge. Installing Python 2.7.15 ISA: x64"
             if [[ "$(isMavericsOrHigher)" == "T" ]]; then
                 pyurl="https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
@@ -206,6 +208,10 @@ function Check-Deps () {
         fi
         #Patch Python Installer bug that prevents HTTPS from working on macOS
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
+        if [[ ! -e "/Applications/Python 2.7/Install Certificates.command" ]]; then
+            chmod 777 "$SCRIPTPATH/Install Certificates.command"
+	     bash "$SCRIPTPATH/Install Certificates.command" > /dev/null 2>&1
+        fi
     else
         Check-LinuxDeps
     fi
@@ -392,10 +398,14 @@ function Install-1.6x {
     
     #Upgrade python for windows to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
-    Download "$temp/python_fml_2.7.9.zip" "$python_url" "25" "4" " -k"
-    rm -rf "$mdk_dir/fml/python"
-    mkdir "$mdk_dir/fml/python"
-    unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
+    ExitOnDLFail="false"
+    Download "$temp/python_fml_2.7.9.zip" "$python_url" "true" "2" "2" " -k"
+    ExitOnDLFail="true"
+    if [ -e "$temp/python_fml_2.7.9.zip" ]; then
+    	rm -rf "$mdk_dir/fml/python"
+    	mkdir "$mdk_dir/fml/python"
+    	unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
+    fi
 
     #Remove Temp Folder
     rm -rf "$temp"
