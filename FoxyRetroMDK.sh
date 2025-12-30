@@ -61,10 +61,13 @@ function Download () {
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         ecode=$?
         status=${status:-0}
-        if [ "$ecode" -ne 0 ]; then
+        if [[ "$ecode" -ne 0 && "$ops" != *"-k"* ]]; then
             for code in "${codes[@]}"; do
                 if [[ "$code" -eq "$err" ]]; then
                     echo "SSL Error Code for $URL Detected CURL Error:$ecode"
+                    ops="$ops -k"
+                    ((i--))
+                    continue
                 fi
             done
         fi
