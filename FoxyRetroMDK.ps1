@@ -379,7 +379,7 @@ function Install-1.6x {
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
     Set-Location -Path "$mdk_dir"
-    & "$mdk_dir\install.cmd"
+    & "$mdk_dir\install.cmd" "--no-assets"
     Write-Host "Forge MDK Installation Completed"
 }
 

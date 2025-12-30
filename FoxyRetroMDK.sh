@@ -428,7 +428,11 @@ function Install-1.6x {
 
     echo "Running Forge install.sh"
     cd "$mdk_dir"
-    bash "$mdk_dir/install.sh"
+    if [[ "$dl_rc" == "true" ]]; then
+        bash "$mdk_dir/install.sh"
+    else
+        bash "$mdk_dir/install.sh" "--no-assets"
+    fi
     echo "Forge MDK Installation Completed"
 }
 
