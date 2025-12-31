@@ -39,6 +39,7 @@ ExitOnDLFail="true"
 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
+codes=(34 35 40 50 51 53 54 57 58 59 60 62 64 66 76 77 80 82 83 90 91 96 98)
 function Download () {
 
     local OutFile="$1"
@@ -57,7 +58,6 @@ function Download () {
         ops="-sS $ops"
     fi
 
-    codes=(34 35 40 50 51 53 54 57 58 59 60 62 64 66 76 77 80 82 83 90 91 96 98)
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         ecode=$?
@@ -78,7 +78,7 @@ function Download () {
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
-         echo $ecode $status $URL $ops
+            echo $ecode $status $URL $ops
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
