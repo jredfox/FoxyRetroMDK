@@ -817,6 +817,8 @@ if [[ "$dl_rc" == "true" ]]; then
         Download "$resource_file" "$resource" "true" "4"
     done < "${jsonFile}.txt"
     ExitOnDLFail="true"
+else
+    echo "Skipping Resource Downloading"
 fi
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
