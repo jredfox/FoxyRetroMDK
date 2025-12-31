@@ -15,25 +15,27 @@ if ($ps_ver -lt 3) {
 }
 if ($ps_ver -lt 5) {
     Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
-    Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
-    Write-Warning "FoxyRetroMDK Requires .NET Framework 4.5"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
+    try {
+        $prog_old = $ProgressPreference
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest "https://www.howsmyssl.com/a/check" -UseBasicParsing -TimeoutSec 5 | Out-Null
+        $ProgressPreference = $prog_old
     }
-    "@
-    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+    catch {
+        Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
+        Write-Warning "TLSv1.2 Check Has Failed! HTTPS Downloads will likely not succeed :("
+    }
 }
 
 #import C# zip tools
-Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
+try {
+    Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
+}
+catch {
+    Write-Error ".NET Framework 4.5 is Missing!"
+    exit 1
+}
 
 & {
 
