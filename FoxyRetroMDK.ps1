@@ -15,6 +15,8 @@ if ($ps_ver -lt 3) {
 }
 if ($ps_ver -lt 5) {
     Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
+    Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
+    Write-Warning "FoxyRetroMDK Requires .NET Framework 4.5"
     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
