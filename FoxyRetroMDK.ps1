@@ -15,16 +15,16 @@ if ($ps_ver -lt 5) {
         exit 1
     }
     Add-Type @"
-    using System.Net;
-    using System.Security.Cryptography.X509Certificates;
-    public class TrustAllCertsPolicy : ICertificatePolicy {
-        public bool CheckValidationResult(
-            ServicePoint srvPoint, X509Certificate certificate,
-            WebRequest request, int certificateProblem) {
-            return true;
-        }
-    }
-    "@
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+public class TrustAllCertsPolicy : ICertificatePolicy {
+public bool CheckValidationResult(
+    ServicePoint srvPoint, X509Certificate certificate,
+    WebRequest request, int certificateProblem) {
+    return true;
+}
+}
+"@
     [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
     Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
