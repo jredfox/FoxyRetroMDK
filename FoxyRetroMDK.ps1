@@ -154,7 +154,7 @@ function Download {
                     }
                 }
             }
-            catch 
+            catch
             {
                 Write-Warning "Unknown exception occurred: $($_.Exception.Message)"
             }
