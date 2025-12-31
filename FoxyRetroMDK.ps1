@@ -7,10 +7,10 @@ param(
 $ps_ver = $PSVersionTable.PSVersion.Major
 if ($ps_ver -lt 5) {
     if ($ps_ver -lt 3) {
-        Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! UpGrade Now to one of the fallowing links"
+        Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
         Write-Host "Powershell 3.0 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=34595"
-        Write-Host "Powershell 4.0 64 bit Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x64-MultiPkg.msu"
-        Write-Host "Powershell 4.0 32 bit Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x86-MultiPkg.msu"
+        Write-Host "Powershell 4.0 x64(64 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x64-MultiPkg.msu"
+        Write-Host "Powershell 4.0 x86(32 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x86-MultiPkg.msu"
         Write-Host "Powershell 5.1 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=54616"
         exit 1
     }
