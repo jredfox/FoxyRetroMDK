@@ -241,6 +241,7 @@ function Download-Mediafire () {
     local mediafire_file="$2"
 
     # Initialize variables
+    local line
     local inDownloadDiv="false"
     local inputFound="false"
     local downloadLink=""
@@ -444,6 +445,7 @@ function DL-Natives () {
     local natives_url2="$2"
     local natives_name="$3"
     local natives_name2="${natives_name%.*}2.jar"
+    local file
     Download "$temp/$natives_name" "$natives_url"
     Download "$temp/$natives_name2" "$natives_url2"
     unzip -q -o "$temp/$natives_name" -d "$temp/natives"
