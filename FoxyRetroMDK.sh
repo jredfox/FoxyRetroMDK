@@ -109,7 +109,6 @@ function Download () {
 function Check-LinuxDeps () {
 
     local missing="F"
-    local user_input=""
     local py_ver
 
     if ! output=$(zip "--help" > /dev/null 2>&1); then
