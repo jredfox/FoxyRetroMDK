@@ -110,6 +110,7 @@ function Check-LinuxDeps () {
 
     local missing="F"
     local user_input=""
+    local py_ver
 
     if ! output=$(zip "--help" > /dev/null 2>&1); then
         echo "zip command not found"
@@ -287,6 +288,8 @@ function Unsupported-Version {
 #cleanup previous installation attempts
 function MDK-Check {
 
+local user_input
+
 if [ -d "$mdk_dir" ]; then
     read -p "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
     if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
@@ -301,6 +304,7 @@ fi
 function Patch-MDKPY {
 
     local mcp_dir="$1"
+    local onesixflag
 
     #Copy JDK finder over
     mkdir -p "$mcp_dir/cache"
