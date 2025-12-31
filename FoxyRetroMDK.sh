@@ -420,7 +420,7 @@ function Install-1.6x {
     #Upgrade python for windows to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
     ExitOnDLFail="false"
-    Download "$temp/python_fml_2.7.9.zip" "$python_url" "true" "2"
+    Download "$temp/python_fml_2.7.9.zip" "$python_url" "true" "4"
     ExitOnDLFail="true"
     if [ -e "$temp/python_fml_2.7.9.zip" ]; then
         rm -rf "$mdk_dir/fml/python"
