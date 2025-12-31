@@ -14,7 +14,7 @@ if ($ps_ver -lt 3) {
     exit 1
 }
 if ($ps_ver -lt 5) {
-    Write-Host "Legacy Powershell Detected $PSVersionTable.PSVersion.Major Disabling Certificate & Enabling TLS1.2 as the default!"
+    Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
