@@ -132,6 +132,10 @@ function Download {
                         $setStatus = "T"
                         $status = [int] $ex.Response.StatusCode.value__
                     }
+                    elseif ($ex.Response.StatusCode.Value__) {
+                        $setStatus = "T"
+                        $status = [int] $ex.Response.StatusCode.Value__
+                    }
                     # PowerShell 7+ (HttpResponseException)
                     elseif ($ex.Response.StatusCode) {
                         $setStatus = "T"
