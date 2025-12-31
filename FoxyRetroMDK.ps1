@@ -12,6 +12,9 @@ Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
 #Enforce script continues when a command fails
 $ErrorActionPreference = 'Continue'
 
+#Cleanup Possible env contamination from not using child powershell somehow
+$env:patchoneone = "F"
+
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver)) 
 {
