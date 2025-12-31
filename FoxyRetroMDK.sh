@@ -32,13 +32,13 @@ if [[ "$(echo "$NAME_OS" | tr '[:upper:]' '[:lower:]')" == "darwin" ]]; then
 else
     isLinux=true
 fi
-Mozilla="Mozilla"
-ExitOnDLFail="true"
 
 ################# Functions Start #################
 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
+Mozilla="Mozilla"
+ExitOnDLFail="true"
 codes=(34 35 40 50 51 53 54 57 58 59 60 62 64 66 76 77 80 82 83 90 91 96 98)
 function Download () {
 
@@ -51,6 +51,7 @@ function Download () {
     
     local status
     local i
+    local code
     local ecode
     local hasSSL=""
     local ops="-L$FLAGS"
