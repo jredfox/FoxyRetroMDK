@@ -431,11 +431,13 @@ function Install-1.6x {
     #Remove Temp Folder
     rm -rf "$temp"
 
-    echo "Running Forge install.sh"
     cd "$mdk_dir"
     if [[ "$dl_rc" == "true" ]]; then
+        echo "Running Forge install.sh"
         bash "$mdk_dir/install.sh"
     else
+        echo "Skipping Resource Downloading"
+        echo "Running Forge install.sh"
         bash "$mdk_dir/install.sh" "--no-assets"
     fi
     echo "Forge MDK Installation Completed"
