@@ -4,6 +4,8 @@ param(
     [string]$skip_rc="F"
 )
 
+& {
+
 $ps_ver = $PSVersionTable.PSVersion.Major
 if ($ps_ver -lt 5) {
     if ($ps_ver -lt 3) {
@@ -48,8 +50,6 @@ catch {
     Write-Error ".NET Framework 4.5 is Missing!"
     exit 1
 }
-
-& {
 
 #Enforce script continues when a command fails
 $ErrorActionPreference = 'Continue'
