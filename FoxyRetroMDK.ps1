@@ -18,11 +18,18 @@ if ($ps_ver -lt 5) {
     Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
     Write-Warning "FoxyRetroMDK Requires .NET Framework 4.5"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    [System.Net.ServicePointManager]::ServerCertificateValidationCallback =
-    [System.Net.Security.RemoteCertificateValidationCallback]{
-        param($sender, $cert, $chain, $errors)
-        return $true
+    Add-Type @"
+    using System.Net;
+    using System.Security.Cryptography.X509Certificates;
+    public class TrustAllCertsPolicy : ICertificatePolicy {
+        public bool CheckValidationResult(
+            ServicePoint srvPoint, X509Certificate certificate,
+            WebRequest request, int certificateProblem) {
+            return true;
+        }
     }
+    "@
+    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 }
 
 #import C# zip tools
