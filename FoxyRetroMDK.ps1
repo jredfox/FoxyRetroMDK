@@ -14,6 +14,7 @@ if ($ps_ver -lt 5) {
         Write-Host "Powershell 5.1 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=54616"
         exit 1
     }
+    Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
     Add-Type @"
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -26,7 +27,6 @@ public bool CheckValidationResult(
 }
 "@
     [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-    Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     try {
         $prog_old = $ProgressPreference
