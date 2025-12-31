@@ -44,6 +44,10 @@ public bool CheckValidationResult(
     catch {
         Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
         Write-Warning "TLSv1.2 Check Has Failed! HTTPS Downloads will likely not succeed :("
+        $shouldStop = Read-Host "Do You Wish to Continue (Y/N)?"
+        if($shouldStop -like "N*") {
+            exit 0
+        }
     }
 }
 
