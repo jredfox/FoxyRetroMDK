@@ -32,14 +32,13 @@ public bool CheckValidationResult(
         [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
     }
     catch {
-        Write-Host "Error Unable to Disble Certificates this is bad!"
+        Write-Warning "Error Unable to Disble Certificates this is bad!"
     }
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     try {
         $prog_old = $ProgressPreference
         $ProgressPreference = 'SilentlyContinue'
         Invoke-WebRequest "https://www.howsmyssl.com/a/check" -UseBasicParsing -TimeoutSec 5 | Out-Null
-        $ProgressPreference = $prog_old
     }
     catch {
         Write-Warning "FoxyRetroMDK Requires Windows 7 KB3140245 or higher for HTTPS to Work!"
@@ -48,6 +47,9 @@ public bool CheckValidationResult(
         if($shouldStop -like "N*") {
             exit 0
         }
+    }
+    finally {
+        $ProgressPreference = $prog_old 
     }
 }
 
