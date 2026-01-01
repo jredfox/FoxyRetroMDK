@@ -39,6 +39,7 @@ fi
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 Mozilla="Mozilla"
 ExitOnDLFail="true"
+#IF YOUR READING THIS CURL PLEASE MAKE 1 EXIT CODE FOR ENCYRPTION(SSL,TLS, TLS Encyrption Extensions) AND ONE FOR CERT ONLY! The user shouldnt have to check lots of sub error codes. the sub error should be printed last before the exit if they need it
 codes=(34 35 40 50 51 53 54 57 58 59 60 61 62 64 66 76 77 80 82 83 90 91 92 94 95 96 98 101)
 function Download () {
 
