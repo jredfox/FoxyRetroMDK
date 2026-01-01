@@ -7,6 +7,7 @@ param(
 & {
 
 $ps_ver = $PSVersionTable.PSVersion.Major
+$ps_ver = 3
 if ($ps_ver -lt 5) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
@@ -35,6 +36,9 @@ public bool CheckValidationResult(
         Write-Warning "Error Unable to Disble Certificates this is bad!"
     }
     try {
+        if(([Net.SecurityProtocolType]::Tls12) -eq $null) {
+            throw "msg"
+        }
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $prog_old = $ProgressPreference
         $ProgressPreference = 'SilentlyContinue'
