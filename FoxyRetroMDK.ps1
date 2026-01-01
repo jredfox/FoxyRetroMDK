@@ -49,7 +49,7 @@ public bool CheckValidationResult(
         }
     }
     finally {
-        $ProgressPreference = $prog_old 
+        $ProgressPreference = $prog_old
     }
 }
 
