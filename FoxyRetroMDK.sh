@@ -39,7 +39,7 @@ fi
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 Mozilla="Mozilla"
 ExitOnDLFail="true"
-codes=(34 35 40 50 51 53 54 57 58 59 60 62 64 66 76 77 80 82 83 90 91 96 98)
+codes=(34 35 40 50 51 53 54 57 58 59 60 62 64 66 76 77 80 82 83 90 91 95 96 98 101)
 function Download () {
 
     local OutFile="$1"
@@ -58,12 +58,14 @@ function Download () {
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
     fi
+    local opsb="$ops"
+    local opsk="$ops -k"
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
         ecode=$?
         status=${status:-0}
-        if [[ "$ecode" -ne 0 && "$ops" != *"-k"* ]]; then
+        if [[ "$hasSSL" != "T" && "$ecode" -ne 0 ]]; then
             for code in "${codes[@]}"; do
                 if [[ "$code" -eq "$ecode" ]]; then
                     echo "SSL Error Code Detected CURL Error:$ecode for $URL"
@@ -71,13 +73,19 @@ function Download () {
                     break
                 fi
             done
-            if [[ "$hasSSL" == "T" ]]; then
-                ops="$ops -k"
-                ((i--))
-                continue
-            fi
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
+            if [[ "$hasSSL" == "T" ]]; then
+                if [[ "$ops" != *"-k"* ]]; then
+                    ops="$opsk"
+                    if [[ "$MAX_TRIES" -eq 1 ]]; then
+                        ((i--))
+                        continue
+                    fi
+                else
+                    ops="$opsb"
+                fi
+            fi
             rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
