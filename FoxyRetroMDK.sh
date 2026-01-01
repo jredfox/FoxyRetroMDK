@@ -79,7 +79,6 @@ function Download () {
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
-            echo $ecode $status $URL $ops
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
@@ -87,7 +86,7 @@ function Download () {
                 fi
                 return 1
             fi
-            echo "HTTP Error: $status for $URL"
+            echo "HTTP Error: $status Error CURL: $ecode for $URL"
             if [[ "$i" -lt "$MAX_TRIES" ]]; then
                 sleep "$SLEEP"
             fi
