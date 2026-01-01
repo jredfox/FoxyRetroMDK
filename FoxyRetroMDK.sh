@@ -86,7 +86,7 @@ function Download () {
                 fi
                 return 1
             fi
-            echo "HTTP Error: $status Error CURL: $ecode for $URL"
+            echo "Error HTTP: $status CURL: $ecode for $URL"
             if [[ "$i" -lt "$MAX_TRIES" ]]; then
                 sleep "$SLEEP"
             fi
