@@ -53,10 +53,10 @@ public bool CheckValidationResult(
 
 #import C# zip tools
 try {
-    Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
+    Add-Type -AssemblyName 'System.IO.Compression.FileSystem' -ErrorAction Stop
 }
 catch {
-    Write-Error ".NET Framework 4.5 is Missing!"
+    throw ".NET Framework 4.5 is Missing!"
     exit 1
 }
 
