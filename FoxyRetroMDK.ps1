@@ -34,8 +34,8 @@ public bool CheckValidationResult(
     catch {
         Write-Warning "Error Unable to Disble Certificates this is bad!"
     }
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $prog_old = $ProgressPreference
         $ProgressPreference = 'SilentlyContinue'
         Invoke-WebRequest "https://www.howsmyssl.com/a/check" -UseBasicParsing -TimeoutSec 5 | Out-Null
