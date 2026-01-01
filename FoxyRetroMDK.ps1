@@ -7,7 +7,6 @@ param(
 & {
 
 $ps_ver = $PSVersionTable.PSVersion.Major
-$ps_ver = 3
 if ($ps_ver -lt 5) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
