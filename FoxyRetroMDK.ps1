@@ -55,6 +55,10 @@ public bool CheckValidationResult(
         $ProgressPreference = $prog_old
     }
 }
+else
+{
+    [Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls13"
+}
 
 #import C# zip tools
 try {
