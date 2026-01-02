@@ -86,7 +86,7 @@ function Download () {
             rm -f "$OutFile"
             #Toggle -k on and off to support MacOS 10.6 - 10.12 with default CURL
             if [[ "$hasSSL" == "T" ]]; then
-                if [[ "$ops" != *"-k"* ]]; then
+                if [[ "$ops" != *"-k"* && "$ops" != *"--insecure"* ]]; then
                     ops="$opsk"
                 else
                     ops="$opsb"
