@@ -75,7 +75,7 @@ function Download () {
                 fi
             done
             #If not -k and Max Tries are 1 try again 1 more time with -k due to CERT issues
-            if [[ "$MAX_TRIES" -eq 1 && "$ops" != *"-k"* ]]; then
+            if [[ "$MAX_TRIES" -eq 1 && "$hasSSL" == "T" && "$ops" != *"-k"* ]]; then
                 ((MAX_TRIES++))
                 continue
             fi
