@@ -7,7 +7,7 @@ param(
 & {
 
 $ps_ver = $PSVersionTable.PSVersion.Major
-if ($ps_ver -lt 5) {
+if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
         Write-Host "Powershell 3.0 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=34595"
@@ -55,9 +55,8 @@ public bool CheckValidationResult(
         $ProgressPreference = $prog_old
     }
 }
-else
-{
-    [Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls13"
+else {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
 
 #import C# zip tools
@@ -66,6 +65,7 @@ try {
 }
 catch {
     throw ".NET Framework 4.5 is Missing!"
+    pause
     exit 1
 }
 
