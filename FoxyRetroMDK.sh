@@ -76,6 +76,8 @@ function Download () {
             done
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
+            rm -f "$OutFile"
+            #Toggle -k on and off to support MacOS 10.6 - 10.12 with default CURL
             if [[ "$hasSSL" == "T" ]]; then
                 if [[ "$ops" != *"-k"* ]]; then
                     ops="$opsk"
@@ -87,7 +89,6 @@ function Download () {
                     ops="$opsb"
                 fi
             fi
-            rm -f "$OutFile"
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
