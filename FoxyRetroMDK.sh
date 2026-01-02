@@ -74,6 +74,10 @@ function Download () {
                     break
                 fi
             done
+            if [[ "$MAX_TRIES" -eq 1 && "$ops" != *"-k"* ]]; then
+                ((MAX_TRIES++))
+                continue
+            fi
         fi
         if [ "$status" -ge 400 ] || [ "$status" -eq 0 ] || [ "$ecode" -ne 0 ]; then
             rm -f "$OutFile"
@@ -81,10 +85,6 @@ function Download () {
             if [[ "$hasSSL" == "T" ]]; then
                 if [[ "$ops" != *"-k"* ]]; then
                     ops="$opsk"
-                    if [[ "$MAX_TRIES" -eq 1 ]]; then
-                        ((i--))
-                        continue
-                    fi
                 else
                     ops="$opsb"
                 fi
