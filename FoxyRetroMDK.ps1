@@ -7,7 +7,7 @@ param(
 & {
 
 #Exit Powershell Pausing if "T" and Resetting the Title back to the original
-ps_title = $host.ui.RawUI.WindowTitle
+$ps_title = $host.ui.RawUI.WindowTitle
 function OnExit {
     param (
         [string]$pause,
