@@ -37,8 +37,10 @@ fi
 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
+#NOTE: for macOS before mavericks GFLAGS is set to " --tlsv1.2"
 Mozilla="Mozilla"
 ExitOnDLFail="true"
+GFLAGS=""
 #IF YOUR READING THIS CURL PLEASE MAKE 1 EXIT CODE FOR ENCYRPTION(SSL,TLS, TLS Encyrption Extensions) AND ONE FOR CERT ONLY! The user shouldnt have to check lots of sub error codes. the sub error should be printed last before the exit if they need it
 codes=(34 35 40 50 51 53 54 57 58 59 60 61 62 64 66 76 77 80 82 83 90 91 92 94 95 96 98 101)
 function Download () {
@@ -55,7 +57,7 @@ function Download () {
     local code
     local ecode
     local hasSSL=""
-    local ops="-L$FLAGS"
+    local ops="-L${GFLAGS}${FLAGS}"
     if [[ "$Silent" == "true" ]]; then
         ops="-sS $ops"
     fi
@@ -216,12 +218,17 @@ function isMavericsOrHigher () {
 
 function Check-Deps () {
 
-    local pyurl pyfile output
+    local pyurl pyfile output isMavericks
     
     if [[ "$isMac" == "true" ]]; then
+        isMavericks="$(isMavericsOrHigher)"
+        #Forcibly turn on --tlsv1.2 required to download anything on HTTPS
+        if [[ "$isMavericks" != "T" ]]; then
+            GFLAGS=" --tlsv1.2"
+        fi
         if ! output=$(python2.7 "-c" "import sys;version_info = sys.version_info;major = version_info.major;minor = version_info.minor;patch = version_info.micro;sys.exit(1 if (not major == 2 or minor < 7 or minor == 7 and patch < 15) else 0)" > /dev/null 2>&1); then
             echo "Python 2.7.10 or Higher Is Required for running MCP & Forge. Installing Python 2.7.15 ISA: x64"
-            if [[ "$(isMavericsOrHigher)" == "T" ]]; then
+            if [[ "$isMavericks" == "T" ]]; then
                 pyurl="https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.9.pkg"
                 pyfile="$SCRIPTPATH/python-2.7.15-macosx10.9.pkg"
             else
