@@ -21,6 +21,7 @@ function OnExit {
 }
 
 $ps_ver = $PSVersionTable.PSVersion.Major
+$ps_ver = 3
 if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
@@ -78,7 +79,7 @@ try {
     Add-Type -AssemblyName 'System.IO.Compression.FileSystem' -ErrorAction Stop
 }
 catch {
-    throw ".NET Framework 4.5 is Missing!"
+    $Host.UI.WriteErrorLine(".NET Framework 4.5 is Missing!")
     OnExit "T" 1
 }
 
