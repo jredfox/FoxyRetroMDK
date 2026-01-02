@@ -23,6 +23,12 @@
  * Newer Eclipse Make sure that the new Alternate JDK Matches the JDK you just added. You may have to go back and rename the Alternative JDK If there are duplicate naming entries.
  * Newer Eclipse If not (Compiling / Running) right click --> project --> properties --> java compiler --> Check Enable Project Specic Settings, Change Compliance Level to 1.6. Now Do `Project --> Refresh` Fallowed by `Project --> Clean`
 
+# How to use Windows 7
+- Download and install Powershell 3.0 or higher. Recommended [Powershell 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
+- Update Windows to Windows 7 KB3140245 or higher (2016)
+- Download and install .NET Framework 4.5 or higher `if prompted` WMF and or Windows update normally does this for you
+- Repeat Steps in How to Use Windows
+
 # MDK's Portability
 * Linux --> Mac
 * Linux --> Windows
