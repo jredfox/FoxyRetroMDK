@@ -7,6 +7,7 @@ param(
 & {
 
 $ps_ver = $PSVersionTable.PSVersion.Major
+$ps_pause = "Press Enter to Continue...."
 if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
@@ -14,6 +15,7 @@ if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
         Write-Host "Powershell 4.0 x64(64 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x64-MultiPkg.msu"
         Write-Host "Powershell 4.0 x86(32 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x86-MultiPkg.msu"
         Write-Host "Powershell 5.1 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=54616"
+        Read-Host "$ps_pause"
         exit 1
     }
     Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
@@ -65,7 +67,7 @@ try {
 }
 catch {
     throw ".NET Framework 4.5 is Missing!"
-    pause
+    Read-Host "$ps_pause"
     exit 1
 }
 
@@ -181,6 +183,7 @@ function Download {
                 Write-Error "Download Failed: HTTP $status for $Uri"
                 if ($Exit -eq "true")
                 {
+                    Read-Host "$ps_pause"
                     exit 1
                 }
                 return
@@ -195,6 +198,7 @@ function Download {
     Write-Error "Download Failed After $MaxTries tries for $Uri to $OutFile"
     if ($Exit -eq "true")
     {
+        Read-Host "$ps_pause"
         exit 1
     }
 }
@@ -262,7 +266,7 @@ function Create-Jar {
 function Unsupported-Version {
     
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
-    pause
+    Read-Host "$ps_pause"
     exit 1
 }
 
@@ -331,7 +335,7 @@ function Enforce-JDK8 {
     $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py")
     if([string]::IsNullOrWhiteSpace($JDK8)) {
         Write-Error "JDK-8 or lower isn't found in the PATH!"
-        pause
+        Read-Host "$ps_pause"
         exit 1
     }
     $JDK8 = $JDK8.Trim()
