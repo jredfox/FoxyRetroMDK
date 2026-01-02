@@ -6,8 +6,21 @@ param(
 
 & {
 
+#Exit Powershell Pausing if "T" and Resetting the Title back to the original
+ps_title = $host.ui.RawUI.WindowTitle
+function OnExit {
+    param (
+        [string]$pause,
+        [int]$code
+    )
+    if ($pause -like "T*") {
+        Read-Host "Press Enter to Continue...."
+    }
+    $host.ui.RawUI.WindowTitle = $ps_title
+    exit $code
+}
+
 $ps_ver = $PSVersionTable.PSVersion.Major
-$ps_pause = "Press Enter to Continue...."
 if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
     if ($ps_ver -lt 3) {
         Write-Warning "PowerShell 3.0 or Higher is Required In Order to Use FoxyRetroMDK! Upgrade Now to one of the fallowing links"
@@ -15,8 +28,7 @@ if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
         Write-Host "Powershell 4.0 x64(64 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x64-MultiPkg.msu"
         Write-Host "Powershell 4.0 x86(32 bit) Upgrade https://web.archive.org/web/20181126124429/https://download.microsoft.com/download/3/D/6/3D61D262-8549-4769-A660-230B67E15B25/Windows6.1-KB2819745-x86-MultiPkg.msu"
         Write-Host "Powershell 5.1 Upgrade https://www.microsoft.com/en-us/download/details.aspx?id=54616"
-        Read-Host "$ps_pause"
-        exit 1
+        OnExit "T" 1
     }
     Write-Host "Legacy Powershell Detected $ps_ver Disabling Certificate & Enabling TLSv1.2 as the default!"
     try {
@@ -50,7 +62,7 @@ public bool CheckValidationResult(
         Write-Warning "TLSv1.2 Check Has Failed! HTTPS Downloads will likely not succeed :("
         $shouldStop = Read-Host "Do You Wish to Continue (Y/N)?"
         if($shouldStop -like "N*") {
-            exit 0
+            OnExit "F" 0
         }
     }
     finally {
@@ -67,8 +79,7 @@ try {
 }
 catch {
     throw ".NET Framework 4.5 is Missing!"
-    Read-Host "$ps_pause"
-    exit 1
+    OnExit "T" 1
 }
 
 #Enforce script continues when a command fails
@@ -183,8 +194,7 @@ function Download {
                 Write-Error "Download Failed: HTTP $status for $Uri"
                 if ($Exit -eq "true")
                 {
-                    Read-Host "$ps_pause"
-                    exit 1
+                    OnExit "T" 1
                 }
                 return
             }
@@ -198,8 +208,7 @@ function Download {
     Write-Error "Download Failed After $MaxTries tries for $Uri to $OutFile"
     if ($Exit -eq "true")
     {
-        Read-Host "$ps_pause"
-        exit 1
+        OnExit "T" 1
     }
 }
 
@@ -266,8 +275,7 @@ function Create-Jar {
 function Unsupported-Version {
     
     Write-Error "Invalid or Unsupported MC Version $mc_ver"
-    Read-Host "$ps_pause"
-    exit 1
+    OnExit "T" 1
 }
 
 #cleanup previous installation attempts
@@ -279,7 +287,7 @@ if ([System.IO.Directory]::Exists("$mdk_dir")) {
         [System.IO.Directory]::Delete("$mdk_dir", $true)
     }
     else {
-        exit 0
+        OnExit "F" 0
     }
 }
 
@@ -335,8 +343,7 @@ function Enforce-JDK8 {
     $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py")
     if([string]::IsNullOrWhiteSpace($JDK8)) {
         Write-Error "JDK-8 or lower isn't found in the PATH!"
-        Read-Host "$ps_pause"
-        exit 1
+        OnExit "T" 1
     }
     $JDK8 = $JDK8.Trim()
     $env:PATH = "$JDK8;$env:PATH"
@@ -482,7 +489,7 @@ function DL-Natives
 if ($mc_ver.StartsWith("1.6")) 
 {
     Install-1.6x
-    exit 0
+    OnExit "F" 0
 }
 
 #URL Start
