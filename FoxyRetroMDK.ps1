@@ -89,17 +89,17 @@ $ErrorActionPreference = 'Continue'
 $env:patchoneone = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
-if ([string]::IsNullOrEmpty($mc_ver)) 
+if ([string]::IsNullOrEmpty($mc_ver))
 {
     $mc_ver = "1.5.2"
 }
 
 #Set the mcp(MDK) dir
-if ([string]::IsNullOrEmpty($mdk_dir) -Or ([System.IO.Path]::GetFullPath("$mdk_dir") -eq "$PSScriptRoot")) 
+if ([string]::IsNullOrEmpty($mdk_dir) -Or ([System.IO.Path]::GetFullPath("$mdk_dir") -eq "$PSScriptRoot"))
 {
     $mdk_dir = "$PSScriptRoot\MDK-$mc_ver"
 }
-else 
+else
 {
     $mdk_dir = [System.IO.Path]::GetFullPath("$mdk_dir")
 }
@@ -154,7 +154,7 @@ function Download {
             $status = 0
             $setStatus = ""
             $ex = $_.Exception
-            try 
+            try
             {
                 if ($ex.Response)
                 {
@@ -333,7 +333,7 @@ $ProgressPreference = "$progress_org"
 
 }
 
-#Enforce JDK-8 during MDK installation after forge has 
+#Enforce JDK-8 during MDK installation after forge has
 function Enforce-JDK8 {
     param (
         [string]$mcp_dir,
@@ -486,7 +486,7 @@ function DL-Natives
 
 ################# End Functions   #################
 
-if ($mc_ver.StartsWith("1.6")) 
+if ($mc_ver.StartsWith("1.6"))
 {
     Install-1.6x
     OnExit "F" 0
