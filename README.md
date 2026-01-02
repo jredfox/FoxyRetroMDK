@@ -26,7 +26,7 @@
 # How to use Windows 7
 - Download and install Powershell 3.0 or higher. Recommended [Powershell 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
 - Update Windows to Windows 7 KB3140245 or higher (2016)
-- Download and install .NET Framework 4.5 or higher `if prompted` WMF and or Windows update normally does this for you
+- Download and install .NET Framework 4.5 or higher `if you encounter ".NET Framework 4.5 is Missing!" message` WMF and or Windows update normally does this for you
 - Repeat Steps in How to Use Windows
 
 # MDK's Portability
