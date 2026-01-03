@@ -20,6 +20,42 @@ function OnExit {
     exit $code
 }
 
+#Compile PSRestoreTitle @author jredfox
+try {
+Add-Type @"
+using System;
+public static class PSRestoreTitle {
+    private static ConsoleCancelEventHandler _handler;
+    private static string orgTitle;
+    private static string title;
+    private static bool useOrgTitle = false;
+    public static void Attach(string t, bool o) {
+        useOrgTitle = o;
+        title = t;
+        if (_handler != null) return;
+        orgTitle = t;
+        _handler = new ConsoleCancelEventHandler(OnCancel);
+        Console.CancelKeyPress += _handler;
+    }
+
+    private static void OnCancel(object sender, ConsoleCancelEventArgs e) {
+        if(useOrgTitle) {
+            Console.Title = orgTitle;
+        }
+        else {
+            Console.Title = title;
+        }
+    }
+}
+"@
+
+# PSRestoreTitle Handles CONTROL+C & Restore Original Title
+[PSRestoreTitle]::Attach($host.ui.RawUI.WindowTitle, $true)
+}
+catch {
+    Write-Error "Unable Attatch PSRestoreTitle CONTROL+C will not restore the title! Report this issue to https://github.com/jredfox/FoxyRetroMDK/issues"
+}
+
 $ps_ver = $PSVersionTable.PSVersion.Major
 if ($ps_ver -lt 5 -or [System.Environment]::OSVersion.Version.Major -lt 10) {
     if ($ps_ver -lt 3) {
