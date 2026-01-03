@@ -117,7 +117,7 @@ try {
     Add-Type -AssemblyName 'System.IO.Compression.FileSystem' -ErrorAction Stop
 }
 catch {
-    $Host.UI.WriteErrorLine(".NET Framework 4.5 is Missing!")
+    $host.ui.WriteErrorLine(".NET Framework 4.5 is Missing!")
     OnExit "T" 1
 }
 
