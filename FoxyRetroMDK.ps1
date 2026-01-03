@@ -8,6 +8,9 @@ param(
 
 #Exit Powershell Pausing if "T" and Resetting the Title back to the original
 $ps_title = $host.ui.RawUI.WindowTitle
+if ([string]::IsNullOrEmpty($ps_title)) {
+    $ps_title = ""
+}
 function OnExit {
     param (
         [string]$pause,
@@ -50,7 +53,7 @@ public static class PSRestoreTitle {
 "@
 
 # PSRestoreTitle Handles CONTROL+C & Restore Original Title
-[PSRestoreTitle]::Attach($host.ui.RawUI.WindowTitle, $true)
+[PSRestoreTitle]::Attach($ps_title, $true)
 }
 catch {
     Write-Error "Unable Attatch PSRestoreTitle CONTROL+C will not restore the title! Report this issue to https://github.com/jredfox/FoxyRetroMDK/issues"
