@@ -37,9 +37,17 @@ fi
 
 #Exits the program restoring the original title of the terminal
 function OnExit () {
+    echo "Starting On Exit"
+    if [[ $ONEXIT_FRMDK -eq 1 ]]; then
+        return
+    fi
+    ONEXIT_FRMDK=1
     echo -n -e '\033]0;\007'
+    echo "Hello on Exit!"
     exit $1
 }
+#Handles CONTROL+C CONTROL+BREAK SIGQUIT SIGTERM
+trap 'OnExit 1' SIGINT SIGQUIT SIGTERM
 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
