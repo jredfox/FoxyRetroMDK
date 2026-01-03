@@ -9,6 +9,7 @@ if "!mc_ver!" EQU "" (
     set mc_ver= 
 )
 set mc_ver=!mc_ver:"=!
+set mc_ver=!mc_ver:'=!
 set mc_ver=!mc_ver: =!
 
 REM ## Run Main Script ##
