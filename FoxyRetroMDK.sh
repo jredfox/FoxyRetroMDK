@@ -37,13 +37,11 @@ fi
 
 #Exits the program restoring the original title of the terminal
 function OnExit () {
-    echo "Starting On Exit"
     if [[ "${ONEXIT_FRMDK:-0}" -eq 1 ]]; then
         return
     fi
     export ONEXIT_FRMDK=1
     echo -n -e '\033]0;\007'
-    echo "Hello on Exit!"
     exit $1
 }
 #Handles CONTROL+C CONTROL+BREAK SIGQUIT SIGTERM
