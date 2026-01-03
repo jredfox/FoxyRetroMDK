@@ -854,3 +854,4 @@ echo "Running Forge install.sh"
 cd "$mdk_dir/forge"
 bash "$mdk_dir/forge/install.sh"
 echo "Forge MDK Installation Completed"
+OnExit 0
