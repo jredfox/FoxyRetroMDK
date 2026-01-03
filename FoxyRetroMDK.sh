@@ -35,6 +35,12 @@ fi
 
 ################# Functions Start #################
 
+#Exits the program restoring the original title of the terminal
+function OnExit () {
+    echo -n -e '\033]0;\007'
+    exit $1
+}
+
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 #NOTE: for macOS before mavericks GFLAGS is set to " --tlsv1.2"
@@ -95,7 +101,7 @@ function Download () {
             if [[ "$i" -ge 2 && ( "$status" -eq 404 || "$status" -eq 410 ) ]]; then
                 echo "Download Failed: HTTP $status for $URL"
                 if [[ "$ExitOnDLFail" == "true" ]]; then
-                    exit 1
+                    OnExit 1
                 fi
                 return 1
             fi
@@ -110,7 +116,7 @@ function Download () {
 
     echo "Download Failed After $MAX_TRIES tries for $URL to $OutFile"
     if [[ "$ExitOnDLFail" == "true" ]]; then
-        exit 1
+        OnExit 1
     fi
     return 1
 }
@@ -150,7 +156,7 @@ function Check-LinuxDeps () {
 
     if [[ "$missing" == "T" ]]; then
         echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
-        exit 1
+        OnExit 1
     fi
 
     #Create Dep Folders for Deps
@@ -238,7 +244,7 @@ function Check-Deps () {
             Download "$pyfile" "$pyurl" "true"
             open "$pyfile"
             echo "Please re-run the script once Python has been installed"
-            exit 0
+            OnExit 0
         fi
         #Patch Python Installer bug that prevents HTTPS from working on macOS
         bash /Applications/Python*/Install\ Certificates.command > /dev/null 2>&1
@@ -298,7 +304,7 @@ function Download-Mediafire () {
 function Unsupported-Version {
 
     echo "Invalid or Unsupported MC Version $mc_ver" >&2
-    exit 1
+    OnExit 1
 }
 
 #cleanup previous installation attempts
@@ -311,7 +317,7 @@ if [ -d "$mdk_dir" ]; then
     if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
         rm -rf "$mdk_dir"
     else
-        exit 0
+        OnExit 0
     fi
 fi
 
@@ -507,7 +513,7 @@ temp="$mdk_dir/tmp"
 JDK8=$("python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)
 if [[ -z "$JDK8" ]]; then
     echo "JDK-8 or lower isn't found in the PATH!"
-    exit 1
+    OnExit 1
 fi
 export PATH="$JDK8:$PATH"
 export JAVA_HOME=$(dirname "$JDK8")
@@ -515,7 +521,7 @@ export JAVA_HOME=$(dirname "$JDK8")
 #Install 1.6x versions
 if [[ "$mc_ver" == 1.6* ]]; then
     Install-1.6x
-    exit 0
+    OnExit 0
 fi
 
 #URL Start
@@ -701,7 +707,7 @@ elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isLinux" == "true" ]]; then
         echo "Try Installing Wine and then run FoxyRetroMDK.cmd"
     fi
-    exit 1
+    OnExit 1
 else
     Unsupported-Version
 fi
