@@ -38,7 +38,7 @@ fi
 #Exits the program restoring the original title of the terminal
 function OnExit () {
     echo "Starting On Exit"
-    if [[ $ONEXIT_FRMDK -eq 1 ]]; then
+    if [[ "$ONEXIT_FRMDK" -eq 1 ]]; then
         return
     fi
     ONEXIT_FRMDK=1
