@@ -844,5 +844,6 @@ Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mdk_dir\forge"
 & "$mdk_dir\forge\install.cmd"
 Write-Host "Forge MDK Installation Completed"
+OnExit "F" 0
 
 }
