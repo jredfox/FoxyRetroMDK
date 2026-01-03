@@ -41,7 +41,7 @@ function OnExit () {
     if [[ "${ONEXIT_FRMDK:-0}" -eq 1 ]]; then
         return
     fi
-    ONEXIT_FRMDK=1
+    export ONEXIT_FRMDK=1
     echo -n -e '\033]0;\007'
     echo "Hello on Exit!"
     exit $1
