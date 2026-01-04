@@ -53,7 +53,7 @@ public static class PSRestoreTitle {
 "@
 
 # PSRestoreTitle Handles CONTROL+C & Restore Original Title
-[PSRestoreTitle]::Attach($ps_title, $true)
+[PSRestoreTitle]::Attach($ps_title, $false)
 }
 catch {
     Write-Error "Unable Attatch PSRestoreTitle CONTROL+C will not restore the title! Report this issue to https://github.com/jredfox/FoxyRetroMDK/issues"
