@@ -71,10 +71,11 @@ function Download () {
     local hasSSL=""
     local ops="-L${GFLAGS}${FLAGS}"
     if [[ "$Silent" == "true" ]]; then
-        ops="-sS $ops"
+        ops="-s $ops"
     fi
     local opsb="$ops"
     local opsk="$ops -k"
+    local opsc
 
     for (( i=1; i<=MAX_TRIES; i++ )); do
         status=$(curl -A "$Mozilla" $ops -o "$OutFile" -w "%{http_code}" "$URL")
@@ -98,6 +99,7 @@ function Download () {
             rm -f "$OutFile"
             #Toggle -k on and off to support MacOS 10.6 - 10.12 with default CURL
             if [[ "$hasSSL" == "T" ]]; then
+                opsc="$ops"
                 if [[ "$ops" != *"-k"* && "$ops" != *"--insecure"* ]]; then
                     ops="$opsk"
                 else
@@ -111,7 +113,7 @@ function Download () {
                 fi
                 return 1
             fi
-            echo "Error HTTP: $status CURL: $ecode for $URL"
+            echo "Error HTTP: $status CURL: $ecode $opsc for $URL"
             if [[ "$i" -lt "$MAX_TRIES" ]]; then
                 sleep "$SLEEP"
             fi
