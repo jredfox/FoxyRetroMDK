@@ -7,7 +7,7 @@ param(
 & {
 
 $prog_org = $ProgressPreference
-#Exit Powershell Pausing if "T" and Resetting the Title back to the original
+#Exit Powershell Pausing if "T"
 function OnExit {
     param (
         [string]$pause,
