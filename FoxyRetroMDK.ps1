@@ -6,12 +6,7 @@ param(
 
 & {
 
-$cwd_org = (Get-Location).Path
 $prog_org = $ProgressPreference
-$ps_title = $host.ui.RawUI.WindowTitle
-if ([string]::IsNullOrEmpty($ps_title)) {
-    $ps_title = ""
-}
 #Exit Powershell Pausing if "T" and Resetting the Title back to the original
 function OnExit {
     param (
@@ -21,41 +16,7 @@ function OnExit {
     if ($pause -like "T*") {
         Read-Host "Press Enter to Continue...."
     }
-    $host.ui.RawUI.WindowTitle = $ps_title
-    Set-Location -Path "$cwd_org"
     exit $code
-}
-
-#Compile PSRestoreTitle @author jredfox
-try {
-Add-Type @"
-using System;
-using System.IO;
-public static class PSRestoreTitle {
-    private static ConsoleCancelEventHandler _handler;
-    private static string title;
-    private static string cwd;
-    public static void Attach(string t) {
-        if (_handler != null) return;
-        title = t;
-        cwd = Directory.GetCurrentDirectory();
-        _handler = new ConsoleCancelEventHandler(OnCancel);
-        Console.CancelKeyPress += _handler;
-    }
-
-    private static void OnCancel(object sender, ConsoleCancelEventArgs e) {
-        Console.Title = title;
-        Directory.SetCurrentDirectory(cwd);
-        Environment.CurrentDirectory = cwd;
-    }
-}
-"@
-
-# PSRestoreTitle Handles CONTROL+C & Restore Original Title
-[PSRestoreTitle]::Attach($ps_title)
-}
-catch {
-    Write-Error "Unable Attatch PSRestoreTitle CONTROL+C will not restore the title! Report this issue to https://github.com/jredfox/FoxyRetroMDK/issues"
 }
 
 $ps_ver = $PSVersionTable.PSVersion.Major
@@ -495,12 +456,7 @@ function Install-1.6x {
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
     Set-Location -Path "$mdk_dir"
-    try {
-        & "$mdk_dir\install.cmd" "--no-assets"
-    }
-    finally {
-        Set-Location -Path "$cwd_org"
-    }
+    & "$mdk_dir\install.cmd" "--no-assets"
     Write-Host "Forge MDK Installation Completed"
 }
 
@@ -887,12 +843,7 @@ $ProgressPreference = $prog_org
 #Run Forge's Install Script
 Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mdk_dir\forge"
-try {
-    & "$mdk_dir\forge\install.cmd"
-}
-finally {
-    Set-Location -Path "$cwd_org"
-}
+& "$mdk_dir\forge\install.cmd"
 Write-Host "Forge MDK Installation Completed"
 OnExit "F" 0
 
