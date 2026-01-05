@@ -888,7 +888,7 @@ $ProgressPreference = $prog_org
 Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mdk_dir\forge"
 try {
-& "$mdk_dir\forge\install.cmd"
+    & "$mdk_dir\forge\install.cmd"
 }
 finally {
     Set-Location -Path "$cwd_org"
