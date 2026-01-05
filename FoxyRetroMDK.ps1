@@ -492,7 +492,6 @@ function Install-1.6x {
 
     #Clear the Temp Folder
     Remove-Item -Path "$temp" -Recurse -Force | out-null
-    Write-Progress -Activity " " -Completed
 
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
@@ -878,7 +877,6 @@ DL-Resources -JsonURL "$resources_json_url" -Resources "$mdk_dir\jars\resources"
 #Clear the Temp Folder. Comment Out if your encountering a bug and want to know what the tmp folder looks like
 Write-Host "Deleting Temp Folder"
 Remove-Item -Path "$temp" -Recurse -Force | out-null
-Write-Progress -Activity " " -Completed
 
 #Run Forge's Install Script
 Write-Host "Running Forge install.cmd"
