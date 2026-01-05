@@ -30,33 +30,29 @@ function OnExit {
 try {
 Add-Type @"
 using System;
+using System.IO;
 public static class PSRestoreTitle {
     private static ConsoleCancelEventHandler _handler;
-    private static string orgTitle;
     private static string title;
-    private static bool useOrgTitle = false;
-    public static void Attach(string t, bool o) {
-        useOrgTitle = o;
-        title = t;
+    private static string cwd;
+    public static void Attach(string t) {
         if (_handler != null) return;
-        orgTitle = t;
+        title = t;
+        cwd = Directory.GetCurrentDirectory();
         _handler = new ConsoleCancelEventHandler(OnCancel);
         Console.CancelKeyPress += _handler;
     }
 
     private static void OnCancel(object sender, ConsoleCancelEventArgs e) {
-        if(useOrgTitle) {
-            Console.Title = orgTitle;
-        }
-        else {
-            Console.Title = title;
-        }
+        Console.Title = title;
+        Directory.SetCurrentDirectory(cwd);
+        Environment.CurrentDirectory = cwd;
     }
 }
 "@
 
 # PSRestoreTitle Handles CONTROL+C & Restore Original Title
-[PSRestoreTitle]::Attach($ps_title, $true)
+[PSRestoreTitle]::Attach($ps_title)
 }
 catch {
     Write-Error "Unable Attatch PSRestoreTitle CONTROL+C will not restore the title! Report this issue to https://github.com/jredfox/FoxyRetroMDK/issues"
@@ -499,7 +495,12 @@ function Install-1.6x {
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
     Set-Location -Path "$mdk_dir"
-    & "$mdk_dir\install.cmd" "--no-assets"
+    try {
+        & "$mdk_dir\install.cmd" "--no-assets"
+    }
+    finally {
+        Set-Location -Path "$cwd_org"
+    }
     Write-Host "Forge MDK Installation Completed"
 }
 
@@ -886,7 +887,12 @@ $ProgressPreference = $prog_org
 #Run Forge's Install Script
 Write-Host "Running Forge install.cmd"
 Set-Location -Path "$mdk_dir\forge"
+try {
 & "$mdk_dir\forge\install.cmd"
+}
+finally {
+    Set-Location -Path "$cwd_org"
+}
 Write-Host "Forge MDK Installation Completed"
 OnExit "F" 0
 
