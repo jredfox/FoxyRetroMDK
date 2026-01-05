@@ -6,11 +6,12 @@ param(
 
 & {
 
-#Exit Powershell Pausing if "T" and Resetting the Title back to the original
+$prog_org = $ProgressPreference
 $ps_title = $host.ui.RawUI.WindowTitle
 if ([string]::IsNullOrEmpty($ps_title)) {
     $ps_title = ""
 }
+#Exit Powershell Pausing if "T" and Resetting the Title back to the original
 function OnExit {
     param (
         [string]$pause,
@@ -88,7 +89,6 @@ public bool CheckValidationResult(
         Write-Warning "Error Unable to Disble Certificates this is bad!"
     }
     try {
-        $prog_old = $ProgressPreference
         if(([Net.SecurityProtocolType]::Tls12) -eq $null) {
             throw "msg"
         }
@@ -105,7 +105,7 @@ public bool CheckValidationResult(
         }
     }
     finally {
-        $ProgressPreference = $prog_old
+        $ProgressPreference = $prog_org
     }
 }
 else {
@@ -345,7 +345,6 @@ if($skip_rc -like "T*") {
     return
 }
 
-$progress_org = "$ProgressPreference"
 $ProgressPreference = 'SilentlyContinue'
 try
 {
@@ -368,7 +367,7 @@ catch
 {
     Write-Error "An Error Occured Obtaining Minecraft Resources Please manually Download and insert them into $Resources"
 }
-$ProgressPreference = "$progress_org"
+$ProgressPreference = $prog_org
 
 }
 
@@ -491,7 +490,9 @@ function Install-1.6x {
     DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Clear the Temp Folder
+    $ProgressPreference = 'SilentlyContinue'
     Remove-Item -Path "$temp" -Recurse -Force | out-null
+    $ProgressPreference = $prog_org
 
     #Start Forge install.cmd
     Write-Host "Running Forge install.cmd"
@@ -876,7 +877,9 @@ DL-Resources -JsonURL "$resources_json_url" -Resources "$mdk_dir\jars\resources"
 
 #Clear the Temp Folder. Comment Out if your encountering a bug and want to know what the tmp folder looks like
 Write-Host "Deleting Temp Folder"
+$ProgressPreference = 'SilentlyContinue'
 Remove-Item -Path "$temp" -Recurse -Force | out-null
+$ProgressPreference = $prog_org
 
 #Run Forge's Install Script
 Write-Host "Running Forge install.cmd"
