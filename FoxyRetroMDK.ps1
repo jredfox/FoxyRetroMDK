@@ -6,6 +6,7 @@ param(
 
 & {
 
+$cwd_org = (Get-Location).Path
 $prog_org = $ProgressPreference
 $ps_title = $host.ui.RawUI.WindowTitle
 if ([string]::IsNullOrEmpty($ps_title)) {
@@ -21,6 +22,7 @@ function OnExit {
         Read-Host "Press Enter to Continue...."
     }
     $host.ui.RawUI.WindowTitle = $ps_title
+    Set-Location -Path "$cwd_org"
     exit $code
 }
 
@@ -304,11 +306,11 @@ function Create-Jar {
         [string]$Jar     # The Path of the Jar file to save it as.
     )
 
-    $temp_cd = Get-Location
-    Set-Location "$Path"
+    $temp_cd = (Get-Location).Path
+    Set-Location -Path "$Path"
     Write-Host "Creating Jar $Jar"
     & "jar" cf "$Jar" "."
-    Set-Location "$temp_cd"
+    Set-Location -Path "$temp_cd"
 }
 
 function Unsupported-Version {
