@@ -45,7 +45,8 @@ function OnExit () {
     exit $1
 }
 #Handles CONTROL+C CONTROL+BREAK SIGQUIT SIGTERM
-trap 'OnExit 1' SIGINT SIGQUIT SIGTERM
+trap 'OnExit 1' EXIT SIGINT SIGQUIT SIGTERM SIGHUP SIGILL SIGABRT SIGFPE SIGSEGV SIGPIPE SIGALRM SIGBUS SIGSYS SIGTRAP SIGXCPU SIGXFSZ SIGVTALRM SIGPROF SIGEMT SIGIO SIGIOT SIGPOLL SIGPWR SIGSTKFLT
+#trap 'OnExit 1' SIGINT SIGQUIT SIGTERM
 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
