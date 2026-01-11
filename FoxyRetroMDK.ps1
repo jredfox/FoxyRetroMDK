@@ -112,6 +112,7 @@ $temp = "$mdk_dir\tmp"
 $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
+$lwjgl_ver = "2.9.4-nightly-20150209" #Debugging older LWJGL Use "2.9.1" Windows / Linux. Use "2.9.0" for macOS or technicpack debugging
 
 #Set UserAgent for Downloads
 $Mozilla = "Mozilla"
@@ -429,12 +430,12 @@ function Install-1.6x {
     Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
 
     #Patch fml.json
-    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.json" "http:" "https:" "2.9.0" "2.9.1"
+    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.json" "http:" "https:" "2.9.0" "$lwjgl_ver"
 
     # Upgrade Eclipse to Use LWJGL 2.9.1
-    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\eclipse\Minecraft\.classpath" "2.9.0" "2.9.1"
-    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Client\.classpath" "2.9.0" "2.9.1"
-    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Server\.classpath" "2.9.0" "2.9.1"
+    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\eclipse\Minecraft\.classpath" "2.9.0" "$lwjgl_ver"
+    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Client\.classpath" "2.9.0" "$lwjgl_ver"
+    & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Server\.classpath" "2.9.0" "$lwjgl_ver"
     
     #Patch fml.py
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
@@ -499,15 +500,15 @@ $guava_url = "https://web.archive.org/web/20150324120717id_/https://files.minecr
 $scala_lib_url = "https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
 $jinput_url = "https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
 $jutil_url = "https://libraries.minecraft.net/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
-$lwjgl_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar"
-$lwjgl_util_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar"
+$lwjgl_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/${lwjgl_ver}/lwjgl-${lwjgl_ver}.jar"
+$lwjgl_util_url = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/${lwjgl_ver}/lwjgl_util-${lwjgl_ver}.jar"
 #Native URLS
 $natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
-$natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-osx.jar"
+$natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-osx.jar"
 $natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
-$natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-linux.jar"
+$natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-linux.jar"
 $natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
-$natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-windows.jar"
+$natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-windows.jar"
 $mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
 #URLS that change based upon MC Version
 if ($mc_ver -eq "1.5.2")
