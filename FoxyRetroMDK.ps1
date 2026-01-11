@@ -432,7 +432,7 @@ function Install-1.6x {
     #Patch fml.json
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.json" "http:" "https:" "2.9.0" "$lwjgl_ver"
 
-    # Upgrade Eclipse to Use LWJGL 2.9.1
+    # Upgrade Eclipse's LWJGL
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\eclipse\Minecraft\.classpath" "2.9.0" "$lwjgl_ver"
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Client\.classpath" "2.9.0" "$lwjgl_ver"
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\mcp\eclipse\Server\.classpath" "2.9.0" "$lwjgl_ver"
