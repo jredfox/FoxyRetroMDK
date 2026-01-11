@@ -112,7 +112,7 @@ $temp = "$mdk_dir\tmp"
 $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
 $resources_url = "https://resources.download.minecraft.net/"
-$lwjgl_ver = "2.9.4-nightly-20150209" #Debugging older LWJGL Use "2.9.1" Windows / Linux. Use "2.9.0" for macOS or technicpack debugging
+$lwjgl_ver = "2.9.4-nightly-20150209" #Default: "2.9.4-nightly-20150209", Debug technicpack or older LWJGL "2.9.0", Debug Older LWJGL for linux or windows "2.9.1". macOS will bug out with LWJGL 2.9.1 on Java 6-7 and maybe 8u51 to
 
 #Set UserAgent for Downloads
 $Mozilla = "Mozilla"
