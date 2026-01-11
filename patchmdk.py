@@ -77,8 +77,6 @@ if __name__ == "__main__":
             with open(fmlJSONFile, 'wb') as f:
                 for line in fmlJSONText.split('\n'):
                     f.write(line.rstrip() + '\n')
-            
-        
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\nmcp="${mcp}/mcp"\n')
