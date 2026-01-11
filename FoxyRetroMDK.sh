@@ -33,6 +33,9 @@ else
     isLinux=true
 fi
 
+#Default: "2.9.4-nightly-20150209", Debug technicpack or older LWJGL "2.9.0", Debug Older LWJGL for linux or windows "2.9.1". macOS will bug out with LWJGL 2.9.1 on Java 6-7 and maybe 8u51 to
+lwjgl_ver="2.9.4-nightly-20150209"
+
 ################# Functions Start #################
 
 #Exits the program restoring the original cwd & title of the terminal
@@ -437,12 +440,12 @@ function Install-1.6x {
     Download "$mdk_dir/mcp/jars/minecraft_server.${mc_ver}.jar" "$mc_server_url" "true"
 
     # Patch fml.json
-    python2.7 "$rp" "$mdk_dir/fml/fml.json" "http:" "https:" "2.9.0" "2.9.1"
+    python2.7 "$rp" "$mdk_dir/fml/fml.json" "http:" "https:" "2.9.0" "$lwjgl_ver"
 
-    # Upgrade Eclipse to Use LWJGL 2.9.1
-    python2.7 "$rp" "$mdk_dir/fml/eclipse/Minecraft/.classpath" "2.9.0" "2.9.1"
-    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Client/.classpath" "2.9.0" "2.9.1"
-    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Server/.classpath" "2.9.0" "2.9.1"
+    # Upgrade Eclipse's LWJGL
+    python2.7 "$rp" "$mdk_dir/fml/eclipse/Minecraft/.classpath" "2.9.0" "$lwjgl_ver"
+    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Client/.classpath" "2.9.0" "$lwjgl_ver"
+    python2.7 "$rp" "$mdk_dir/mcp/eclipse/Server/.classpath" "2.9.0" "$lwjgl_ver"
 
     # Patch fml.py
     python2.7 "$rp" "$mdk_dir/fml/fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
@@ -542,14 +545,14 @@ guava_url="https://web.archive.org/web/20150324120717id_/https://files.minecraft
 scala_lib_url="https://web.archive.org/web/20130708223654id_/http://files.minecraftforge.net/fmllibs/scala-library.jar"
 jinput_url="https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar"
 jutil_url="https://libraries.minecraft.net/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
-lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar"
-lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar"
+lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/${lwjgl_ver}/lwjgl-${lwjgl_ver}.jar"
+lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/${lwjgl_ver}/lwjgl_util-${lwjgl_ver}.jar"
 natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
-natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-osx.jar"
+natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-osx.jar"
 natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
-natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-linux.jar"
+natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-linux.jar"
 natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
-natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-windows.jar"
+natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-windows.jar"
 
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
 resources_url="https://resources.download.minecraft.net/"
