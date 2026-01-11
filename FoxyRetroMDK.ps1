@@ -1,7 +1,8 @@
 param(
     [string]$mc_ver,
     [string]$mdk_dir,
-    [string]$skip_rc="F"
+    [string]$skip_rc="F",
+    [string]$lwjgl_ver=""
 )
 
 & {
@@ -114,7 +115,9 @@ $assets_json_url = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c
 $resources_url = "https://resources.download.minecraft.net/"
 
 #Default is "2.9.4-nightly-20150209", Debug technicpack or older LWJGL "2.9.0", Debug Older LWJGL for linux or windows "2.9.1". macOS will bug out with LWJGL 2.9.1 on Java 6-7 and maybe 8u51 to
-$lwjgl_ver = "2.9.4-nightly-20150209"
+if ([string]::IsNullOrEmpty($lwjgl_ver)) {
+    $lwjgl_ver = "2.9.4-nightly-20150209"
+}
 
 #Set UserAgent for Downloads
 $Mozilla = "Mozilla"

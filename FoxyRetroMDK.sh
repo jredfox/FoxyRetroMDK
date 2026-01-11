@@ -8,6 +8,7 @@ if [[ "$3" == T* || "$3" == t* ]]; then
 else
     dl_rc=true
 fi
+lwjgl_ver="$4"
 
 #Get Script's Absolute Path
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
@@ -34,7 +35,9 @@ else
 fi
 
 #Default: "2.9.4-nightly-20150209", Debug technicpack or older LWJGL "2.9.0", Debug Older LWJGL for linux or windows "2.9.1". macOS will bug out with LWJGL 2.9.1 on Java 6-7 and maybe 8u51 to
-lwjgl_ver="2.9.4-nightly-20150209"
+if [[ -z "$lwjgl_ver" ]]; then
+    lwjgl_ver="2.9.4-nightly-20150209"
+fi
 
 ################# Functions Start #################
 
