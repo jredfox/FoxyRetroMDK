@@ -477,7 +477,7 @@ function DL-Natives
     Get-ChildItem "$temp\natives\*.dylib" | Rename-Item -NewName { $_.Name -replace "\.dylib$",".jnilib" }
     [System.IO.Compression.ZipFile]::CreateFromDirectory("$temp\natives", "$mdk_dir\jars\bin\natives\$FileName.jar") # Re-Zips the natives and installs it to the correct
     
-    # Un-Zips all Natives to the correct location
+    # Un-Zips all  Natives to the correct location
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$mdk_dir\jars\bin\natives\$FileName.jar", "$mdk_dir\jars\bin\natives")
     
     #Cleanup When Done
