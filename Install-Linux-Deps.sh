@@ -120,13 +120,13 @@ echo "PKG Manager: $PKG_MNG"
 
 #Handle debian distros
 if [[ "$PKG_MNG" == "apt" ]]; then
-    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
+    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl; do
         if ! dpkg -s "$pkg" > /dev/null 2>&1; then
             install_pkg "$PKG_MNG" "$pkg"
         fi
     done
 else
-    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev; do
+    for pkg in build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl; do
         install_pkg "$PKG_MNG" "$pkg"
     done
 fi

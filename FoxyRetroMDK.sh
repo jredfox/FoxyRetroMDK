@@ -171,7 +171,7 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev"
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl"
         OnExit 1
     fi
 
@@ -320,7 +320,7 @@ function Download-Mediafire () {
 function DL-Resources () {
 
     local JsonUrl="$1"
-    local Resources"$2"
+    local Resources="$2"
     
     if [[ "$dl_rc" == "true" ]]; then
         ExitOnDLFail="false"
@@ -402,6 +402,7 @@ function Patch-MDKPY {
 function Install-1.6x {
 
     #Start URL's
+    local resources_url="https://resources.download.minecraft.net/"
     local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
     local assets_base_url="https://resources.download.minecraft.net"
     local python_url="https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
