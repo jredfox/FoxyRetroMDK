@@ -317,6 +317,7 @@ function Download-Mediafire () {
 
 }
 
+resources_url="https://resources.download.minecraft.net/"
 function DL-Resources () {
 
     local JsonUrl="$1"
@@ -402,7 +403,6 @@ function Patch-MDKPY {
 function Install-1.6x {
 
     #Start URL's
-    local resources_url="https://resources.download.minecraft.net/"
     local assets_json_url="https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json"
     local assets_base_url="https://resources.download.minecraft.net"
     local python_url="https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
@@ -580,7 +580,6 @@ natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-plat
 natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-windows.jar"
 
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
-resources_url="https://resources.download.minecraft.net/"
 mcp72_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
 
 #URLS that change based upon MC Version
