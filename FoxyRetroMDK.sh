@@ -317,6 +317,30 @@ function Download-Mediafire () {
 
 }
 
+function DL-Resources () {
+
+    local JsonUrl="$1"
+    local Resources"$2"
+    
+    if [[ "$dl_rc" == "true" ]]; then
+        ExitOnDLFail="false"
+        jsonFile="$temp/assets.json"
+        Download "$jsonFile" "$JsonUrl" "true" "10"
+
+        # Parse JSON & Download Resources
+        python2.7 "$SCRIPTPATH/resources.py" "$jsonFile" "$resources_url" "$Resources"
+        while IFS=, read -r key resource; do
+            resource_file="$Resources/$key"
+            echo "Downloading Resource URL: $resource"
+            Download "$resource_file" "$resource" "true" "4"
+        done < "${jsonFile}.txt"
+        ExitOnDLFail="true"
+    else
+        echo "Skipping Resource Downloading"
+    fi
+
+}
+
 function Unsupported-Version {
 
     echo "Invalid or Unsupported MC Version $mc_ver" >&2
@@ -466,19 +490,16 @@ function Install-1.6x {
         mkdir "$mdk_dir/fml/python"
         unzip -q -o "$temp/python_fml_2.7.9.zip" -d "$mdk_dir/fml/python"
     fi
+    
+    #Download Resources
+    DL-Resources "$assets_json_url" "$mdk_dir/mcp/jars/assets"
 
     #Remove Temp Folder
     rm -rf "$temp"
 
+    echo "Running Forge install.sh"
     cd "$mdk_dir"
-    if [[ "$dl_rc" == "true" ]]; then
-        echo "Running Forge install.sh"
-        bash "$mdk_dir/install.sh"
-    else
-        echo "Skipping Resource Downloading"
-        echo "Running Forge install.sh"
-        bash "$mdk_dir/install.sh" "--no-assets"
-    fi
+    bash "$mdk_dir/install.sh" "--no-assets"
     echo "Forge MDK Installation Completed"
 }
 
@@ -845,22 +866,7 @@ elif [[ "$patch_mcp72" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-if [[ "$dl_rc" == "true" ]]; then
-    ExitOnDLFail="false"
-    jsonFile="$temp/assets.json"
-    Download "$jsonFile" "$legacy_assets_url" "true" "10"
-
-    # Parse JSON & Download Resources
-    python2.7 "$SCRIPTPATH/resources.py" "$jsonFile" "$resources_url" "$mdk_dir/jars/resources"
-    while IFS=, read -r key resource; do
-        resource_file="$mdk_dir/jars/resources/$key"
-        echo "Downloading Resource URL: $resource"
-        Download "$resource_file" "$resource" "true" "4"
-    done < "${jsonFile}.txt"
-    ExitOnDLFail="true"
-else
-    echo "Skipping Resource Downloading"
-fi
+DL-Resources "$legacy_assets_url" "$mdk_dir/jars/resources"
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
 rm -rf "$temp"
