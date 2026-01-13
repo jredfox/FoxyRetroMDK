@@ -289,6 +289,10 @@ if ([System.IO.Directory]::Exists("$mdk_dir")) {
     $shouldStop = Read-Host "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N)"
     if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
         [System.IO.Directory]::Delete("$mdk_dir", $true)
+        if ([System.IO.Directory]::Exists("$mdk_dir")) {
+            $host.ui.WriteErrorLine("Unable to Delete $mdk_dir")
+            OnExit "T" 1
+        }
     }
     else {
         OnExit "F" 0
