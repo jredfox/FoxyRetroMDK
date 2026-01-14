@@ -86,6 +86,7 @@ $ErrorActionPreference = 'Continue'
 
 #Cleanup Possible env contamination from not using child powershell somehow
 $env:patchoneone = "F"
+$env:patch_21 = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
@@ -627,7 +628,7 @@ elseif ($mc_ver.StartsWith("1.4"))
         Unsupported-Version
     }
     
-    $patch_21 = "T" #patch forge's code to compile using java 7 or newer
+    $env:patch_21 = "T" #patch forge's code to compile using java 7 or newer
     $forge_lib_url = "https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
     #Older then 1.5 Forge Uses Older Runtime Libraries
     $argo_url = "https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
@@ -817,13 +818,12 @@ DL-Natives -URL "$natives_mac_url" -URL2 "$natives_mac_url2" -FileName "macosx_n
 DL-Natives -URL "$natives_linux_url" -URL2 "$natives_linux_url2" -FileName "linux_natives"
 
 #Make MCP & Forge 1.4x compile with java 8 or higher
-& java -jar "$PSScriptRoot\VerCheck.jar"
-if ($LASTEXITCODE -eq 0 -and $patch_21 -eq "T")
+if ($env:patch_21 -eq "T")
 {
+    Copy-Item -Path "$PSScriptRoot\VerCheck.jar" -Destination "$mdk_dir\forge\VerCheck.jar" -Force | out-null
     Write-Host "Patching Forge's RenderPlayer.java.patch"
     $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
-    if (-Not [System.IO.File]::Exists("$patch_file"))
-    {
+    if (-Not [System.IO.File]::Exists("$patch_file")) {
         $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\client\renderer\entity\RenderPlayer.java.patch" #Redirects Patch file between 1.4.5-1.4.7
     }
     & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$patch_file" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"

@@ -138,4 +138,24 @@ if __name__ == "__main__":
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                
+        if os.getenv("patch_21") == "T":
+            import shutil
+            print("Patching RenderPlayer.java.patch")
+            patch_file = mdk + "/forge/patches/minecraft/net/minecraft/src/RenderPlayer.java.patch"
+            if not os.path.exists(patch_file):
+                patch_file = mdk + "/forge/patches/minecraft/net/minecraft/client/renderer/entity/RenderPlayer.java.patch"
+            patch_file8 = patch_file + "8"
+            shutil.copy(patch_file, patch_file + "7")
+            shutil.copy(patch_file, patch_file8)
+            with open(patch_file8, 'r') as f:
+                lines = f.read()
+            lines = lines.replace("for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)").replace("for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)", "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)")
+            lines = lines.replace("\r\n", "\n")
+            with open(file, 'wb') as f:
+                f.write(lines)
+            print("Patching Forge's install.cmd & install.sh so RenderPlayer.java can compile!")
+            installcmd = mdk + "/forge/install.cmd"
+            installsh = mdk + "/forge/install.sh"
+            with open(installcmd, 'r') as f:
+                lines = f.read()
+            lines = lines.replace() #//TODO:
