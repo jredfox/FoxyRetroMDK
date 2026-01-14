@@ -841,7 +841,7 @@ DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar"
 DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar"
 
 #Make MCP & Forge 1.4x compile with java 8 or higher
-java -jar "$PSScriptRoot\VerCheck.jar"
+java -jar "$SCRIPTPATH/VerCheck.jar"
 p21code=$?
 if [[ "$p21code" -eq 0 && "$patch_21" == "T" ]]; then
     echo "Patching Forge's RenderPlayer.java.patch"
