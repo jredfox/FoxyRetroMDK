@@ -816,8 +816,9 @@ DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "
 DL-Natives -URL "$natives_mac_url" -URL2 "$natives_mac_url2" -FileName "macosx_natives"
 DL-Natives -URL "$natives_linux_url" -URL2 "$natives_linux_url2" -FileName "linux_natives"
 
-#Make MCP & Forge 1.4x compile with java 7 or higher
-if ($patch_21 -eq "T")
+#Make MCP & Forge 1.4x compile with java 8 or higher
+& java -jar "$PSScriptRoot\VerCheck.jar"
+if ($LASTEXITCODE -eq 0 -and $patch_21 -eq "T")
 {
     Write-Host "Patching Forge's RenderPlayer.java.patch"
     $patch_file = "$mdk_dir\forge\patches\minecraft\net\minecraft\src\RenderPlayer.java.patch"
