@@ -158,4 +158,4 @@ if __name__ == "__main__":
             installsh = mdk + "/forge/install.sh"
             with open(installcmd, 'r') as f:
                 lines = f.read()
-            lines = lines.replace() #//TODO:
+            lines = lines.replace() #//TODO: 
