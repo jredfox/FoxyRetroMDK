@@ -380,7 +380,7 @@ function Patch-MDKPY {
     
     #Copy PatchRenderPlayer.jar over
     if [[ "$patch_21" == "T" ]]; then
-        cp -f "$SCRIPTPATH/PatchRenderPlayer.jar" "$mcp_dir/PatchRenderPlayer.jar"
+        cp -f "$SCRIPTPATH/PatchRenderPlayer.jar" "$mcp_dir/forge/PatchRenderPlayer.jar"
     fi
 
     ## Copy Linux Binaries over to the MDK
