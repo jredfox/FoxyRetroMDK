@@ -377,6 +377,11 @@ function Patch-MDKPY {
     mkdir -p "$mcp_dir/cache"
     cp -f "$SCRIPTPATH/jdk-finder.py" "$mcp_dir/jdk-finder.py"
     cp -rf "$SCRIPTPATH/cache" "$mcp_dir"
+    
+    #Copy PatchRenderPlayer.jar over
+    if [[ "$patch_21" == "T" ]]; then
+        cp -f "$SCRIPTPATH/PatchRenderPlayer.jar" "$mcp_dir/PatchRenderPlayer.jar"
+    fi
 
     ## Copy Linux Binaries over to the MDK
     if [[ "$isLinux" == "true" ]]; then
