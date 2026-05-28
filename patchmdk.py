@@ -121,10 +121,10 @@ if __name__ == "__main__":
         
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
-            str_forge_sh = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
-            str_fml_sh = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
-            str_forge_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
-            str_fml_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar "..\\PatchRenderPlayer.jar" "%~dp0.."\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
+            str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
+            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_fml_cmd = str_fml_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar "..\\PatchRenderPlayer.jar" "%~dp0.."\r\nREM ## Foxy Retro MDK END ##\r\n')
             
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
