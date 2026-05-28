@@ -678,7 +678,7 @@ elif [[ "$mc_ver" == 1.4* ]]; then
         Unsupported-Version
     fi
 
-    patch_21="T" #patch forge's code to compile using java 7 or newer
+    export patch_21="T" #patch forge's code to compile using java 7 or newer
     forge_lib_url="https://web.archive.org/web/20130305145719if_/http://files.minecraftforge.net/fmllibs/fml_libs_dev.zip"
     #Older then 1.5 Forge Uses Older Runtime Libraries
     argo_url="https://web.archive.org/web/20130313100037if_/http://files.minecraftforge.net:80/fmllibs/argo-2.25.jar"
@@ -839,24 +839,6 @@ rm -f "$mdk_dir/jars/bin/jutil.jar"
 DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar"
 DL-Natives "$natives_mac_url" "$natives_mac_url2" "macosx_natives.jar"
 DL-Natives "$natives_linux_url" "$natives_linux_url2" "linux_natives.jar"
-
-#Make MCP & Forge 1.4x compile with java 8 or higher
-java -jar "$SCRIPTPATH/VerCheck.jar"
-p21code=$?
-if [[ "$p21code" -eq 0 && "$patch_21" == "T" ]]; then
-    echo "Patching Forge's RenderPlayer.java.patch"
-    patch_file="$mdk_dir/forge/patches/minecraft/net/minecraft/src/RenderPlayer.java.patch"
-
-    if [[ ! -f "$patch_file" ]]; then
-        patch_file="$mdk_dir/forge/patches/minecraft/net/minecraft/client/renderer/entity/RenderPlayer.java.patch" # Redirects Patch file between 1.4.5-1.4.7
-    fi
-
-    if [[ -f "$patch_file" ]]; then
-        python2.7 "$rp" "$patch_file" "for (int var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (int var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var21.getItem().getRenderPasses(var21.getItemDamage()); ++var27)" "for (var27 = 0; var27 < var22.getItem().getRenderPasses(var22.getItemDamage()); ++var27)"
-    else
-        echo "Failed to patch file $patch_file"
-    fi
-fi
 
 #Patch MCP startclient & startserver comamnds so that it works without an IDE
 if [[ "$patch_mcp723" == "T" ]]; then
