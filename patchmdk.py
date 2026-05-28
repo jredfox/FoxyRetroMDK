@@ -124,7 +124,7 @@ if __name__ == "__main__":
             str_forge_sh = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_fml_sh = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_forge_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
-            str_fml_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0.."\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_fml_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar "..\\PatchRenderPlayer.jar" "%~dp0.."\r\nREM ## Foxy Retro MDK END ##\r\n')
             
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
