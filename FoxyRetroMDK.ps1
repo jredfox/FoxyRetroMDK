@@ -361,6 +361,9 @@ function Enforce-JDK8 {
     if($env:patchoneone -eq "T") {
         Copy-Item -Path "$PSScriptRoot\patchoneone.py" -Destination "$mcp_dir\patchoneone.py" -Force | out-null
     }
+    if($env:patch_21 -eq "T") {
+        Copy-Item -Path "$PSScriptRoot\PatchRenderPlayer.jar" -Destination "$mcp_dir\forge\PatchRenderPlayer.jar" -Force | out-null
+    }
 }
 
 function Install-1.6x {
