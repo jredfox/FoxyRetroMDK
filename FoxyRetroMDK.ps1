@@ -830,7 +830,7 @@ if ($patch_mcp723 -eq "T") {
 elseif ($patch_mcp72 -eq "T") {
     $mcp_cmds="$mdk_dir\runtime\commands.py"
     Write-Host "Patching MCP $mc_ver $mcp_cmds"
-    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:`r`n            return self.checkbins(CLIENT)`r`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
+    & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:`n            return self.checkbins(CLIENT)`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
 }
 
 #Download Minecraft Resources
