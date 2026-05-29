@@ -42,6 +42,8 @@ fi
 ################# Functions Start #################
 
 #Exits the program restoring the original cwd & title of the terminal
+export ONEXIT_FRMDK=0
+export patch_21="F"
 cwd_org="$(pwd -P)"
 function OnExit () {
     if [[ "${ONEXIT_FRMDK:-0}" -eq 1 ]]; then

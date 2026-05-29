@@ -86,6 +86,7 @@ $ErrorActionPreference = 'Continue'
 
 #Cleanup Possible env contamination from not using child powershell somehow
 $env:patchoneone = "F"
+$env:patch_21 = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
