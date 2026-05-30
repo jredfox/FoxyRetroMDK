@@ -8,5 +8,3 @@ osascript JRE-6-Install.applescript
 #Open the PKG Installer
 open -W "$HOME/Desktop/Java.pkg"
 
-# Important removal jvm.cfg it will cause libjvm.dylib to not be found. (Minecraft will have Graphical Errors)
-sudo rm -f /Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/jvm.cfg
