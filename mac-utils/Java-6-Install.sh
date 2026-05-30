@@ -7,4 +7,3 @@ osascript JRE-6-Install.applescript
 
 #Open the PKG Installer
 open -W "$HOME/Desktop/Java.pkg"
-
