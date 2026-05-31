@@ -32,6 +32,21 @@ mcp_batch_patch = (
     'REM ## Foxy Retro MDK END ##\r\n'
 )
 
+mcp_commands_py_patch = (
+'    ## Foxy Retro MDK START ##\n'
+'        print("Debug:" + SIDE_NAME[side].upper())\n'
+'        print(\'Debug: "\' + self.binservertmp + \'" \' + self.cmpjarserver + \'"\')\n'
+'        if SIDE_NAME[side].upper() == "SERVER":\n'
+'            print(\'> Packing blank.txt into server_recomp.jar for JDK 6 Compatibility\')\n'
+'            txtfile = os.path.join(self.binservertmp, \'blank.txt\')\n'
+'            with open(txtfile, \'w\') as f:\n'
+'                f.write(\'blank\')\n'
+'            with zipfile.ZipFile(self.cmpjarserver, "a") as zipf:\n'
+'                if \'blank.txt\' not in zipf.namelist():\n'
+'                    zipf.write(txtfile, \'blank.txt\')\n'
+'        ## Foxy Retro MDK END ##\n\n    '
+)
+
 if __name__ == "__main__":
 
     mdk = os.path.normpath(sys.argv[1])
@@ -43,7 +58,11 @@ if __name__ == "__main__":
     print("Patching Path:" + commandspy)
     with open(commandspy, 'r') as f:
         data = f.read()
-    data = data.replace("\r\n", "\n").replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
+    data = data.replace("\r\n", "\n").replace('\t', '    ').replace('def checkjava(self):', 'def checkjava(self):\n        ## Foxy Retro MDK Start ##\n        jdk_finder = True\n        if jdk_finder:\n            exe = \'.exe\' if ( self.osname == \'win\' ) else \'\'\n            self.cmdjava =  \'"%s"\' % ( \'java\' + exe )\n            self.cmdjavac = \'"%s"\' % ( \'javac\' + exe )\n            return\n        ## Foxy Retro MDK End ##', 1)
+    if not mcpInForge:
+        start = data.find('def packbin(') + 5
+        index = data.find('def ', start)
+        data = data[:index] + mcp_commands_py_patch + data[index:]
     with open(commandspy, 'wb') as f:
         f.write(data)
     
