@@ -34,8 +34,6 @@ mcp_batch_patch = (
 
 mcp_commands_py_patch = (
 '    ## Foxy Retro MDK START ##\n'
-'        print("Debug:" + SIDE_NAME[side].upper())\n'
-'        print(\'Debug: "\' + self.binservertmp + \'" \' + self.cmpjarserver + \'"\')\n'
 '        if SIDE_NAME[side].upper() == "SERVER":\n'
 '            print(\'> Packing blank.txt into server_recomp.jar for JDK 6 Compatibility\')\n'
 '            txtfile = os.path.join(self.binservertmp, \'blank.txt\')\n'
