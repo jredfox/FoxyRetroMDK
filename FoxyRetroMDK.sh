@@ -39,11 +39,14 @@ if [[ -z "$lwjgl_ver" ]]; then
     lwjgl_ver="2.9.4-nightly-20150209"
 fi
 
+#Clear Env Variables
+export patch_21="F"
+export patch_portability="F"
+
 ################# Functions Start #################
 
 #Exits the program restoring the original cwd & title of the terminal
 export ONEXIT_FRMDK=0
-export patch_21="F"
 cwd_org="$(pwd -P)"
 function OnExit () {
     if [[ "${ONEXIT_FRMDK:-0}" -eq 1 ]]; then
@@ -749,6 +752,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
 
     fernflower_dl="T"  #Enable Fernflower Download From newer MCP
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
+    export patch_portability="T"
 
 elif [[ "$mc_ver" == "1.1" ]]; then
     echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on Non Windows :("

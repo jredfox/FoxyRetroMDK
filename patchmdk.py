@@ -142,7 +142,13 @@ if __name__ == "__main__":
             str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
             str_fml_cmd = str_fml_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar "..\\PatchRenderPlayer.jar" "%~dp0.."\r\nREM ## Foxy Retro MDK END ##\r\n')
-            
+        
+        #Make MC 1.1 - 1.2.5 Portabable when re-installing forge from non windows
+        if os.getenv("patch_portability") == "T":
+            print('Debug: Patching Portability for re-installing forge under forge/install.sh')
+            str_forge_sh = str_forge_sh.replace('mcp="$(dirname "$mcp")"\n', 'mcp="$(dirname "$mcp")"\n## Portability Patch Start ##\nchmod +x "$mcp"/*.sh\nchmod +x "$mcp/forge"/*.sh\nchmod +x "$mcp/forge/fml"/*.sh\n## Portability Patch End ##', 1)
+            str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n## Portability Patch Start ##\nxattr -d com.apple.quarantine "$mcp/forge"/*.sh\nxattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh\nxattr -d com.apple.quarantine "$mcp"/*.sh\n## Portability Patch End ##\n', 1)
+        
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
