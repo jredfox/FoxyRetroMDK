@@ -39,6 +39,3 @@ Since Linux Has Additional Deps that are only created When Installing an MDK on 
 
 # Changing Java Notes
 Changing Java on an MDK that's already been compiled from an Upgrade Java 6 --> Java 7 or a downgrade Java 8 --> Java 7 Will Cause MCP to think every single class is modified when calling `reobfuscate` or `reobfuscate_srg`. **This is a limition of MCP not handling proper detection for modified classes**. First Step is to go into `cache/jdkfinder-target.cfg` and change the target to the desired java version. Now in order to Get around it you **MUST backup your src** folder and **copy it to a location outside the MDK**. Then you can go and run forge/install.cmd or forge/install.sh (non windows) for 1.5.2 and lower or the MDK/install.sh for 1.6x. This will re-install forge wipe your MDK and update the MD5's. Replace the src folder back with your current modding workspace and MCP should detect what classes are actually modified again
-
-# MC 1.3 - MC 1.4 JDK 6 Notes
-- Forge Doesn't Work with Reobfuscating the minecraft_server.jar with JDK 6. You will need to swap to JDK 7 or higher in order to reobfuscate and export your mod. MCP appears to reobfuscate without forge just fine.
