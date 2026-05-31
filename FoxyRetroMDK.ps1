@@ -791,7 +791,7 @@ if ($scala_lib_url -ne "") {
 
 #Download minecraft.jar & minecraft_server.jar and Install it
 Download -Uri "$mc_url" -OutFile "$mdk_dir\jars\bin\minecraft.jar"
-if (-Not $server_skip -eq "T" ) {
+if (-Not ($server_skip -eq "T") ) {
     Download -Uri "$mc_server_url" -OutFile "$mdk_dir\jars\minecraft_server.jar"
 }
 
