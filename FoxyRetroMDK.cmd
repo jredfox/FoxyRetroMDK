@@ -13,5 +13,5 @@ set mc_ver=!mc_ver:'=!
 set mc_ver=!mc_ver: =!
 
 REM ## Run Main Script ##
-powershell -ExecutionPolicy Bypass -File "%~dp0\FoxyRetroMDK.ps1" -mc_ver "!mc_ver!" -skip_rc "T"
+powershell -ExecutionPolicy Bypass -File "%~dp0\FoxyRetroMDK.ps1" -mc_ver "!mc_ver!" -skip_rc "F"
 endlocal
