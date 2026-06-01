@@ -3,14 +3,19 @@ import sys
 
 if __name__ == "__main__":
 
-    EXTENSIONS = ('.sh', '.cfg', '.srg', '.java_', '.patch_', '.exc', '.cvs', '.py', ".py#", ".bck", '.py~')
     script_path = os.path.realpath(__file__)
     mcp = os.path.realpath(sys.argv[1])
     winlf = False if (len(sys.argv) < 3) else (sys.argv[2][0].upper() == 'T')
     printOnly = False if (len(sys.argv) < 4) else (sys.argv[3][0].upper() == 'T')
-    printOnly = True
-    
+    #EXTENSIONS = ('.sh', '.cfg', '.srg', '.exc', '.cvs', '.patch')
+    EXTENSIONS = ('.sh', '.cfg')
+
     for root, dirs, files in os.walk(mcp):
+        #Skip bin_linux
+        if os.path.basename(root) == 'bin_linux':
+            dirs[:] = []  # Don't recurse further
+            continue
+
         for fname in files:
             if fname.endswith(EXTENSIONS):
                 fpath = os.path.realpath(os.path.join(root, fname))
