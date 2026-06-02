@@ -67,7 +67,7 @@ if __name__ == "__main__":
     with open(commandspy, 'wb') as f:
         f.write(data)
     
-    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', sh_portability + '## Foxy Retro MDK END ##\n')
+    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', sh_portability + '## Foxy Retro MDK END ##\n', 1)
     str_mcp_batch_patch = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability + 'REM ## Foxy Retro MDK END ##\r\n', 1)
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
@@ -152,8 +152,8 @@ if __name__ == "__main__":
             print('Debug: Patching Portability for re-installing forge under forge/install.sh')
             str_forge_sh = str_forge_sh.replace('mcp="$(dirname "$mcp")"\n', 'mcp="$(dirname "$mcp")"\n## Portability Patch Start ##\nchmod +x "$mcp"/*.sh\nchmod +x "$mcp/forge"/*.sh\nchmod +x "$mcp/forge/fml"/*.sh 2>/dev/null\n## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n    ## Portability Patch Start ##\n    xattr -d com.apple.quarantine "$mcp/forge"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp"/*.sh 2>/dev/null\n    ## Portability Patch End ##\n', 1)
-            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n')
-            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability_forge + 'REM ## Foxy Retro MDK END ##\r\n')
+            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n', 1)
+            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability_forge + 'REM ## Foxy Retro MDK END ##\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
