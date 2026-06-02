@@ -3,11 +3,11 @@ import sys
 
 if __name__ == "__main__":
 
-    script_path = os.path.realpath(__file__)
     mcp = os.path.realpath(sys.argv[1])
-    winlf = (os.name == 'nt') if (len(sys.argv) < 3) else (sys.argv[2][0].upper() == 'T')
+    script_path = os.path.realpath(sys.argv[2])
+    winlf = (os.name == 'nt') if (len(sys.argv) < 4) else (sys.argv[3][0].upper() == 'T')
+    printOnly = False if (len(sys.argv) < 4) else (sys.argv[4][0].upper() == 'T')
     EXTENSIONS = ('.sh', '.cfg')
-    printOnly = False
     
     SCANDIRS = (mcp, os.path.join(mcp, "forge"), os.path.join(mcp, "forge/fml"), os.path.join(mcp, 'temp'), os.path.join(mcp, 'tmp'), os.path.join(mcp, 'conf'), os.path.join(mcp, 'forge/conf') )
     for root in SCANDIRS:
@@ -16,6 +16,8 @@ if __name__ == "__main__":
                 cfg = fname.endswith('.cfg')
                 if cfg or fname.endswith('.sh'):
                     fpath = os.path.realpath(os.path.join(root, fname))
+                    if fpath == script_path:
+                        continue
                     with open(fpath, 'rb') as f:
                         data = f.read()
                     if not winlf:
