@@ -4,6 +4,7 @@ import glob
 
 #global vars
 sh_portability = 'python2.7 patchportability.py "$mcp" "$0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
+sh_portability_forge = 'python2.7 ../patchportability.py "$mcp" "$0"\n' if ( os.getenv("patch_portability") == "T" ) else ""
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
@@ -148,6 +149,7 @@ if __name__ == "__main__":
             print('Debug: Patching Portability for re-installing forge under forge/install.sh')
             str_forge_sh = str_forge_sh.replace('mcp="$(dirname "$mcp")"\n', 'mcp="$(dirname "$mcp")"\n## Portability Patch Start ##\nchmod +x "$mcp"/*.sh\nchmod +x "$mcp/forge"/*.sh\nchmod +x "$mcp/forge/fml"/*.sh 2>/dev/null\n## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n    ## Portability Patch Start ##\n    xattr -d com.apple.quarantine "$mcp/forge"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp"/*.sh 2>/dev/null\n    ## Portability Patch End ##\n', 1)
+            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n')
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
