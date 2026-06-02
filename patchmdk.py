@@ -5,6 +5,8 @@ import glob
 #global vars
 sh_portability = 'python2.7 patchportability.py "$mcp" "$0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
 sh_portability_forge = 'python2.7 ../patchportability.py "$mcp" "$0"\n'
+batch_portability = 'call "runtime\bin\python\python_mcp.exe" "patchportability.py" ".." "%~0"' if ( os.getenv("patchoneone") == "T" ) else ""
+batch_portability_forge = 'call "..\runtime\bin\python\python_mcp.exe" "..\patchportability.py" ".." "%~0"'
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
@@ -66,13 +68,14 @@ if __name__ == "__main__":
         f.write(data)
     
     str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', sh_portability + '## Foxy Retro MDK END ##\n')
+    str_mcp_batch_patch = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability + 'REM ## Foxy Retro MDK END ##\r\n', 1)
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):
             print("Patching Path:" + file)
             with open(file, 'r') as f:
                 lines = f.read()
-            lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + mcp_batch_patch, 1))
+            lines = (lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_mcp_sh_patch, 1) ) if isSh else (lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_mcp_batch_patch, 1))
             with open(file, 'wb') as f:
                 f.write(lines)
             
@@ -150,6 +153,7 @@ if __name__ == "__main__":
             str_forge_sh = str_forge_sh.replace('mcp="$(dirname "$mcp")"\n', 'mcp="$(dirname "$mcp")"\n## Portability Patch Start ##\nchmod +x "$mcp"/*.sh\nchmod +x "$mcp/forge"/*.sh\nchmod +x "$mcp/forge/fml"/*.sh 2>/dev/null\n## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n    ## Portability Patch Start ##\n    xattr -d com.apple.quarantine "$mcp/forge"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp"/*.sh 2>/dev/null\n    ## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n')
+            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability_forge + 'REM ## Foxy Retro MDK END ##\r\n')
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
