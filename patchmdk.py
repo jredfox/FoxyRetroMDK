@@ -4,7 +4,7 @@ import glob
 
 #global vars
 sh_portability = 'python2.7 patchportability.py "$mcp" "$0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
-sh_portability_forge = 'python2.7 ../patchportability.py "$mcp" "$0"\n' if ( os.getenv("patch_portability") == "T" ) else ""
+sh_portability_forge = 'python2.7 ../patchportability.py "$mcp" "$0"\n'
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
