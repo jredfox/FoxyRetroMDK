@@ -6,7 +6,7 @@ import glob
 sh_portability = 'python2.7 patchportability.py "$mcp" "$0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
 sh_portability_forge = 'python2.7 ../patchportability.py "$mcp" "$0"\n'
 batch_portability = 'call "runtime\bin\python\python_mcp.exe" "patchportability.py" ".." "%~0"' if ( os.getenv("patchoneone") == "T" ) else ""
-batch_portability_forge = 'call "..\runtime\bin\python\python_mcp.exe" "..\patchportability.py" ".." "%~0"'
+batch_portability_forge = 'call "..\runtime\bin\python\python_mcp.exe" "..\\patchportability.py" ".." "%~0"'
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
