@@ -6,9 +6,9 @@ if __name__ == "__main__":
     mcp = os.path.realpath(sys.argv[1])
     script_path = os.path.realpath(sys.argv[2])
     winlf = (os.name == 'nt') if (len(sys.argv) < 4) else (sys.argv[3][0].upper() == 'T')
-    printOnly = False if (len(sys.argv) < 4) else (sys.argv[4][0].upper() == 'T')
+    printOnly = False if (len(sys.argv) < 5) else (sys.argv[4][0].upper() == 'T')
     
-    SCANDIRS = (mcp, os.path.join(mcp, "forge"), os.path.join(mcp, "forge/fml"), os.path.join(mcp, 'temp'), os.path.join(mcp, 'tmp'), os.path.join(mcp, 'conf'), os.path.join(mcp, 'forge/conf') )
+    SCANDIRS = (mcp, os.path.join(mcp, 'forge'), os.path.join(mcp, 'forge', 'fml'), os.path.join(mcp, 'temp'), os.path.join(mcp, 'tmp'), os.path.join(mcp, 'conf'), os.path.join(mcp, 'forge', 'conf') )
     for root in SCANDIRS:
         if os.path.exists(root):
             for fname in os.listdir(root):
@@ -23,16 +23,16 @@ if __name__ == "__main__":
                         if ('\r' in data or (cfg and '\\' in data)):
                             data = data.replace('\r\n', '\n').replace('\r', '\n')
                             if cfg:
-                                data = data.replace("\\", "/")
+                                data = data.replace('\\', '/')
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(data)
-                            print("patched portability:" + fpath)
+                            print('patched portability:' + fpath)
                     elif cfg:
-                        new_data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n').replace("\\", "/")
+                        new_data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n').replace('\\', '/')
                         if data != new_data:
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(new_data)
-                            print("patched portability:" + fpath)
+                            print('patched portability:' + fpath)
     
