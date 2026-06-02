@@ -27,12 +27,12 @@ if __name__ == "__main__":
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(data)
-                            print("normalized lines:" + fpath)
+                            print("patched portability:" + fpath)
                     elif cfg:
                         new_data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n').replace("\\", "/")
                         if data != new_data:
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(new_data)
-                            print("normalized lines:" + fpath)
+                            print("patched portability:" + fpath)
     
