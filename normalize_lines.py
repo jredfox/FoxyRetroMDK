@@ -5,9 +5,9 @@ if __name__ == "__main__":
 
     script_path = os.path.realpath(__file__)
     mcp = os.path.realpath(sys.argv[1])
-    winlf = False if (len(sys.argv) < 3) else (sys.argv[2][0].upper() == 'T')
+    winlf = (os.name == 'nt') if (len(sys.argv) < 3) else (sys.argv[2][0].upper() == 'T')
     EXTENSIONS = ('.sh', '.cfg')
-    printOnly = True
+    printOnly = False
     
     SCANDIRS = (mcp, os.path.join(mcp, "forge"), os.path.join(mcp, "forge/fml"), os.path.join(mcp, 'temp'), os.path.join(mcp, 'tmp'), os.path.join(mcp, 'conf'), os.path.join(mcp, 'forge/conf') )
     for root in SCANDIRS:
@@ -28,9 +28,10 @@ if __name__ == "__main__":
                                     f.write(data)
                             print("normalized lines:" + fpath)
                     elif cfg:
-                        data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n').replace("\\", "/")
-                        if not printOnly:
-                            with open(fpath, 'wb') as f:
-                                f.write(data)
-                        print("normalized lines:" + fpath)
+                        new_data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n').replace("\\", "/")
+                        if data != new_data:
+                            if not printOnly:
+                                with open(fpath, 'wb') as f:
+                                    f.write(new_data)
+                            print("normalized lines:" + fpath)
     
