@@ -27,6 +27,9 @@ if __name__ == "__main__":
                             if '\r' in data:
                                 if not printOnly:
                                     data = data.replace('\r\n', '\n').replace('\r', '\n')
+                                    #Normalize Paths for MC 1.1
+                                    if fname.endswith('.cfg'):
+                                        data = data.replace("\\", "/")
                                     with open(fpath, 'wb') as f:
                                         f.write(data)
                                 print("normalized lines:" + fpath)
