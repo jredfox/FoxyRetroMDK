@@ -149,7 +149,6 @@ if __name__ == "__main__":
         
         #Make MC 1.1 - 1.2.5 Portabable when re-installing forge from non windows
         if os.getenv("patch_portability") == "T":
-            print('Debug: Patching Portability for re-installing forge under forge/install.sh')
             str_forge_sh = str_forge_sh.replace('mcp="$(dirname "$mcp")"\n', 'mcp="$(dirname "$mcp")"\n## Portability Patch Start ##\nchmod +x "$mcp"/*.sh\nchmod +x "$mcp/forge"/*.sh\nchmod +x "$mcp/forge/fml"/*.sh 2>/dev/null\n## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n    ## Portability Patch Start ##\n    xattr -d com.apple.quarantine "$mcp/forge"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp"/*.sh 2>/dev/null\n    ## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n', 1)
