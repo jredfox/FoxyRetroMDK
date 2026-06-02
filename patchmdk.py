@@ -3,7 +3,7 @@ import sys
 import glob
 
 #global vars
-oneone = "python2.7 patchoneone.py\n" if ( os.getenv("patchoneone") == "T" ) else ""
+sh_portability = 'python2.7 patchportability.py "$mcp" "$0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     with open(commandspy, 'wb') as f:
         f.write(data)
     
-    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', oneone + '## Foxy Retro MDK END ##\n')
+    str_mcp_sh_patch = mcp_sh_patch.replace('## Foxy Retro MDK END ##\n', sh_portability + '## Foxy Retro MDK END ##\n')
     for file in glob.glob(os.path.normpath(mcp + "/*")):
         isSh = file.endswith(".sh")
         if isSh or file.endswith(".bat") or file.endswith(".cmd"):

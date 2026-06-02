@@ -42,6 +42,7 @@ fi
 #Clear Env Variables
 export patch_21="F"
 export patch_portability="F"
+export patchoneone="F"
 
 ################# Functions Start #################
 
@@ -386,6 +387,11 @@ function Patch-MDKPY {
     #Copy PatchRenderPlayer.jar over
     if [[ "$patch_21" == "T" ]]; then
         cp -f "$SCRIPTPATH/PatchRenderPlayer.jar" "$mcp_dir/forge/PatchRenderPlayer.jar"
+    fi
+	
+	#Copy patchportability.py over
+    if [[ "$patch_portability" == "T" ]]; then
+        cp -f "$SCRIPTPATH/patchportability.py" "$mcp_dir/patchportability.py"
     fi
 
     ## Copy Linux Binaries over to the MDK
@@ -755,6 +761,8 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     export patch_portability="T"
 
 elif [[ "$mc_ver" == "1.1" ]]; then
+	export patch_portability="T"
+	export patchoneone="T"
     echo "MCP + Forge Installation Scripts for Minecraft 1.1 do not work on Non Windows :("
     if [[ "$isLinux" == "true" ]]; then
         echo "Try Installing Wine and then run FoxyRetroMDK.cmd"
