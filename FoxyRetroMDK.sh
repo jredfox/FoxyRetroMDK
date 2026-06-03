@@ -175,6 +175,12 @@ function Check-LinuxDeps () {
         echo "g++ command not found"
         missing="T"
     fi
+    
+    if [[ "$mc_ver" == "1.1" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
+        echo "wine command not found"
+        echo "wine is required by MCP for MC 1.1 itself"
+        OnExit 1
+    fi
 
     if [[ "$missing" == "T" ]]; then
         echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl zip"
@@ -761,11 +767,6 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     export patch_portability="T"
 
 elif [[ "$mc_ver" == "1.1" ]]; then
-    if [[ "$isLinux" == "true" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
-        echo "wine command not found"
-        echo "wine is required by MCP for MC 1.1 itself"
-        OnExit 1
-    fi
     mcp_ver="mcp56"
     mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
     forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
