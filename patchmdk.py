@@ -29,6 +29,7 @@ mcp_sh_patch = (
 
 mcp_batch_patch = (
     'REM ## Foxy Retro MDK START ##\r\n'
+    'cd /D "%~dp0"\r\n'
     'FOR /F "delims=" %%I IN (\'call "runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"\') DO SET "JAVA_DIR=%%I"\r\n'
     'set "PATH=%JAVA_DIR%;%PATH%"\r\n'
     'FOR %%I IN ("%JAVA_DIR%\\..") DO SET "JAVA_HOME=%%~fI"\r\n'
