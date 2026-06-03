@@ -763,7 +763,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
 elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isLinux" == "true" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
         echo "wine command not found"
-        echo "wine is required for MCP for MC 1.1 itself"
+        echo "wine is required by MCP for MC 1.1 itself"
         exit 1
     fi
     mcp_ver="mcp56"
