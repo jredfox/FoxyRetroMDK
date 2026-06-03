@@ -764,7 +764,7 @@ elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isLinux" == "true" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
         echo "wine command not found"
         echo "wine is required by MCP for MC 1.1 itself"
-        exit 1
+        OnExit 1
     fi
     mcp_ver="mcp56"
     mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
