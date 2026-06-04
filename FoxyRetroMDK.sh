@@ -178,7 +178,7 @@ function Check-LinuxDeps () {
     
     if [[ "$mc_ver" == "1.1" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
         echo "wine command not found"
-        echo "wine is required by MCP for MC 1.1 itself"
+        echo "wine is required by MCP for MC 1.1"
         OnExit 1
     fi
 
