@@ -767,6 +767,12 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     export patch_portability="T"
 
 elif [[ "$mc_ver" == "1.1" ]]; then
+    if [[ "$isMac" == "true" ]]; then
+        echo "MC 1.1 Forge Source Doesn't work on macOS!"
+        echo "Forge for MC 1.1 required JAD which only compiled for 32 bit intel. 64 bit intel can run on mac silicon but not 32 bit :("
+        echo "If your macOS is older then Catalina which still supports intel 32 bit apps, you can attempt to comment the exit command out using # around line 774"
+        OnExit 1
+    fi
     mcp_ver="mcp56"
     mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
     forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.1-1.3.4.29/forge-1.1-1.3.4.29-src.zip"
