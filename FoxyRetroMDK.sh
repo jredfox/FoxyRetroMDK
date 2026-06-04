@@ -250,6 +250,22 @@ function isMavericsOrHigher () {
     fi
 }
 
+function isMojaveOrLower () {
+    local ver major minor patch
+    ver=$(sw_vers -productVersion 2>/dev/null)
+    IFS=. read -r major minor patch <<< "$ver"
+    major=${major:-0}
+    minor=${minor:-0}
+
+    if [ "$major" -ge 11 ] || { [ "$major" -eq 10 ] && [ "$minor" -ge 15 ]; }; then
+        echo "F"
+        return 1
+    else
+        echo "T"
+        return 0
+    fi
+}
+
 function Check-Deps () {
 
     local pyurl pyfile output isMavericks
@@ -768,10 +784,12 @@ elif [[ "$mc_ver" == 1.2* ]]; then
 
 elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isMac" == "true" ]]; then
-        echo "MC 1.1 Forge Source Doesn't work on macOS!"
-        echo "Forge for MC 1.1 required JAD which only compiled for 32 bit intel. 64 bit intel can run on mac silicon but not 32 bit :("
-        echo "If your macOS is older then Catalina which still supports intel 32 bit apps, you can attempt to comment the exit command out using # around line 774"
-        OnExit 1
+        is32bitCapable="$(isMojaveOrLower)"
+        if [[ "$is32bitCapable" != "T" ]]; then
+            echo "MC 1.1 Forge Source Doesn't work on macOS 10.15 (Catalina) or Newer!"
+            echo "Forge requires JAD which only compiled for x86 (intel 32 bit). x64 (intel 64 bit) can run on mac silicon (arm64) but not the 32 bit :("
+            OnExit 1
+        fi
     fi
     mcp_ver="mcp56"
     mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.1.0/mcp56.zip"
