@@ -137,13 +137,11 @@ if __name__ == "__main__":
     else:
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n')
-        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
         
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
-            str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         #Make MC 1.1 - 1.2.5 Portabable when re-installing forge from non windows
@@ -153,7 +151,8 @@ if __name__ == "__main__":
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n', 1)
             str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability_forge + 'REM ## Foxy Retro MDK END ##\r\n', 1)
         
-        #Set the fml shell values
+        #Set FML Scripts
+        str_fml_sh = str_forge_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n')
         str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
