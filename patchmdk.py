@@ -142,7 +142,7 @@ if __name__ == "__main__":
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
-            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar ""\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         #Make MC 1.1 - 1.2.5 Portabable when re-installing forge from non windows
         if os.getenv("patch_portability") == "T":
