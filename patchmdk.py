@@ -102,8 +102,8 @@ if __name__ == "__main__":
             
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
-        str_fml_sh = str_mdk_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
+        str_fml_sh = str_mdk_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
         str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
