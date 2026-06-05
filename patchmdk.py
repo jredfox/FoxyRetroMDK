@@ -104,7 +104,7 @@ if __name__ == "__main__":
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
-        str_fml_cmd = mcp_batch_patch.replace('REM ## Foxy Retro MDK END ##\r\n', 'cd /D "%~dp0\\.."\r\nREM ## Foxy Retro MDK END ##\r\n', 1).replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\mcp\\runtime\\bin\\python\\python_mcp.exe" "..\\mcp\\jdk-finder.py"')
+        str_fml_cmd = mcp_batch_patch.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1).replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
-        str_fml_cmd = mcp_batch_patch.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n').replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
+        str_fml_cmd = mcp_batch_patch.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1).replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
         
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
