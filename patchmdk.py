@@ -102,7 +102,7 @@ if __name__ == "__main__":
             
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
-        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\nmcp="${mcp}/mcp"\n')
+        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
         str_fml_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\mcp\\runtime\\bin\\python\\python_mcp.exe" "..\\mcp\\jdk-finder.py"')
         
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     else:
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n')
-        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\nmcp="$(dirname "$mcp")"\n')
+        str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
         str_fml_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\..\\runtime\\bin\\python\\python_mcp.exe" "..\\..\\jdk-finder.py"')
         
