@@ -104,7 +104,7 @@ if __name__ == "__main__":
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="${mcp}/mcp"\n')
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
-        str_fml_cmd = mcp_batch_patch.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1).replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
+        str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
@@ -139,14 +139,12 @@ if __name__ == "__main__":
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_fml_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\nmcp="$(dirname "$mcp")"\n')
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
-        str_fml_cmd = mcp_batch_patch.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1).replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
         
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n')
             str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
-            str_fml_cmd = str_fml_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'java -jar PatchRenderPlayer.jar "%~dp0"\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         #Make MC 1.1 - 1.2.5 Portabable when re-installing forge from non windows
         if os.getenv("patch_portability") == "T":
@@ -154,6 +152,9 @@ if __name__ == "__main__":
             str_forge_sh = str_forge_sh.replace('xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n', 'xattr -r -d com.apple.quarantine "$mcp/runtime/bin"\n    ## Portability Patch Start ##\n    xattr -d com.apple.quarantine "$mcp/forge"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp/forge/fml"/*.sh 2>/dev/null\n    xattr -d com.apple.quarantine "$mcp"/*.sh 2>/dev/null\n    ## Portability Patch End ##\n', 1)
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', sh_portability_forge + '## Foxy Retro MDK END ##\n', 1)
             str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', batch_portability_forge + 'REM ## Foxy Retro MDK END ##\r\n', 1)
+        
+        #Set the fml shell values
+        str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
