@@ -16,7 +16,6 @@ if __name__ == "__main__":
                 if cfg or fname.endswith('.sh'):
                     fpath = os.path.realpath(os.path.join(root, fname))
                     if fpath == script_path:
-                        print('ignoring:' + script_path)
                         continue
                     with open(fpath, 'rb') as f:
                         data = f.read()
@@ -28,12 +27,10 @@ if __name__ == "__main__":
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(data)
-                            print('patched portability:' + fpath)
                     elif cfg:
                         new_data = data.replace('\r\n', '\n').replace('\r', '\n').replace('\\', '/')
                         if data != new_data:
                             if not printOnly:
                                 with open(fpath, 'wb') as f:
                                     f.write(new_data)
-                            print('patched portability:' + fpath)
-    
+                    
