@@ -22,7 +22,7 @@ def get_sha1(file):
     if not os.path.isfile(file):
         return None
     with closing(open(file, 'rb')) as fh:
-        return sha1(fh.read()).hexdigest()
+        return sha1(fh.read()).hexdigest().lower()
 
 def del_dir(d):
     if os.path.isdir(dir_natives):
@@ -40,6 +40,16 @@ if __name__ == "__main__":
         print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.4, 2.9.4-<nightlybuild>, or latest')
         print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, while macOS with JDK-8 works best with the latest version')
         sys.exit(1)
+
+    lwjgl_sha1 = lwjgl_util_sha1 = lwjgl_windows_sha1 = lwjgl_macosx_sha1 = lwjgl_linux_sha1 = None
+    if lwjgl_ver == '2.9.0':
+        lwjgl_sha1 = '5654d06e61a1bba7ae1e7f5233e1106be64c91cd'
+        lwjgl_util_sha1 = 'a778846b64008fc7f48ead2377f034e547991699'
+        lwjgl_windows_sha1 = '3f11873dc8e84c854ec7c5a8fd2e869f8aaef764'
+        lwjgl_macosx_sha1 = '6621b382cb14cc409b041d8d72829156a87c31aa'
+        lwjgl_linux_sha1 = '2ba5dcb11048147f1a74eff2deb192c001321f77'
+    elif lwjgl_ver == '2.9.1':
+        pass
 
     dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
     dir_natives = os.path.join(dir_bin, 'natives')
@@ -59,8 +69,8 @@ if __name__ == "__main__":
     lwjgl_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
     lwjgl_util_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/' + lwjgl_ver + '/lwjgl_util-' + lwjgl_ver + '.jar'
     lwjgl_natives_base = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/" + lwjgl_ver + '/lwjgl-platform-' + lwjgl_ver + "-natives-"
-    download_file(lwjgl_url, lwjgl_jar, None, False)
-    download_file(lwjgl_util_url, lwjgl_util_jar, None, False)
-    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, None, True)
-    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, None, True)
-    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, None, True)
+    download_file(lwjgl_url, lwjgl_jar, lwjgl_sha1, False)
+    download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1, False)
+    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
+    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
+    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
