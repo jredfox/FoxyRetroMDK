@@ -49,7 +49,11 @@ if __name__ == "__main__":
         lwjgl_macosx_sha1 = '6621b382cb14cc409b041d8d72829156a87c31aa'
         lwjgl_linux_sha1 = '2ba5dcb11048147f1a74eff2deb192c001321f77'
     elif lwjgl_ver == '2.9.1':
-        pass
+        lwjgl_sha1 = 'f58c5aabcef0e41718a564be9f8e412fff8db847'
+        lwjgl_util_sha1 = '290d7ba8a1bd9566f5ddf16ad06f09af5ec9b20e'
+        lwjgl_windows_sha1 = '4c517eca808522457dd95ee8fc1fbcdbb602efbe'
+        lwjgl_macosx_sha1 = '2d12c83fdfbc04ecabf02c7bc8cc54d034f0daac'
+        lwjgl_linux_sha1 = 'aa9aae879af8eb378e22cfc64db56ec2ca9a44d1'
 
     dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
     dir_natives = os.path.join(dir_bin, 'natives')
