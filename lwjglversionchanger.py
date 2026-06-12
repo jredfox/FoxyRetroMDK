@@ -51,7 +51,7 @@ if __name__ == "__main__":
         if mc_ver == "":
             print("Minecraft Version Cannot Be determined because minecraft_server.<mc version>.jar is missing!")
             sys.exit(1)
-    if lwjgl_ver == '' or lwjgl_ver == 'latest':
+    if lwjgl_ver == '' or lwjgl_ver == 'latest' or lwjgl_ver == '2.9.4':
         lwjgl_ver = '2.9.4-nightly-20150209'
     if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4' and lwjgl_ver != '2.9.2':
         print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.2, 2.9.3(bugged), 2.9.4, 2.9.4-<nightlybuild>, or latest')
