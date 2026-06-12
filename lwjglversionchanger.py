@@ -77,6 +77,12 @@ if __name__ == "__main__":
         lwjgl_windows_sha1 = 'b84d5102b9dbfabfeb5e43c7e2828d98a7fc80e0'
         lwjgl_macosx_sha1 = 'bcab850f8f487c3f4c4dbabde778bb82bd1a40ed'
         lwjgl_linux_sha1 = '931074f46c795d2f7b30ed6395df5715cfd7675b'
+    elif lwjgl_ver == '2.9.2':
+        lwjgl_sha1 = 'A9D80FE5935C7A9149F6584D9777CFD471F65489'.lower()
+        lwjgl_util_sha1 = '4B9E37300A87799856E0BD15ED81663CDB6B0947'.lower()
+        lwjgl_windows_sha1 = '510C7D317F5E9E700B9CFAAC5FD38BDEBF0702E0'.lower()
+        lwjgl_macosx_sha1 = 'D55B46B40B40249D627A83A7F7F22649709D70C3'.lower()
+        lwjgl_linux_sha1 = 'D276CDF61FE2B516C7B7F4AA1B8DEA91DBDC8D56'.lower()
     elif lwjgl_ver == '2.9.3':
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
