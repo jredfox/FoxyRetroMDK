@@ -39,7 +39,7 @@ if __name__ == "__main__":
         lwjgl_ver = '2.9.4-nightly-20150209'
     if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4':
         print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.3(bugged), 2.9.4, 2.9.4-<nightlybuild>, or latest')
-        print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, while macOS with JDK-8 works best with the latest version')
+        print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, 2.9.4-nightly-20150209 (latest) for macOS with JDK-8')
         sys.exit(1)
 
     lwjgl_sha1 = lwjgl_util_sha1 = lwjgl_windows_sha1 = lwjgl_macosx_sha1 = lwjgl_linux_sha1 = None
