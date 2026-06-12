@@ -81,7 +81,7 @@ if __name__ == "__main__":
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
     if not onesix:
-        dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
+        dir_bin = os.path.join(dir_mcp, "jars", "bin")
         dir_natives = os.path.join(dir_bin, 'natives')
         lwjgl_jar = os.path.join(dir_bin, 'lwjgl.jar')
         lwjgl_util_jar = os.path.join(dir_bin, 'lwjgl_util.jar')
@@ -89,7 +89,7 @@ if __name__ == "__main__":
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
         lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
     else:
-        dir_base = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars")
+        dir_base = os.path.join(dir_mcp, "jars")
         dir_libs = os.path.join(dir_base, "libraries", 'org', 'lwjgl', 'lwjgl')
         dir_natives = os.path.join(dir_base, "versions", mc_ver, (mc_ver + '-natives'))
         lwjgl_jar = os.path.join(dir_libs, 'lwjgl', lwjgl_ver, ('lwjgl-' + lwjgl_ver + '.jar') )
