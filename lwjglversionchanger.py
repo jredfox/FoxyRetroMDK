@@ -7,6 +7,9 @@ from contextlib import closing
 from hashlib import sha1
 
 def download_file(url, target, sha1, extract=False):
+    pdir = os.path.dirname(target)
+    if onesix and (not os.path.isdir(pdir)):
+        os.makedirs(pdir)
     print('downloading: ' + url)
     urllib.urlretrieve(url, target)
     if (not sha1 is None):
@@ -17,7 +20,7 @@ def download_file(url, target, sha1, extract=False):
             sys.exit(1)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
-            zip_ref.extractall(os.path.dirname(target))
+            zip_ref.extractall(pdir)
 
 def get_sha1(file):
     if not os.path.isfile(file):
@@ -26,8 +29,8 @@ def get_sha1(file):
         return sha1(fh.read()).hexdigest().lower()
 
 def del_dir(d):
-    if os.path.isdir(dir_natives):
-        shutil.rmtree(dir_natives)
+    if os.path.isdir(d):
+        shutil.rmtree(d)
 
 def del_file(file):
     if(os.path.isfile(file)):
@@ -35,6 +38,12 @@ def del_file(file):
 
 if __name__ == "__main__":
     lwjgl_ver = sys.argv[1].lower().replace('"', '').replace("'", '').replace(' ', '')
+    if len(sys.argv) > 2:
+        onesix = sys.argv[2].lower().replace('"', '').replace("'", '').replace(' ', '').startswith('t')
+        mc_ver = sys.argv[3].lower().replace('"', '').replace("'", '').replace(' ', '')
+    else:
+        onesix = False
+        mc_ver = ""
     if lwjgl_ver == '' or lwjgl_ver == 'latest':
         lwjgl_ver = '2.9.4-nightly-20150209'
     if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4':
@@ -64,13 +73,27 @@ if __name__ == "__main__":
     elif lwjgl_ver == '2.9.3':
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
-    dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
-    dir_natives = os.path.join(dir_bin, 'natives')
-    lwjgl_jar = os.path.join(dir_bin, 'lwjgl.jar')
-    lwjgl_util_jar = os.path.join(dir_bin, 'lwjgl_util.jar')
-    lwjgl_natives_windows_natives_jar = os.path.join(dir_natives, 'windows_natives.jar')
-    lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
-    lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
+    if not onesix:
+        dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
+        dir_natives = os.path.join(dir_bin, 'natives')
+        lwjgl_jar = os.path.join(dir_bin, 'lwjgl.jar')
+        lwjgl_util_jar = os.path.join(dir_bin, 'lwjgl_util.jar')
+        lwjgl_natives_windows_natives_jar = os.path.join(dir_natives, 'windows_natives.jar')
+        lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
+        lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
+    else:
+        dir_base = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars")
+        dir_libs = os.path.join(dir_base, "libraries", 'org', 'lwjgl', 'lwjgl')
+        dir_natives = os.path.join(dir_base, "versions", mc_ver, (mc_ver + '-natives'))
+        lwjgl_jar = os.path.join(dir_libs, 'lwjgl', lwjgl_ver, ('lwjgl-' + lwjgl_ver + '.jar') )
+        lwjgl_util_jar = os.path.join(dir_libs, 'lwjgl_util', lwjgl_ver, ('lwjgl_util-' + lwjgl_ver + '.jar') )
+        lwjgl_natives_windows_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-windows.jar') )
+        lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
+        lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
+        #delete lwjgl jar natives
+        del_file(lwjgl_natives_windows_natives_jar)
+        del_file(lwjgl_natives_macosx_natives_jar)
+        del_file(lwjgl_natives_linux_natives_jar)
     
     #delete previous lwjgl
     del_dir(dir_natives)
