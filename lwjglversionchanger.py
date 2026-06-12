@@ -61,7 +61,7 @@ if __name__ == "__main__":
         lwjgl_macosx_sha1 = 'bcab850f8f487c3f4c4dbabde778bb82bd1a40ed'
         lwjgl_linux_sha1 = '931074f46c795d2f7b30ed6395df5715cfd7675b'
     elif lwjgl_ver == '2.9.3':
-        print('WARNING LWJGL 2.9.3 contains lots of graphical issues! Please use a different version')
+        print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
     dir_bin = os.path.join(os.path.dirname(os.path.realpath(__file__)), "jars", "bin")
     dir_natives = os.path.join(dir_bin, 'natives')
