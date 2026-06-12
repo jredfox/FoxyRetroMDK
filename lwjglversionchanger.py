@@ -97,6 +97,9 @@ if __name__ == "__main__":
         lwjgl_natives_windows_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-windows.jar') )
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
+        #patch lwjgl version strings
+        dir_fml = os.path.join(os.path.dirname(dir_base), 'fml')
+
         #delete lwjgl jar natives
         del_file(lwjgl_natives_windows_natives_jar)
         del_file(lwjgl_natives_macosx_natives_jar)
