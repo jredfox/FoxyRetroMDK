@@ -57,7 +57,7 @@ lwjgl_version_changer_cmd = (
     'IF /I "%lwjgl_ver%" == "" (\r\n'
         'set /p lwjgl_ver="Enter LWJGL Version: "\r\n'
     ')\r\n'
-    'call "%APPDATA%\FoxyRetroMDK\python2.7\python.exe" "lwjglversionchanger.py" "%lwjgl_ver%"\r\n'
+    'call "%APPDATA%\FoxyRetroMDK\python2.7\python.exe" "lwjglversionchanger.py" %*\r\n'
     'pause\r\n'
     'REM ## Foxy Retro MDK END ##\r\n'
 )
@@ -70,7 +70,7 @@ lwjgl_version_changer_sh = (
     'isa="$(uname -m)"\n'
     'export PATH="$mcp/bin_linux/$isa/python2.7:$PATH"\n'
     'chmod -R 777 "$mcp/bin_linux"\n'
-    'python2.7 "lwjglversionchanger.py" "$1"\n'
+    'python2.7 "lwjglversionchanger.py" "$@"\n'
     '## Foxy Retro MDK END ##\n'
 )
 
