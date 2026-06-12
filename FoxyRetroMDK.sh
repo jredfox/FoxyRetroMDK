@@ -405,6 +405,9 @@ function Patch-MDKPY {
     mkdir -p "$mcp_dir/cache"
     cp -f "$SCRIPTPATH/jdk-finder.py" "$mcp_dir/jdk-finder.py"
     cp -rf "$SCRIPTPATH/cache" "$mcp_dir"
+
+    #Copy lwjglversionchanger.py over
+    cp -f "$SCRIPTPATH/lwjglversionchanger.py" "$mcp_dir/lwjglversionchanger.py"
     
     #Copy PatchRenderPlayer.jar over
     if [[ "$patch_21" == "T" ]]; then

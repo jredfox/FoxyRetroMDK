@@ -359,6 +359,7 @@ function Enforce-JDK8 {
     $env:JAVA_HOME = Split-Path "$JDK8" -Parent
     & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
     Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
+    Copy-Item -Path "$PSScriptRoot\lwjglversionchanger.py" -Destination "$mcp_dir\lwjglversionchanger.py" -Force | out-null 
     Copy-Item -Path "$PSScriptRoot\cache" -Destination "$mcp_dir\cache" -Recurse -Force | out-null
     if($env:patch_portability -eq "T") {
         Copy-Item -Path "$PSScriptRoot\patchportability.py" -Destination "$mcp_dir\patchportability.py" -Force | out-null
