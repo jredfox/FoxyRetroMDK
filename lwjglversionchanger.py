@@ -38,12 +38,19 @@ def del_file(file):
 
 if __name__ == "__main__":
     lwjgl_ver = sys.argv[1].lower().replace('"', '').replace("'", '').replace(' ', '')
-    if len(sys.argv) > 2:
-        onesix = sys.argv[2].lower().replace('"', '').replace("'", '').replace(' ', '').startswith('t')
-        mc_ver = sys.argv[3].lower().replace('"', '').replace("'", '').replace(' ', '')
-    else:
-        onesix = False
-        mc_ver = ""
+    onesix = False
+    mc_ver = ""
+    dir_mcp = os.path.dirname(os.path.realpath(__file__))
+    if os.path.isdir(os.path.join(dir_mcp, 'jars', 'versions')) and os.path.isdir(os.path.join(dir_mcp, 'jars', 'libraries')):
+        onesix = True
+        for f in os.listdir(os.path.join(dir_mcp, 'jars')):
+            fname = os.path.basename(f)
+            if fname.startswith('minecraft_server.1.6.') and fname.endswith('.jar'):
+                mc_ver = fname[len('minecraft_server.'):-4]
+                break
+        if mc_ver == "":
+            print("Minecraft Version Cannot Be determined because minecraft_server.<mc version>.jar is missing!")
+            sys.exit(1)
     if lwjgl_ver == '' or lwjgl_ver == 'latest':
         lwjgl_ver = '2.9.4-nightly-20150209'
     if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4':
