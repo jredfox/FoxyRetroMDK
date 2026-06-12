@@ -49,6 +49,26 @@ mcp_commands_py_patch = (
 '        ## Foxy Retro MDK END ##\n\n    '
 )
 
+lwjgl_version_changer_cmd = (
+    '@ECHO OFF\r\n'
+    'REM ## Foxy Retro MDK START ##\r\n'
+    'cd /D "%~dp0"\r\n'
+    'call "runtime\\bin\\python\\python_mcp.exe" "lwjglversionchanger.py" "%~1"\r\n'
+    'REM ## Foxy Retro MDK END ##\r\n'
+)
+
+lwjgl_version_changer_sh = (
+    '#!/bin/bash\n'
+    '## Foxy Retro MDK START ##\n'
+    'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+    'cd "$mcp"\n'
+    'isa="$(uname -m)"\n'
+    'export PATH="$mcp/bin_linux/$isa/python2.7:$PATH"\n'
+    'chmod -R 777 "$mcp/bin_linux"\n'
+    'python2.7 "lwjglversionchanger.py" "$1"'
+    '## Foxy Retro MDK END ##\n'
+)
+
 if __name__ == "__main__":
 
     mdk = os.path.normpath(sys.argv[1])
@@ -174,4 +194,8 @@ if __name__ == "__main__":
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-                
+    #Copy lwjglversionchanger into MCP
+    with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
+        f.write(lwjgl_version_changer_sh)
+    with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
+        f.write(lwjgl_version_changer_cmd)

@@ -7,12 +7,12 @@ from contextlib import closing
 from hashlib import sha1
 
 def download_file(url, target, sha1, extract=False):
-    print('downloading:' + url)
+    print('downloading: ' + url)
     urllib.urlretrieve(url, target)
     if (not sha1 is None):
         downloaded_sha1 = get_sha1(target)
         if downloaded_sha1 != sha1:
-            print('Download Failed Removing:' + target)
+            print('Download Failed Removing: ' + target)
             os.remove(target)
             sys.exit(1)
     if extract:

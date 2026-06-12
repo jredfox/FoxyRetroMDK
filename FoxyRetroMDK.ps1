@@ -501,6 +501,19 @@ function DL-Natives
 
 ################# End Functions   #################
 
+#Install Python on Windows
+$pydir = "$env:APPDATA\FoxyRetroMDK\python2.7"
+if ( -Not ([System.IO.Directory]::Exists("$pydir")) )
+{
+	Write-Host "Installing Python to $pydir"
+	New-Item -Path "$pydir" -ItemType "directory" -Force | out-null
+	$pyzip = "$env:APPDATA\python_fml_2.7.9.zip"
+	Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip" -OutFile "$pyzip"
+	[System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$pydir")
+	Remove-Item -Path "$pyzip" -Force | out-null
+	Copy-Item -Path "$pydir\python_fml.exe" -Destination "$pydir\python.exe" -Force | out-null
+}
+
 if ($mc_ver.StartsWith("1.6"))
 {
     Install-1.6x
