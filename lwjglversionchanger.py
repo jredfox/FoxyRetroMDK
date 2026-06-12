@@ -53,8 +53,8 @@ if __name__ == "__main__":
             sys.exit(1)
     if lwjgl_ver == '' or lwjgl_ver == 'latest':
         lwjgl_ver = '2.9.4-nightly-20150209'
-    if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4':
-        print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.3(bugged), 2.9.4, 2.9.4-<nightlybuild>, or latest')
+    if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4' and lwjgl_ver != '2.9.2':
+        print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.2, 2.9.3(bugged), 2.9.4, 2.9.4-<nightlybuild>, or latest')
         print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, LWJGL Version 2.9.4-nightly-20150209 (latest) for macOS with JDK-8')
         sys.exit(1)
 
@@ -115,6 +115,10 @@ if __name__ == "__main__":
     lwjgl_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
     lwjgl_util_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/' + lwjgl_ver + '/lwjgl_util-' + lwjgl_ver + '.jar'
     lwjgl_natives_base = "https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/" + lwjgl_ver + '/lwjgl-platform-' + lwjgl_ver + "-natives-"
+    if lwjgl_ver == '2.9.2':
+        lwjgl_url = 'https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar'
+        lwjgl_util_url = 'https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar'
+        lwjgl_natives_base = 'https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-'
     download_file(lwjgl_url, lwjgl_jar, lwjgl_sha1)
     download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1)
     download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
