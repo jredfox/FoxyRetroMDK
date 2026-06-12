@@ -53,7 +53,12 @@ lwjgl_version_changer_cmd = (
     '@ECHO OFF\r\n'
     'REM ## Foxy Retro MDK START ##\r\n'
     'cd /D "%~dp0"\r\n'
-    'call "runtime\\bin\\python\\python_mcp.exe" "lwjglversionchanger.py" "%~1"\r\n'
+    'set lwjgl_ver="%~1"\r\n'
+    'IF /I "lwjgl_ver" == "" (\r\n'
+        'set /p lwjgl_ver="Enter LWJGL Version: "\r\n'
+    ')\r\n'
+    'call "%APPDATA%\FoxyRetroMDK\python2.7\python.exe" "lwjglversionchanger.py" "%lwjgl_ver%"\r\n'
+    'pause\r\n'
     'REM ## Foxy Retro MDK END ##\r\n'
 )
 
