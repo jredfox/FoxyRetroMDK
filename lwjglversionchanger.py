@@ -20,7 +20,7 @@ def download_file(url, target, sha1, extract=False):
             sys.exit(1)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
-            zip_ref.extractall(pdir)
+            zip_ref.extractall(dir_natives)
 
 def get_sha1(file):
     if not os.path.isfile(file):
