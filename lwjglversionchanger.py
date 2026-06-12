@@ -9,11 +9,12 @@ from hashlib import sha1
 def download_file(url, target, sha1, extract=False):
     print('downloading:' + url)
     urllib.urlretrieve(url, target)
-    downloaded_sha1 = get_sha1(target)
-    if (not sha1 is None) and downloaded_sha1 != sha1:
-        print('Download Failed Removing:' + target)
-        os.remove(target)
-        sys.exit(1)
+    if (not sha1 is None):
+        downloaded_sha1 = get_sha1(target)
+        if downloaded_sha1 != sha1:
+            print('Download Failed Removing:' + target)
+            os.remove(target)
+            sys.exit(1)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(os.path.dirname(target))
@@ -37,7 +38,7 @@ if __name__ == "__main__":
     if lwjgl_ver == '' or lwjgl_ver == 'latest':
         lwjgl_ver = '2.9.4-nightly-20150209'
     if lwjgl_ver != '2.9.0' and lwjgl_ver != '2.9.1' and lwjgl_ver != '2.9.3' and (not lwjgl_ver.startswith('2.9.4-')) and lwjgl_ver != '2.9.4':
-        print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.3(bugged) 2.9.4, 2.9.4-<nightlybuild>, or latest')
+        print('LWJGL Version Must be 2.9.0, 2.9.1, 2.9.3(bugged), 2.9.4, 2.9.4-<nightlybuild>, or latest')
         print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, while macOS with JDK-8 works best with the latest version')
         sys.exit(1)
 
