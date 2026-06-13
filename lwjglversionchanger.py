@@ -78,11 +78,11 @@ if __name__ == "__main__":
         lwjgl_macosx_sha1 = 'bcab850f8f487c3f4c4dbabde778bb82bd1a40ed'
         lwjgl_linux_sha1 = '931074f46c795d2f7b30ed6395df5715cfd7675b'
     elif lwjgl_ver == '2.9.2':
-        lwjgl_sha1 = 'A9D80FE5935C7A9149F6584D9777CFD471F65489'.lower()
-        lwjgl_util_sha1 = '4B9E37300A87799856E0BD15ED81663CDB6B0947'.lower()
-        lwjgl_windows_sha1 = '510C7D317F5E9E700B9CFAAC5FD38BDEBF0702E0'.lower()
-        lwjgl_macosx_sha1 = 'D55B46B40B40249D627A83A7F7F22649709D70C3'.lower()
-        lwjgl_linux_sha1 = 'D276CDF61FE2B516C7B7F4AA1B8DEA91DBDC8D56'.lower()
+        lwjgl_sha1 = 'a9d80fe5935c7a9149f6584d9777cfd471f65489'
+        lwjgl_util_sha1 = '4b9e37300a87799856e0bd15ed81663cdb6b0947'
+        lwjgl_windows_sha1 = '510c7d317f5e9e700b9cfaac5fd38bdebf0702e0'
+        lwjgl_macosx_sha1 = 'd55b46b40b40249d627a83a7f7f22649709d70c3'
+        lwjgl_linux_sha1 = 'd276cdf61fe2b516c7b7f4aa1b8dea91dbdc8d56'
     elif lwjgl_ver == '2.9.3':
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
