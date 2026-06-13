@@ -35,6 +35,9 @@ def del_dir(d):
 def del_file(file):
     if(os.path.isfile(file)):
         os.remove(file)
+        
+def patch_classpath(file):
+    pass
 
 if __name__ == "__main__":
     lwjgl_ver = sys.argv[1].lower().replace('"', '').replace("'", '').replace(' ', '')
@@ -109,7 +112,7 @@ if __name__ == "__main__":
         fmlJSONFile = os.path.join(dir_fml, 'fml.json')
         import json
         from collections import OrderedDict
-        useMojang = lwjgl_ver != '2.9.0'
+        useMojang = lwjgl_ver != '2.9.2'
         print('Patching Path:' + fmlJSONFile)
         with open(fmlJSONFile, 'r') as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
