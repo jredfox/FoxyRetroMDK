@@ -104,7 +104,8 @@ if __name__ == "__main__":
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
         #patch lwjgl version strings
-        dir_fml = os.path.join(os.path.dirname(dir_base), 'fml')
+        #patch from fml.json
+        dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         fmlJSONFile = os.path.join(dir_fml, 'fml.json')
         import json
         from collections import OrderedDict
@@ -117,8 +118,7 @@ if __name__ == "__main__":
             oname = lib.get("name", "")
             name = oname.lower()
             if 'lwjgl' in name and ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
-                print(oname[:s.rfind(":")] + lwjgl_ver)
-                #lib["name"] = (oname[:s.rfind(":")] + lwjgl_ver)
+                lib["name"] = (oname[:oname.rfind(":")] + ":" + lwjgl_ver)
                 url = lib.get("url")
                 if useMojang:
                     if url is not None:
