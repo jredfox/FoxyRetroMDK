@@ -35,6 +35,33 @@ def del_dir(d):
 def del_file(file):
     if(os.path.isfile(file)):
         os.remove(file)
+
+def patch_libs(libJSONFile):
+    if os.path.exists(libJSONFile):
+        import json
+        from collections import OrderedDict
+        useMojang = lwjgl_ver != '2.9.2'
+        print('Patching ' + os.path.basename(libJSONFile))
+        with open(libJSONFile, 'r') as f:
+            data = json.load(f, object_pairs_hook=OrderedDict)
+        libraries = data.get('libraries', [])
+        for lib in libraries:
+            oname = lib.get("name", "")
+            name = oname.lower()
+            if 'lwjgl' in name and ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
+                lib["name"] = (oname[:oname.rfind(":")] + ":" + lwjgl_ver)
+                url = lib.get("url")
+                if useMojang:
+                    if url is not None:
+                        del lib["url"]
+                else:
+                    lib["url"] = "https://repo.maven.apache.org/maven2"
+        libJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
+        with open(libJSONFile, 'wb') as f:
+            for line in libJSONText.split('\n'):
+                f.write(line.rstrip() + '\n')
+    else:
+        print('skipping patching: ' + libJSONFile)
         
 def patch_classpath(file):
     pass
@@ -100,7 +127,8 @@ if __name__ == "__main__":
     else:
         dir_base = os.path.join(dir_mcp, "jars")
         dir_libs = os.path.join(dir_base, "libraries", 'org', 'lwjgl', 'lwjgl')
-        dir_natives = os.path.join(dir_base, "versions", mc_ver, (mc_ver + '-natives'))
+        dir_version = os.path.join(dir_base, "versions", mc_ver)
+        dir_natives = os.path.join(dir_version, (mc_ver + '-natives'))
         lwjgl_jar = os.path.join(dir_libs, 'lwjgl', lwjgl_ver, ('lwjgl-' + lwjgl_ver + '.jar') )
         lwjgl_util_jar = os.path.join(dir_libs, 'lwjgl_util', lwjgl_ver, ('lwjgl_util-' + lwjgl_ver + '.jar') )
         lwjgl_natives_windows_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-windows.jar') )
@@ -109,30 +137,8 @@ if __name__ == "__main__":
         #patch lwjgl version strings
         #patch from fml.json
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
-        fmlJSONFile = os.path.join(dir_fml, 'fml.json')
-        if os.path.exists(fmlJSONFile):
-            import json
-            from collections import OrderedDict
-            useMojang = lwjgl_ver != '2.9.2'
-            print('Patching fml.json')
-            with open(fmlJSONFile, 'r') as f:
-                data = json.load(f, object_pairs_hook=OrderedDict)
-            libraries = data.get('libraries', [])
-            for lib in libraries:
-                oname = lib.get("name", "")
-                name = oname.lower()
-                if 'lwjgl' in name and ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
-                    lib["name"] = (oname[:oname.rfind(":")] + ":" + lwjgl_ver)
-                    url = lib.get("url")
-                    if useMojang:
-                        if url is not None:
-                            del lib["url"]
-                    else:
-                        lib["url"] = "https://repo.maven.apache.org/maven2"
-            fmlJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
-            with open(fmlJSONFile, 'wb') as f:
-                for line in fmlJSONText.split('\n'):
-                    f.write(line.rstrip() + '\n')
+        patch_libs(os.path.join(dir_fml, 'fml.json'))
+        patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
 
         #delete lwjgl jar natives
         del_file(lwjgl_natives_windows_natives_jar)
