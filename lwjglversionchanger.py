@@ -66,6 +66,23 @@ def patch_libs(libJSONFile):
 def patch_classpath(file, printSkip=True):
     if os.path.isfile(file):
         print('Patching: ' + file)
+        with open(file, 'r') as f:
+            lines = f.read().replace('\r\n', '\n').replace('\\', '/')
+        target = 'jars/libraries/org/lwjgl/lwjgl/lwjgl/'
+        start = lines.rfind(target) + len(target)
+        end = lines.find('/', start)
+        version = lines[start:end]
+        print('classpath lwjgl version found:"' + version + '"')
+        cpp_lwjgl = 'jars/libraries/org/lwjgl/lwjgl/lwjgl/' + version + '/lwjgl-' + version + '.jar'
+        cpp_lwjgl_util = 'jars/libraries/org/lwjgl/lwjgl/lwjgl_util/' + version + '/lwjgl_util-' + version + '.jar'
+        str_lwjgl = 'jars/libraries/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
+        str_lwjgl_util = 'jars/libraries/org/lwjgl/lwjgl/lwjgl_util/' + lwjgl_ver + '/lwjgl_util-' + lwjgl_ver + '.jar'
+        lines = lines.replace(cpp_lwjgl, str_lwjgl)
+        lines = lines.replace(cpp_lwjgl_util, str_lwjgl_util)
+        lines = lines.replace((cpp_lwjgl[:-4] + "-sources.jar"), (str_lwjgl[:-4] + "-sources.jar"))
+        lines = lines.replace((cpp_lwjgl_util[:-4] + "-sources.jar"), (str_lwjgl_util[:-4] + "-sources.jar"))
+        with open(file, 'wb') as f:
+            f.write(lines)
     elif printSkip:
         print('Skipping Patching: ' + file)
 
@@ -143,8 +160,8 @@ if __name__ == "__main__":
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
         patch_classpath(os.path.join(dir_fml, 'eclipse', 'Minecraft', '.classpath'))
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
-        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
-        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
+        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
+        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
 
         #delete lwjgl jar natives
         del_file(lwjgl_natives_windows_natives_jar)
