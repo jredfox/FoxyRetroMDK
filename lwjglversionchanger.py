@@ -63,7 +63,7 @@ def patch_libs(libJSONFile):
     else:
         print('Skipping Patching: ' + libJSONFile)
         
-def patch_classpath(file, printSkip=True):
+def patch_classpath(file, printSkip=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
         with open(file, 'r') as f:
@@ -72,7 +72,6 @@ def patch_classpath(file, printSkip=True):
         start = lines.rfind(target) + len(target)
         end = lines.find('/', start)
         version = lines[start:end]
-        print('classpath lwjgl version found:"' + version + '"')
         cpp_lwjgl = 'jars/libraries/org/lwjgl/lwjgl/lwjgl/' + version + '/lwjgl-' + version + '.jar'
         cpp_lwjgl_util = 'jars/libraries/org/lwjgl/lwjgl/lwjgl_util/' + version + '/lwjgl_util-' + version + '.jar'
         str_lwjgl = 'jars/libraries/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
@@ -83,7 +82,7 @@ def patch_classpath(file, printSkip=True):
         lines = lines.replace((cpp_lwjgl_util[:-4] + "-sources.jar"), (str_lwjgl_util[:-4] + "-sources.jar"))
         with open(file, 'wb') as f:
             f.write(lines)
-    elif printSkip:
+    elif not printSkip:
         print('Skipping Patching: ' + file)
 
 if __name__ == "__main__":
@@ -184,6 +183,9 @@ if __name__ == "__main__":
         lwjgl_natives_base = 'https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-'
     download_file(lwjgl_url, lwjgl_jar, lwjgl_sha1)
     download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1)
+    if onesix:
+        download_file((lwjgl_url[:-4] + "-sources.jar"), (lwjgl_jar[:-4] + "-sources.jar"), None)
+        download_file((lwjgl_util_url[:-4] + "-sources.jar"), (lwjgl_util_jar[:-4] + "-sources.jar"), None)
     download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
     download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
     download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
