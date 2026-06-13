@@ -17,6 +17,9 @@ def download_file(url, target, sha1, extract=False):
     if (not sha1 is None):
         downloaded_sha1 = get_sha1(target)
         if downloaded_sha1 != sha1:
+            if url.startswith('https://libraries.minecraft.net'):
+                download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+                return
             print('Download Failed Removing: ' + target)
             os.remove(target)
             sys.exit(1)
