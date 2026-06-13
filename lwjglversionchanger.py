@@ -63,10 +63,10 @@ def patch_libs(libJSONFile):
     else:
         print('Skipping Patching: ' + libJSONFile)
         
-def patch_classpath(file):
+def patch_classpath(file, printSkip=True):
     if os.path.isfile(file):
         print('Patching: ' + file)
-    else:
+    elif printSkip:
         print('Skipping Patching: ' + file)
 
 if __name__ == "__main__":
