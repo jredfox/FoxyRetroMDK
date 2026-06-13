@@ -107,31 +107,39 @@ if __name__ == "__main__":
         print('For Testing Older LWJGL: LWJGL Version 2.9.0 works best for windows, LWJGL Version 2.9.1 Works best on linux, LWJGL Version 2.9.4-nightly-20150209 (latest) for macOS with JDK-8')
         sys.exit(1)
 
-    lwjgl_sha1 = lwjgl_util_sha1 = lwjgl_windows_sha1 = lwjgl_macosx_sha1 = lwjgl_linux_sha1 = None
+    lwjgl_sha1 = lwjgl_util_sha1 = lwjgl_windows_sha1 = lwjgl_macosx_sha1 = lwjgl_linux_sha1 = lwjgl_src_sha1 = lwjgl_util_src_sha1 = None
     if lwjgl_ver == '2.9.0':
         lwjgl_sha1 = '5654d06e61a1bba7ae1e7f5233e1106be64c91cd'
         lwjgl_util_sha1 = 'a778846b64008fc7f48ead2377f034e547991699'
         lwjgl_windows_sha1 = '3f11873dc8e84c854ec7c5a8fd2e869f8aaef764'
         lwjgl_macosx_sha1 = '6621b382cb14cc409b041d8d72829156a87c31aa'
         lwjgl_linux_sha1 = '2ba5dcb11048147f1a74eff2deb192c001321f77'
+        lwjgl_src_sha1 = 'c93326bd0f3a21f3b2c8c22b6f345ab6ca1dd683'
+        lwjgl_util_src_sha1 = 'a7449c197615515f4f9cbf03e6a185ca5bf946e3'
     elif lwjgl_ver == '2.9.1':
         lwjgl_sha1 = 'f58c5aabcef0e41718a564be9f8e412fff8db847'
         lwjgl_util_sha1 = '290d7ba8a1bd9566f5ddf16ad06f09af5ec9b20e'
         lwjgl_windows_sha1 = '4c517eca808522457dd95ee8fc1fbcdbb602efbe'
         lwjgl_macosx_sha1 = '2d12c83fdfbc04ecabf02c7bc8cc54d034f0daac'
         lwjgl_linux_sha1 = 'aa9aae879af8eb378e22cfc64db56ec2ca9a44d1'
+        lwjgl_src_sha1 = 'a59627548c970e89cc4893a368631fb8d2640bb2'
+        lwjgl_util_src_sha1 = '13ab3bc191a0139a5e846fa60faf2e8c84398593'
     elif lwjgl_ver == '2.9.4-nightly-20150209':
         lwjgl_sha1 = '697517568c68e78ae0b4544145af031c81082dfe'
         lwjgl_util_sha1 = 'd51a7c040a721d13efdfbd34f8b257b2df882ad0'
         lwjgl_windows_sha1 = 'b84d5102b9dbfabfeb5e43c7e2828d98a7fc80e0'
         lwjgl_macosx_sha1 = 'bcab850f8f487c3f4c4dbabde778bb82bd1a40ed'
         lwjgl_linux_sha1 = '931074f46c795d2f7b30ed6395df5715cfd7675b'
+        lwjgl_src_sha1 = '7da2cff65127b558a66e8e38456174161723d3a7'
+        lwjgl_util_src_sha1 = '002e3787f55c68a245e994f88755795b3a7684b3'
     elif lwjgl_ver == '2.9.2':
         lwjgl_sha1 = 'a9d80fe5935c7a9149f6584d9777cfd471f65489'
         lwjgl_util_sha1 = '4b9e37300a87799856e0bd15ed81663cdb6b0947'
         lwjgl_windows_sha1 = '510c7d317f5e9e700b9cfaac5fd38bdebf0702e0'
         lwjgl_macosx_sha1 = 'd55b46b40b40249d627a83a7f7f22649709d70c3'
         lwjgl_linux_sha1 = 'd276cdf61fe2b516c7b7f4aa1b8dea91dbdc8d56'
+        lwjgl_src_sha1 = '4d114b5ef3ad3bf571b1f090cb00855991067e0b'
+        lwjgl_util_src_sha1 = '308d4ebe8d7b240d3490b6a7e0424807ea3ad98b'
     elif lwjgl_ver == '2.9.3':
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
 
@@ -184,8 +192,8 @@ if __name__ == "__main__":
     download_file(lwjgl_url, lwjgl_jar, lwjgl_sha1)
     download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1)
     if onesix:
-        download_file((lwjgl_url[:-4] + "-sources.jar"), (lwjgl_jar[:-4] + "-sources.jar"), None)
-        download_file((lwjgl_util_url[:-4] + "-sources.jar"), (lwjgl_util_jar[:-4] + "-sources.jar"), None)
+        download_file((lwjgl_url[:-4] + "-sources.jar"), (lwjgl_jar[:-4] + "-sources.jar"), lwjgl_src_sha1)
+        download_file((lwjgl_util_url[:-4] + "-sources.jar"), (lwjgl_util_jar[:-4] + "-sources.jar"), lwjgl_util_src_sha1)
     download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
     download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
     download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
