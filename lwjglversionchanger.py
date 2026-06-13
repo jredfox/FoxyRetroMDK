@@ -41,7 +41,7 @@ def patch_libs(libJSONFile):
         import json
         from collections import OrderedDict
         useMojang = lwjgl_ver != '2.9.2'
-        print('Patching ' + os.path.basename(libJSONFile))
+        print('Patching: ' + os.path.basename(libJSONFile))
         with open(libJSONFile, 'r') as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
         libraries = data.get('libraries', [])
@@ -61,10 +61,13 @@ def patch_libs(libJSONFile):
             for line in libJSONText.split('\n'):
                 f.write(line.rstrip() + '\n')
     else:
-        print('skipping patching: ' + libJSONFile)
+        print('Skipping Patching: ' + libJSONFile)
         
 def patch_classpath(file):
-    pass
+    if os.path.isfile(file):
+        print('Patching: ' + file)
+    else:
+        print('Skipping Patching: ' + file)
 
 if __name__ == "__main__":
     lwjgl_ver = sys.argv[1].lower().replace('"', '').replace("'", '').replace(' ', '')
@@ -135,10 +138,13 @@ if __name__ == "__main__":
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
         #patch lwjgl version strings
-        #patch from fml.json
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         patch_libs(os.path.join(dir_fml, 'fml.json'))
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
+        patch_classpath(os.path.join(dir_fml, 'eclipse', 'Minecraft', '.classpath'))
+        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
+        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
+        patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
 
         #delete lwjgl jar natives
         del_file(lwjgl_natives_windows_natives_jar)
