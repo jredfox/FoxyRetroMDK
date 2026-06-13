@@ -3,6 +3,8 @@ import os
 import shutil
 import urllib
 import zipfile
+import json
+from collections import OrderedDict
 from contextlib import closing
 from hashlib import sha1
 
@@ -38,8 +40,6 @@ def del_file(file):
 
 def patch_libs(libJSONFile):
     if os.path.exists(libJSONFile):
-        import json
-        from collections import OrderedDict
         useMojang = lwjgl_ver != '2.9.2'
         print('Patching: ' + os.path.basename(libJSONFile))
         with open(libJSONFile, 'r') as f:
