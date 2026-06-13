@@ -46,7 +46,7 @@ if __name__ == "__main__":
         for f in os.listdir(os.path.join(dir_mcp, 'jars')):
             fname = os.path.basename(f)
             if fname.startswith('minecraft_server.1.6.') and fname.endswith('.jar'):
-                mc_ver = fname[len('minecraft_server.'):-4]
+                mc_ver = fname[17:-4]
                 break
         if mc_ver == "":
             print("Minecraft Version Cannot Be determined because minecraft_server.<mc version>.jar is missing!")
