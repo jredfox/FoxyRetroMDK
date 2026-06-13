@@ -122,8 +122,8 @@ if __name__ == "__main__":
         lwjgl_windows_sha1 = '4c517eca808522457dd95ee8fc1fbcdbb602efbe'
         lwjgl_macosx_sha1 = '2d12c83fdfbc04ecabf02c7bc8cc54d034f0daac'
         lwjgl_linux_sha1 = 'aa9aae879af8eb378e22cfc64db56ec2ca9a44d1'
-        lwjgl_src_sha1 = 'a59627548c970e89cc4893a368631fb8d2640bb2'
-        lwjgl_util_src_sha1 = '13ab3bc191a0139a5e846fa60faf2e8c84398593'
+        lwjgl_src_sha1 = 'ccedb5b6f96913c6f78bc10249e747ded90baa51'
+        lwjgl_util_src_sha1 = '9f350d8a760247f2ae88e996b55f8f7121346c79'
     elif lwjgl_ver == '2.9.4-nightly-20150209':
         lwjgl_sha1 = '697517568c68e78ae0b4544145af031c81082dfe'
         lwjgl_util_sha1 = 'd51a7c040a721d13efdfbd34f8b257b2df882ad0'
