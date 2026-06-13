@@ -117,13 +117,14 @@ if __name__ == "__main__":
                 data = json.load(f, object_pairs_hook=OrderedDict)
             libraries = data.get('libraries', [])
             for lib in libraries:
-                name = lib.get("name", "") 
-                url = lib.get("url")
-                if useMojang:
-                    if ("lwjgl" in name.lower() and url is not None):
-                        del lib["url"]
-                elif ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
-                    lib["url"] = 'https://repo.maven.apache.org/maven2'
+                name = lib.get("name", "").lower()
+                if 'lwjgl' in name and ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
+                    url = lib.get("url")
+                    if useMojang:
+                        if url is not None:
+                            del lib["url"]
+                    else:
+                        lib["url"] = "https://repo.maven.apache.org/maven2"
             fmlJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
             with open(fmlJSONFile, 'wb') as f:
                 for line in fmlJSONText.split('\n'):

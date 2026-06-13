@@ -105,6 +105,30 @@ if __name__ == "__main__":
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
         #patch lwjgl version strings
         dir_fml = os.path.join(os.path.dirname(dir_base), 'fml')
+        fmlJSONFile = os.path.join(dir_fml, 'fml.json')
+        import json
+        from collections import OrderedDict
+        useMojang = lwjgl_ver != '2.9.0'
+        print('Patching Path:' + fmlJSONFile)
+        with open(fmlJSONFile, 'r') as f:
+            data = json.load(f, object_pairs_hook=OrderedDict)
+        libraries = data.get('libraries', [])
+        for lib in libraries:
+            oname = lib.get("name", "")
+            name = oname.lower()
+            if 'lwjgl' in name and ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
+                print(oname[:s.rfind(":")] + lwjgl_ver)
+                #lib["name"] = (oname[:s.rfind(":")] + lwjgl_ver)
+                url = lib.get("url")
+                if useMojang:
+                    if url is not None:
+                        del lib["url"]
+                else:
+                    lib["url"] = "https://repo.maven.apache.org/maven2"
+        fmlJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
+        with open(fmlJSONFile, 'wb') as f:
+            for line in fmlJSONText.split('\n'):
+                f.write(line.rstrip() + '\n')
 
         #delete lwjgl jar natives
         del_file(lwjgl_natives_windows_natives_jar)
