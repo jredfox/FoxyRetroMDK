@@ -542,13 +542,13 @@ $natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platf
 $natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
 $natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-windows.jar"
 $mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
-if ($lwjgl_ver -eq "2.9.2") 
+if ($lwjgl_ver -eq "2.9.2")
 {
-	lwjgl_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
-	lwjgl_util_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
-	natives_mac_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
-	natives_linux_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
-	natives_windows_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
+	$lwjgl_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
+	$lwjgl_util_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
+	$natives_mac_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
+	$natives_linux_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
+	$natives_windows_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
 }
 #URLS that change based upon MC Version
 if ($mc_ver -eq "1.5.2")
