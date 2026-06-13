@@ -106,25 +106,28 @@ if __name__ == "__main__":
                 f.write(lines)
             
     if mcpInForge:
-        if os.getenv("skipMavenPatching") != "T":
-            import json
-            from collections import OrderedDict
-            #Patch fml.json
-            fmlJSONFile = os.path.normpath(os.path.join(mdk, 'fml/fml.json'))
-            if os.path.exists(fmlJSONFile):
-                print('Patching Path:' + fmlJSONFile)
-                with open(fmlJSONFile, 'r') as f:
-                    data = json.load(f, object_pairs_hook=OrderedDict)
-                libraries = data.get('libraries', [])
-                for lib in libraries:
-                    name = lib.get("name", "") 
-                    url = lib.get("url")
-                    if "lwjgl" in name.lower() and url is not None:
+        useMojang = os.getenv("useFMLMaven") != 'T'
+        import json
+        from collections import OrderedDict
+        #Patch fml.json
+        fmlJSONFile = os.path.normpath(os.path.join(mdk, 'fml/fml.json'))
+        if os.path.exists(fmlJSONFile):
+            print('Patching Path:' + fmlJSONFile)
+            with open(fmlJSONFile, 'r') as f:
+                data = json.load(f, object_pairs_hook=OrderedDict)
+            libraries = data.get('libraries', [])
+            for lib in libraries:
+                name = lib.get("name", "") 
+                url = lib.get("url")
+                if useMojang:
+                    if ("lwjgl" in name.lower() and url is not None):
                         del lib["url"]
-                fmlJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
-                with open(fmlJSONFile, 'wb') as f:
-                    for line in fmlJSONText.split('\n'):
-                        f.write(line.rstrip() + '\n')
+                elif ('org.lwjgl.lwjgl:lwjgl:' in name or 'org.lwjgl.lwjgl:lwjgl_util:' in name or 'org.lwjgl.lwjgl:lwjgl-platform:' in name):
+                    lib["url"] = 'https://repo.maven.apache.org/maven2'
+            fmlJSONText = json.dumps(data, indent=2).replace('\r\n', '\n')
+            with open(fmlJSONFile, 'wb') as f:
+                for line in fmlJSONText.split('\n'):
+                    f.write(line.rstrip() + '\n')
             
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n', 1)

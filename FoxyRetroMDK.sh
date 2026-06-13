@@ -43,10 +43,10 @@ fi
 export patch_21="F"
 export patch_portability="F"
 export patchoneone="F"
-export skipMavenPatching="F"
+export useFMLMaven="F"
 
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
-	export skipMavenPatching="T"
+	export useFMLMaven="T"
 fi
 
 ################# Functions Start #################

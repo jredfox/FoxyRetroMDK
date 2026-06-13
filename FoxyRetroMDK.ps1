@@ -88,7 +88,7 @@ $ErrorActionPreference = 'Continue'
 $env:patchoneone = "F"
 $env:patch_21 = "F"
 $env:patch_portability = "F"
-$env:skipMavenPatching="F"
+$env:useFMLMaven="F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
@@ -122,7 +122,7 @@ if ([string]::IsNullOrEmpty($lwjgl_ver)) {
     $lwjgl_ver = "2.9.4-nightly-20150209"
 }
 if ($lwjgl_ver -eq "2.9.2") {
-	$env:skipMavenPatching="T"
+	$env:useFMLMaven="T"
 }
 
 #Set UserAgent for Downloads
