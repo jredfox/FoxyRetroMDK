@@ -70,6 +70,9 @@ lwjgl_version_changer_sh = (
     'isa="$(uname -m)"\n'
     'export PATH="$mcp/bin_linux/$isa/python2.7:$PATH"\n'
     'chmod -R 777 "$mcp/bin_linux"\n'
+    'if [[ "$(echo "$(uname)" | tr \'[:upper:]\' \'[:lower:]\')" == "darwin" ]]; then\n'
+    '    xattr -r -d com.apple.quarantine "$mcp/bin_linux"\n'
+    'fi\n'
     'python2.7 "lwjglversionchanger.py" "$1"\n'
     '## Foxy Retro MDK END ##\n'
 )
