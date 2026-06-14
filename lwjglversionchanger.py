@@ -114,10 +114,19 @@ def attatch_src(file, printSkip=False):
         with open(file, 'wb') as f:
             f.write(lines)
         project_file = os.path.join(os.path.dirname(file), '.project')
+        with open(file, 'r') as f:
+            lines = f.read().replace('\r\n', '\n').replace('\\', '/').replace('    ', '\t').replace('   ', '\t')
         if os.path.isfile(project_file):
-            print('Patching: ' + file)
-            project_patch = '<link>\n<name>lib</name>\n<type>2</type>\n<locationURI>MCP_LOC/lib</locationURI>\n</link>\n'
-        
+            print('Patching: ' + project_file)
+            project_patch = '\t<link>\n\t\t\t<name>lib</name>\n\t\t\t<type>2</type>\n\t\t\t<locationURI>MCP_LOC/lib</locationURI>\n\t\t</link>\n\t'
+            tag_start = lines.find('<linkedResources>')
+            tag_end = lines.find('</linkedResources>')
+            if tag_start != -1 and tag_end != -1:
+                if lines.rfind('MCP_LOC/lib', tag_start, tag_end) == -1:
+                    lines = lines.replace('</linkedResources>', project_patch + '</linkedResources>')
+                    print(lines)
+                    sys.exit(0)
+            
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
