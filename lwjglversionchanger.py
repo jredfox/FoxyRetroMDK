@@ -145,6 +145,13 @@ if __name__ == "__main__":
         lwjgl_util_src_sha1 = '308d4ebe8d7b240d3490b6a7e0424807ea3ad98b'
     elif lwjgl_ver == '2.9.3':
         print('WARNING LWJGL Version 2.9.3 contains lots of graphical issues! Please use a different version')
+        lwjgl_sha1 = '3df168ac74e4a8c96562cdff24ad352e255bf89c'
+        lwjgl_util_sha1 = '751f06b62424da056954c67288fd5c494431e350'
+        lwjgl_windows_sha1 = 'fbc2afb3e288578e9942578decb6291a490549a0'
+        lwjgl_macosx_sha1 = '6686cf6ddaa20b4290aa6599a09bc0d17369be05'
+        lwjgl_linux_sha1 = 'b1eafe80093381c56415731e1d64279e6140bcd0'
+        lwjgl_src_sha1 = '34682f36cee6cded40df9829bb352f2bdce5b14e'
+        lwjgl_util_src_sha1 = '0ca58b77b6393794ca34e12b32e9c6d9c912acb3'
 
     if not onesix:
         dir_bin = os.path.join(dir_mcp, "jars", "bin")
