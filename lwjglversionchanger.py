@@ -108,9 +108,9 @@ def attatch_src(file, printSkip=False):
         with open(file, 'r') as f:
             lines = f.read().replace('\r\n', '\n').replace('\\', '/')
         if not has_src_path(lines, 'path="jars/bin/lwjgl.jar"'):
-            lines = lines.replace('path="jars/bin/lwjgl.jar"', 'path="jars/bin/lwjgl.jar" sourcepath="lib/lwjgl-sources.zip"'
-        if not has_src_path(lines, 'path="jars/bin/lwjgl.jar"'):
-            lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"'
+            lines = lines.replace('path="jars/bin/lwjgl.jar"', 'path="jars/bin/lwjgl.jar" sourcepath="lib/lwjgl-sources.zip"')
+        if not has_src_path(lines, 'path="jars/bin/lwjgl_util.jar"'):
+            lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"')
         with open(file, 'wb') as f:
             f.write(lines)
     elif not printSkip:
