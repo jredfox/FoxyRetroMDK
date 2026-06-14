@@ -204,9 +204,7 @@ if __name__ == "__main__":
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
         lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
         #Attach sources to classpath
-        #MC 1.1 - 1.2.4
-        attatch_src(os.path.join(dir_mcp, 'forge', 'eclipse', 'Client', '.classpath'))
-        attatch_src(os.path.join(dir_mcp, 'forge', 'eclipse', 'Server', '.classpath'))
+        #MC 1.1 - 1.2.5
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
         #MC 1.3.2 - 1.5.2
