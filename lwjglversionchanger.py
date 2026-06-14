@@ -7,6 +7,7 @@ import json
 from collections import OrderedDict
 from contextlib import closing
 from hashlib import sha1
+from urllib2 import urlopen
 
 def download_file(url, target, sha1, extract=False):
     pdir = os.path.dirname(target)
@@ -40,6 +41,13 @@ def del_dir(d):
 def del_file(file):
     if(os.path.isfile(file)):
         os.remove(file)
+
+def has_wifi(url='http://www.google.com', timeout=5):
+    try:
+        urlopen(url, timeout=timeout)
+        return True
+    except Exception:
+        return False
 
 def patch_libs(libJSONFile):
     if os.path.exists(libJSONFile):
@@ -89,6 +97,9 @@ def patch_classpath(file, printSkip=False):
         print('Skipping Patching: ' + file)
 
 if __name__ == "__main__":
+    if (not has_wifi('https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')) and (not has_wifi('https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')):
+        print('Internet is down, or both https://libraries.minecraft.net and https://repo.maven.apache.org are down :(')
+        sys.exit(1)
     lwjgl_ver = sys.argv[1].lower().replace('"', '').replace("'", '').replace(' ', '')
     onesix = False
     mc_ver = ""
