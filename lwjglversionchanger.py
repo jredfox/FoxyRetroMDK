@@ -173,8 +173,11 @@ if __name__ == "__main__":
     if not onesix:
         dir_bin = os.path.join(dir_mcp, "jars", "bin")
         dir_natives = os.path.join(dir_bin, 'natives')
+        dir_src = os.path.join(dir_mcp, 'lib')
         lwjgl_jar = os.path.join(dir_bin, 'lwjgl.jar')
         lwjgl_util_jar = os.path.join(dir_bin, 'lwjgl_util.jar')
+        lwjgl_src_jar = os.path.join(dir_src, 'lwjgl-sources.zip')
+        lwjgl_util_src_jar = os.path.join(dir_src, 'lwjgl_util-sources.zip')
         lwjgl_natives_windows_natives_jar = os.path.join(dir_natives, 'windows_natives.jar')
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
         lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
@@ -185,6 +188,8 @@ if __name__ == "__main__":
         dir_natives = os.path.join(dir_version, (mc_ver + '-natives'))
         lwjgl_jar = os.path.join(dir_libs, 'lwjgl', lwjgl_ver, ('lwjgl-' + lwjgl_ver + '.jar') )
         lwjgl_util_jar = os.path.join(dir_libs, 'lwjgl_util', lwjgl_ver, ('lwjgl_util-' + lwjgl_ver + '.jar') )
+        lwjgl_src_jar = (lwjgl_jar[:-4] + "-sources.jar")
+        lwjgl_util_src_jar =(lwjgl_util_jar[:-4] + "-sources.jar")
         lwjgl_natives_windows_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-windows.jar') )
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
@@ -206,6 +211,8 @@ if __name__ == "__main__":
     del_dir(dir_natives)
     del_file(lwjgl_jar)
     del_file(lwjgl_util_jar)
+    del_file(lwjgl_src_jar)
+    del_file(lwjgl_util_src_jar)
     os.makedirs(dir_natives)
 
     #download & install lwjgl
@@ -218,9 +225,8 @@ if __name__ == "__main__":
         lwjgl_natives_base = 'https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-'
     download_file(lwjgl_url, lwjgl_jar, lwjgl_sha1)
     download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1)
-    if onesix:
-        download_file((lwjgl_url[:-4] + "-sources.jar"), (lwjgl_jar[:-4] + "-sources.jar"), lwjgl_src_sha1)
-        download_file((lwjgl_util_url[:-4] + "-sources.jar"), (lwjgl_util_jar[:-4] + "-sources.jar"), lwjgl_util_src_sha1)
+    download_file((lwjgl_url[:-4] + "-sources.jar"), lwjgl_src_jar, lwjgl_src_sha1)
+    download_file((lwjgl_util_url[:-4] + "-sources.jar"), lwjgl_util_src_jar, lwjgl_util_src_sha1)
     download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
     download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
     download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
