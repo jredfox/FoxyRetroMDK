@@ -102,6 +102,28 @@ def patch_classpath(file, printSkip=False):
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
+def attatch_src(file, printSkip=False):
+    if os.path.isfile(file):
+        print('Patching: ' + file)
+        with open(file, 'r') as f:
+            lines = f.read().replace('\r\n', '\n').replace('\\', '/')
+        if not has_src_path(lines, 'path="jars/bin/lwjgl.jar"'):
+            lines = lines.replace('path="jars/bin/lwjgl.jar"', 'path="jars/bin/lwjgl.jar" sourcepath="lib/lwjgl-sources.zip"'
+        if not has_src_path(lines, 'path="jars/bin/lwjgl.jar"'):
+            lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"'
+        with open(file, 'wb') as f:
+            f.write(lines)
+    elif not printSkip:
+        print('Skipping Patching: ' + file)
+
+def has_src_path(lines, target):
+    start = lines.find(target)
+    if start == -1:
+        return False
+    tag_start = lines.rfind('<', 0, start)
+    tag_end = lines.find('>', start)
+    return (tag_start != -1) and (tag_end != -1) and (lines.find('sourcepath="', tag_start, tag_end) != -1)
+
 if __name__ == "__main__":
     if (not has_wifi('https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')) and (not has_wifi('https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')):
         print('Internet is down, or both https://libraries.minecraft.net and https://repo.maven.apache.org are down :(')
@@ -181,6 +203,15 @@ if __name__ == "__main__":
         lwjgl_natives_windows_natives_jar = os.path.join(dir_natives, 'windows_natives.jar')
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
         lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
+        #Attach sources to classpath
+        #MC 1.1 - 1.2.4
+        #attatch_src(os.path.join(dir_mcp, 'forge', 'eclipse', 'Client', '.classpath'))
+        #attatch_src(os.path.join(dir_mcp, 'forge', 'eclipse', 'Server', '.classpath'))
+        #attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
+        #attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
+        #Eclipse Classpath
+        attatch_src(os.path.join(dir_mcp, 'forge', 'fml', 'eclipse', 'Minecraft', '.classpath'))
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
     else:
         dir_base = os.path.join(dir_mcp, "jars")
         dir_libs = os.path.join(dir_base, "libraries", 'org', 'lwjgl', 'lwjgl')
