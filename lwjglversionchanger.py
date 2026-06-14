@@ -13,17 +13,23 @@ def download_file(url, target, sha1, extract=False):
     pdir = os.path.dirname(target)
     if onesix and (not os.path.isdir(pdir)):
         os.makedirs(pdir)
-    print('downloading: ' + url)
-    urllib.urlretrieve(url, target)
-    if (not sha1 is None):
-        downloaded_sha1 = get_sha1(target)
-        if downloaded_sha1 != sha1:
-            if url.startswith('https://libraries.minecraft.net'):
-                download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
-                return
-            print('Download Failed Removing: ' + target)
-            os.remove(target)
-            sys.exit(1)
+    try:
+        print('downloading: ' + url)
+        urllib.urlretrieve(url, target)
+        if (not sha1 is None):
+            downloaded_sha1 = get_sha1(target)
+            if downloaded_sha1 != sha1:
+                os.remove(target)
+                if url.startswith('https://libraries.minecraft.net'):
+                    download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+                else:
+                    print('Download Failed Removed: ' + target)
+                    sys.exit(1)
+    except Exception as e:
+        os.remove(target)
+        print('Download Failed With Exception: ' + str(e))
+        if url.startswith('https://libraries.minecraft.net'):
+            download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
