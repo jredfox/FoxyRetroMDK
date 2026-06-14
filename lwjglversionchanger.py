@@ -113,6 +113,11 @@ def attatch_src(file, printSkip=False):
             lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"')
         with open(file, 'wb') as f:
             f.write(lines)
+        project_file = os.path.join(os.path.dirname(file), '.project')
+        if os.path.isfile(project_file):
+            print('Patching: ' + file)
+            project_patch = '<link>\n<name>lib</name>\n<type>2</type>\n<locationURI>MCP_LOC/lib</locationURI>\n</link>\n'
+        
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
