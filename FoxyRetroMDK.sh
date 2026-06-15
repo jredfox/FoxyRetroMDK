@@ -46,7 +46,7 @@ export patchoneone="F"
 export useFMLMaven="F"
 
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
-	export useFMLMaven="T"
+    export useFMLMaven="T"
 fi
 
 ################# Functions Start #################
@@ -418,8 +418,8 @@ function Patch-MDKPY {
     if [[ "$patch_21" == "T" ]]; then
         cp -f "$SCRIPTPATH/PatchRenderPlayer.jar" "$mcp_dir/forge/PatchRenderPlayer.jar"
     fi
-	
-	#Copy patchportability.py over
+    
+    #Copy patchportability.py over
     if [[ "$patch_portability" == "T" ]]; then
         cp -f "$SCRIPTPATH/patchportability.py" "$mcp_dir/patchportability.py"
     fi
@@ -629,11 +629,11 @@ natives_linux_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platfo
 natives_windows_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"
 natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-windows.jar"
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
-	lwjgl_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
-	lwjgl_util_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
-	natives_mac_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
-	natives_linux_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
-	natives_windows_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
+    lwjgl_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
+    lwjgl_util_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
+    natives_mac_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
+    natives_linux_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
+    natives_windows_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
 fi
 
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"

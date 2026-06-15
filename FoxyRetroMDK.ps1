@@ -122,7 +122,7 @@ if ([string]::IsNullOrEmpty($lwjgl_ver)) {
     $lwjgl_ver = "2.9.4-nightly-20150209"
 }
 if ($lwjgl_ver -eq "2.9.2") {
-	$env:useFMLMaven="T"
+    $env:useFMLMaven="T"
 }
 
 #Set UserAgent for Downloads
@@ -509,13 +509,13 @@ function DL-Natives
 $pydir = "$env:APPDATA\FoxyRetroMDK\python2.7"
 if ( -Not ([System.IO.Directory]::Exists("$pydir")) )
 {
-	Write-Host "Installing Python to $pydir"
-	New-Item -Path "$pydir" -ItemType "directory" -Force | out-null
-	$pyzip = "$env:APPDATA\python_fml_2.7.9.zip"
-	Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip" -OutFile "$pyzip"
-	[System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$pydir")
-	Remove-Item -Path "$pyzip" -Force | out-null
-	Copy-Item -Path "$pydir\python_fml.exe" -Destination "$pydir\python.exe" -Force | out-null
+    Write-Host "Installing Python to $pydir"
+    New-Item -Path "$pydir" -ItemType "directory" -Force | out-null
+    $pyzip = "$env:APPDATA\python_fml_2.7.9.zip"
+    Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip" -OutFile "$pyzip"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$pydir")
+    Remove-Item -Path "$pyzip" -Force | out-null
+    Copy-Item -Path "$pydir\python_fml.exe" -Destination "$pydir\python.exe" -Force | out-null
 }
 
 if ($mc_ver.StartsWith("1.6"))
@@ -544,11 +544,11 @@ $natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-pla
 $mcp72_url = "https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.3.2/mcp72.zip"
 if ($lwjgl_ver -eq "2.9.2")
 {
-	$lwjgl_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
-	$lwjgl_util_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
-	$natives_mac_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
-	$natives_linux_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
-	$natives_windows_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
+    $lwjgl_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
+    $lwjgl_util_url = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
+    $natives_mac_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
+    $natives_linux_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
+    $natives_windows_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
 }
 #URLS that change based upon MC Version
 if ($mc_ver -eq "1.5.2")
