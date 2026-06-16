@@ -126,7 +126,7 @@ def patch_libs(libJSONFile):
                 f.write(line.rstrip() + '\n')
     else:
         print('Skipping Patching: ' + libJSONFile)
-    
+
 def patch_classpath(file, printSkip=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
