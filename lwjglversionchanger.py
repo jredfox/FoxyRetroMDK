@@ -149,8 +149,9 @@ def del_lwjgl_natives(dir_natives):
         'openal.dylib',
         'openal.jnilib'
     ])
-    for fname in os.listdir(dir_natives):
-        if fname.lower() in names:
+    for fn in os.listdir(dir_natives):
+        fname = fn.lower()
+        if fname in names:
             print('del file: ' + fname)
             del_file(os.path.join(dir_natives, fname))
 
@@ -168,31 +169,31 @@ def download_natives():
         download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
         download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
         download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
-        return
-    #if natives directory doesn't exist re-create the natives from scratch
-    if not os.path.isdir(dir_natives):
-        os.makedirs(dir_natives)
-        #download jinput jar natives
-        jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
-        download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, None, True)
-        download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, None, True)
-        download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, None, True)
     else:
-        del_lwjgl_natives(dir_natives)
-    #download lwjgl jar natives and extract
-    download_file(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1, True)
-    download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
-    download_file(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1, True)
-    #rebuild the jar natives
-    merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
-    merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
-    merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
-    del_file(lwjgl_natives_windows_natives_jar)
-    del_file(lwjgl_natives_macosx_natives_jar)
-    del_file(lwjgl_natives_linux_natives_jar)
-    os.rename((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
-    os.rename((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
-    os.rename((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
+        #if natives directory doesn't exist re-create the natives from scratch
+        if not os.path.isdir(dir_natives):
+            os.makedirs(dir_natives)
+            #download jinput jar natives
+            jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
+            download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, None, True)
+            download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, None, True)
+            download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, None, True)
+        else:
+            del_lwjgl_natives(dir_natives)
+        #download lwjgl jar natives and extract
+        download_file(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1, True)
+        download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
+        download_file(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1, True)
+        #rebuild the jar natives
+        merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
+        merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
+        merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
+        del_file(lwjgl_natives_windows_natives_jar)
+        del_file(lwjgl_natives_macosx_natives_jar)
+        del_file(lwjgl_natives_linux_natives_jar)
+        os.rename((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
+        os.rename((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
+        os.rename((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
     
 def merge_zips(*zips):
     with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
