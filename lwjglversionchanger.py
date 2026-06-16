@@ -22,6 +22,7 @@ def download_file(url, target, sha1, extract=False):
             if downloaded_sha1 != sha1:
                 if url.startswith('https://libraries.minecraft.net'):
                     download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+                    return
                 else:
                     del_file(target)
                     print('Download Failed Removed: ' + target)
@@ -30,6 +31,7 @@ def download_file(url, target, sha1, extract=False):
         print('Download Failed With Exception: ' + str(e))
         if url.startswith('https://libraries.minecraft.net'):
             download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+            return
         else:
             del_file(target)
             print('Download Failed Removed: ' + target)
