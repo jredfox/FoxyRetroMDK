@@ -30,6 +30,33 @@ def has_wifi(url='http://www.google.com', timeout=5):
     except Exception:
         return False
 
+names_lwjgl = set([
+    'liblwjgl.so',
+    'liblwjgl32.so',
+    'liblwjgl64.so',
+    'libopenal.so',
+    'libopenal32.so',
+    'libopenal64.so',
+    'lwjgl.dll',
+    'lwjgl32.dll',
+    'lwjgl64.dll',
+    'openal.dll',
+    'openal32.dll', 
+    'openal64.dll',
+    'liblwjgl.dylib',
+    'liblwjgl.jnilib',
+    'openal.dylib',
+    'openal.jnilib'
+])
+
+def del_lwjgl_natives(dir_natives):
+    del_dir(os.path.join(dir_natives, 'META-INF'))
+    for fname in os.listdir(dir_natives):
+        fn = fname.lower()
+        if fn in names_lwjgl:
+            print('del file: ' + fname)
+            del_file(os.path.join(dir_natives, fname))
+
 def merge_zips(*zips):
     with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
         existing_files = set(z1.namelist())
@@ -156,33 +183,6 @@ def attatch_src(file, printSkip=False):
                         f.write(lines)
     elif not printSkip:
         print('Skipping Patching: ' + file)
-
-names_lwjgl = set([
-    'liblwjgl.so',
-    'liblwjgl32.so',
-    'liblwjgl64.so',
-    'libopenal.so',
-    'libopenal32.so',
-    'libopenal64.so',
-    'lwjgl.dll',
-    'lwjgl32.dll',
-    'lwjgl64.dll',
-    'openal.dll',
-    'openal32.dll', 
-    'openal64.dll',
-    'liblwjgl.dylib',
-    'liblwjgl.jnilib',
-    'openal.dylib',
-    'openal.jnilib'
-])
-
-def del_lwjgl_natives(dir_natives):
-    del_dir(os.path.join(dir_natives, 'META-INF'))
-    for fname in os.listdir(dir_natives):
-        fn = fname.lower()
-        if fn in names_lwjgl:
-            print('del file: ' + fname)
-            del_file(os.path.join(dir_natives, fname))
 
 def download_natives():
     #if natives directory doesn't exist re-create the natives from scratch
