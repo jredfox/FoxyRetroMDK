@@ -160,6 +160,15 @@ def download_natives():
         del_file(lwjgl_natives_windows_natives_jar)
         del_file(lwjgl_natives_macosx_natives_jar)
         del_file(lwjgl_natives_linux_natives_jar)
+        if not os.path.isdir(dir_natives):
+            os.makedirs(dir_natives)
+        else:
+            del_lwjgl_natives(dir_natives)
+        #download lwjgl jar natives and extract
+        download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
+        download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
+        download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
+        return
     #if natives directory doesn't exist re-create the natives from scratch
     if not os.path.isdir(dir_natives):
         os.makedirs(dir_natives)
@@ -171,13 +180,19 @@ def download_natives():
     else:
         del_lwjgl_natives(dir_natives)
     #download lwjgl jar natives and extract
-    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar + '.tmp', lwjgl_windows_sha1, True)
-    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar + '.tmp', lwjgl_macosx_sha1, True)
-    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar + '.tmp', lwjgl_linux_sha1, True)
+    download_file(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1, True)
+    download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
+    download_file(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1, True)
     #rebuild the jar natives
     merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
     merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
     merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
+    del_file(lwjgl_natives_windows_natives_jar)
+    del_file(lwjgl_natives_macosx_natives_jar)
+    del_file(lwjgl_natives_linux_natives_jar)
+    os.rename((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
+    os.rename((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
+    os.rename((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
     
 def merge_zips(*zips):
     with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
