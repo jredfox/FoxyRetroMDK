@@ -161,6 +161,12 @@ def download_natives():
     if onesix:
         if not os.path.isdir(dir_natives):
             os.makedirs(dir_natives)
+            #download jinput jar natives
+            dir_jinput = os.path.join(dir_base, "libraries", 'net', 'java', 'jinput', 'jinput-platform', '2.0.5')
+            jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
+            download_file(jinput_base_url + 'windows.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-windows.jar'), '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
+            download_file(jinput_base_url + 'osx.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-osx.jar'), '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
+            download_file(jinput_base_url + 'linux.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-linux.jar'), '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
         else:
             del_lwjgl_natives(dir_natives)
         #download lwjgl jar natives and extract
