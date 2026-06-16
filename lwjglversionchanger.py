@@ -201,7 +201,7 @@ def merge_zips(*zips):
                 for n in zf.namelist():
                     # Skip dirs and duplicates
                     name_low = n.lower()
-                    if n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl):
+                    if (n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl)):
                         continue
                     print('adding: ' + n)
                     existing_files.add(n)
