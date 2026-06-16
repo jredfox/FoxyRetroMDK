@@ -32,6 +32,8 @@ def download_file(url, target, sha1, extract=False):
             download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
         else:
             del_file(target)
+            print('Download Failed Removed: ' + target)
+            sys.exit(1)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
