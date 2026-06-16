@@ -133,29 +133,30 @@ def attatch_src(file, printSkip=False):
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
+names_lwjgl = set([
+    'liblwjgl.so',
+    'liblwjgl32.so',
+    'liblwjgl64.so',
+    'libopenal.so',
+    'libopenal32.so',
+    'libopenal64.so',
+    'lwjgl.dll',
+    'lwjgl32.dll',
+    'lwjgl64.dll',
+    'openal.dll',
+    'openal32.dll', 
+    'openal64.dll',
+    'liblwjgl.dylib',
+    'liblwjgl.jnilib',
+    'openal.dylib',
+    'openal.jnilib'
+])
+
 def del_lwjgl_natives(dir_natives):
     del_dir(os.path.join(dir_natives, 'META-INF'))
-    names = set([
-        'liblwjgl.so',
-        'liblwjgl32.so',
-        'liblwjgl64.so',
-        'libopenal.so',
-        'libopenal32.so',
-        'libopenal64.so',
-        'lwjgl.dll',
-        'lwjgl32.dll',
-        'lwjgl64.dll',
-        'openal.dll',
-        'openal32.dll', 
-        'openal64.dll',
-        'liblwjgl.dylib',
-        'liblwjgl.jnilib',
-        'openal.dylib',
-        'openal.jnilib'
-    ])
     for fn in os.listdir(dir_natives):
         fname = fn.lower()
-        if fname in names:
+        if fname in names_lwjgl:
             print('del file: ' + fname)
             del_file(os.path.join(dir_natives, fname))
 
@@ -199,8 +200,9 @@ def merge_zips(*zips):
             with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
                 for n in zf.namelist():
                     # Skip dirs and duplicates
-                    if n.endswith('/') or n in existing_files:
+                    if n.endswith('/') or (n in existing_files) or (n.lower() in names_lwjgl):
                         continue
+                    print('adding: ' + n)
                     existing_files.add(n)
                     # Read the file and write to the first zip
                     z1.writestr(n, zf.read(n))
