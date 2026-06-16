@@ -129,7 +129,26 @@ if __name__ == "__main__":
             with open(fmlJSONFile, 'wb') as f:
                 for line in fmlJSONText.split('\n'):
                     f.write(line.rstrip() + '\n')
-            
+        
+        #Makes LWJGL 2.9.1's sources download
+        fmlpyf = os.path.normpath(os.path.join(mdk, 'fml/fml.py'))
+        if os.path.exists(fmlpyf):
+            print('Patching Path:' + fmlpyf)
+            fml_py_patch = (
+                '## Foxy Retro MDK Start ##'
+                '            try:\n'
+                '                headers = get_headers(url)\n'
+                '            except:\n'
+                '                url = url.replace(\'https://libraries.minecraft.net\', \'https://repo.maven.apache.org/maven2\', 1)\n'
+                '                headers = get_headers(url)\n'
+                '            ## Foxy Retro MDK End ##\n'
+            )
+            with open(fmlpyf, 'r') as f:
+                lines = f.read()
+            lines = lines.replace('headers = get_headers(url)', fml_py_patch, 1)
+            with open(fmlpyf, 'wb') as f:
+                f.write(lines)
+        
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n', 1)
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"')
