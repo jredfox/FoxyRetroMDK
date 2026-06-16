@@ -154,9 +154,9 @@ names_lwjgl = set([
 
 def del_lwjgl_natives(dir_natives):
     del_dir(os.path.join(dir_natives, 'META-INF'))
-    for fn in os.listdir(dir_natives):
-        fname = fn.lower()
-        if fname in names_lwjgl:
+    for fname in os.listdir(dir_natives):
+        fn = fname.lower()
+        if fn in names_lwjgl:
             print('del file: ' + fname)
             del_file(os.path.join(dir_natives, fname))
 
