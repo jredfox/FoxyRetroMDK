@@ -203,7 +203,6 @@ def merge_zips(*zips):
                     name_low = n.lower()
                     if (n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl)):
                         continue
-                    print('adding: ' + n)
                     existing_files.add(n)
                     # Read the file and write to the first zip
                     z1.writestr(n, zf.read(n))
