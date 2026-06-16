@@ -9,6 +9,41 @@ from contextlib import closing
 from hashlib import sha1
 from urllib2 import urlopen
 
+def del_file(file):
+    if(os.path.isfile(file)):
+        os.remove(file)
+
+def del_dir(d):
+    if os.path.isdir(d):
+        shutil.rmtree(d)
+
+def get_sha1(file):
+    if not os.path.isfile(file):
+        return None
+    with closing(open(file, 'rb')) as fh:
+        return sha1(fh.read()).hexdigest().lower()
+
+def has_wifi(url='http://www.google.com', timeout=5):
+    try:
+        urlopen(url, timeout=timeout)
+        return True
+    except Exception:
+        return False
+
+def merge_zips(*zips):
+    with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
+        existing_files = set(z1.namelist())
+        for fname in zips[1:]:
+            with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
+                for n in zf.namelist():
+                    # Skip dirs and duplicates
+                    name_low = n.lower()
+                    if (n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl)):
+                        continue
+                    existing_files.add(n)
+                    # Read the file and write to the first zip
+                    z1.writestr(n, zf.read(n))
+
 def download_file(url, target, sha1, extract=False):
     pdir = os.path.dirname(target)
     if onesix and (not os.path.isdir(pdir)):
@@ -39,27 +74,6 @@ def download_file(url, target, sha1, extract=False):
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
-
-def get_sha1(file):
-    if not os.path.isfile(file):
-        return None
-    with closing(open(file, 'rb')) as fh:
-        return sha1(fh.read()).hexdigest().lower()
-
-def del_dir(d):
-    if os.path.isdir(d):
-        shutil.rmtree(d)
-
-def del_file(file):
-    if(os.path.isfile(file)):
-        os.remove(file)
-
-def has_wifi(url='http://www.google.com', timeout=5):
-    try:
-        urlopen(url, timeout=timeout)
-        return True
-    except Exception:
-        return False
 
 def patch_libs(libJSONFile):
     if os.path.exists(libJSONFile):
@@ -107,6 +121,14 @@ def patch_classpath(file, printSkip=False):
             f.write(lines)
     elif not printSkip:
         print('Skipping Patching: ' + file)
+
+def has_src_path(lines, target):
+    start = lines.find(target)
+    if start == -1:
+        return False
+    tag_start = lines.rfind('<', 0, start)
+    tag_end = lines.find('>', start)
+    return (tag_start != -1) and (tag_end != -1) and (lines.find('sourcepath="', tag_start, tag_end) != -1)
 
 def attatch_src(file, printSkip=False):
     if os.path.isfile(file):
@@ -194,28 +216,6 @@ def download_natives():
         os.rename((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
         os.rename((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
         os.rename((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
-
-def merge_zips(*zips):
-    with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
-        existing_files = set(z1.namelist())
-        for fname in zips[1:]:
-            with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
-                for n in zf.namelist():
-                    # Skip dirs and duplicates
-                    name_low = n.lower()
-                    if (n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl)):
-                        continue
-                    existing_files.add(n)
-                    # Read the file and write to the first zip
-                    z1.writestr(n, zf.read(n))
-
-def has_src_path(lines, target):
-    start = lines.find(target)
-    if start == -1:
-        return False
-    tag_start = lines.rfind('<', 0, start)
-    tag_end = lines.find('>', start)
-    return (tag_start != -1) and (tag_end != -1) and (lines.find('sourcepath="', tag_start, tag_end) != -1)
 
 if __name__ == "__main__":
     if (not has_wifi('https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')) and (not has_wifi('https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.0/lwjgl-2.9.0.jar.sha1')):
