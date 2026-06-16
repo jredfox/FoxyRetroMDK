@@ -14,22 +14,24 @@ def download_file(url, target, sha1, extract=False):
     if onesix and (not os.path.isdir(pdir)):
         os.makedirs(pdir)
     try:
+        del_file(target)
         print('downloading: ' + url)
         urllib.urlretrieve(url, target)
         if (not sha1 is None):
             downloaded_sha1 = get_sha1(target)
             if downloaded_sha1 != sha1:
-                del_file(target)
                 if url.startswith('https://libraries.minecraft.net'):
                     download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
                 else:
+                    del_file(target)
                     print('Download Failed Removed: ' + target)
                     sys.exit(1)
     except Exception as e:
-        del_file(target)
         print('Download Failed With Exception: ' + str(e))
         if url.startswith('https://libraries.minecraft.net'):
             download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+        else:
+            del_file(target)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
@@ -157,10 +159,6 @@ def del_lwjgl_natives(dir_natives):
 
 def download_natives():
     if onesix:
-        #delete lwjgl jar natives
-        del_file(lwjgl_natives_windows_natives_jar)
-        del_file(lwjgl_natives_macosx_natives_jar)
-        del_file(lwjgl_natives_linux_natives_jar)
         if not os.path.isdir(dir_natives):
             os.makedirs(dir_natives)
         else:
@@ -322,12 +320,6 @@ if __name__ == "__main__":
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
-    
-    #delete previous lwjgl jars
-    del_file(lwjgl_jar)
-    del_file(lwjgl_util_jar)
-    del_file(lwjgl_src_jar)
-    del_file(lwjgl_util_src_jar)
 
     #download & install lwjgl
     lwjgl_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
