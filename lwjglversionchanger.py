@@ -158,32 +158,23 @@ def del_lwjgl_natives(dir_natives):
             del_file(os.path.join(dir_natives, fname))
 
 def download_natives():
+    #if natives directory doesn't exist re-create the natives from scratch
+    if not os.path.isdir(dir_natives):
+        os.makedirs(dir_natives)
+        #download jinput jar natives
+        jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
+        download_file(jinput_base_url + 'windows.jar', jinput_win, '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
+        download_file(jinput_base_url + 'osx.jar', jinput_mac, '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
+        download_file(jinput_base_url + 'linux.jar', jinput_linux, '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
+    else:
+        del_lwjgl_natives(dir_natives)
+    
     if onesix:
-        if not os.path.isdir(dir_natives):
-            os.makedirs(dir_natives)
-            #download jinput jar natives
-            dir_jinput = os.path.join(dir_base, "libraries", 'net', 'java', 'jinput', 'jinput-platform', '2.0.5')
-            jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
-            download_file(jinput_base_url + 'windows.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-windows.jar'), '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
-            download_file(jinput_base_url + 'osx.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-osx.jar'), '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
-            download_file(jinput_base_url + 'linux.jar', os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-linux.jar'), '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
-        else:
-            del_lwjgl_natives(dir_natives)
         #download lwjgl jar natives and extract
         download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
         download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
         download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
     else:
-        #if natives directory doesn't exist re-create the natives from scratch
-        if not os.path.isdir(dir_natives):
-            os.makedirs(dir_natives)
-            #download jinput jar natives
-            jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
-            download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
-            download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
-            download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
-        else:
-            del_lwjgl_natives(dir_natives)
         #download lwjgl jar natives and extract
         download_file(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1, True)
         download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
@@ -299,6 +290,9 @@ if __name__ == "__main__":
         lwjgl_natives_windows_natives_jar = os.path.join(dir_natives, 'windows_natives.jar')
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_natives, 'macosx_natives.jar')
         lwjgl_natives_linux_natives_jar = os.path.join(dir_natives, 'linux_natives.jar')
+        jinput_win = lwjgl_natives_windows_natives_jar
+        jinput_mac = lwjgl_natives_macosx_natives_jar
+        jinput_linux = lwjgl_natives_linux_natives_jar
         #Attach sources to classpath
         #MC 1.1 - 1.2.5
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
@@ -309,6 +303,7 @@ if __name__ == "__main__":
     else:
         dir_base = os.path.join(dir_mcp, "jars")
         dir_libs = os.path.join(dir_base, "libraries", 'org', 'lwjgl', 'lwjgl')
+        dir_jinput = os.path.join(dir_base, "libraries", 'net', 'java', 'jinput', 'jinput-platform', '2.0.5')
         dir_version = os.path.join(dir_base, "versions", mc_ver)
         dir_natives = os.path.join(dir_version, (mc_ver + '-natives'))
         lwjgl_jar = os.path.join(dir_libs, 'lwjgl', lwjgl_ver, ('lwjgl-' + lwjgl_ver + '.jar') )
@@ -318,6 +313,9 @@ if __name__ == "__main__":
         lwjgl_natives_windows_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-windows.jar') )
         lwjgl_natives_macosx_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-osx.jar') )
         lwjgl_natives_linux_natives_jar = os.path.join(dir_libs, 'lwjgl-platform', lwjgl_ver, ('lwjgl-platform-' + lwjgl_ver + '-natives-linux.jar') )
+        jinput_win = os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-windows.jar')
+        jinput_mac = os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-osx.jar')
+        jinput_linux = os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-linux.jar')
         #patch lwjgl version strings
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         patch_libs(os.path.join(dir_fml, 'fml.json'))
