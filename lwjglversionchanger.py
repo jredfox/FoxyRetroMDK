@@ -164,14 +164,35 @@ def download_natives():
     if not os.path.isdir(dir_natives):
         os.makedirs(dir_natives)
         #download jinput jar natives
-        
+        jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
+        download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, None, True)
+        download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, None, True)
+        download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, None, True)
+    else:
+        del_lwjgl_natives(dir_natives)
         
     #download lwjgl jar natives and extract
-    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
-    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
-    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
-    #if not onesix rebuild jar natives
+    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar + '.tmp', lwjgl_windows_sha1, True)
+    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar + '.tmp', lwjgl_macosx_sha1, True)
+    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar + '.tmp', lwjgl_linux_sha1, True)
+    #rebuild the jar natives
+    merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
+    merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
+    merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
     
+def merge_zips(*zips):
+    with z.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
+        existing_files = set(z1.namelist())
+        for fname in zips[1:]:
+            with z.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
+                for n in zf.namelist():
+                    # Skip dirs and duplicates
+                    if n.endswith('/') or n in existing_files:
+                        continue
+                    print('adding: ' + n)
+                    existing_files.add(n)
+                    # Read the file and write to the first zip
+                    z1.writestr(n, zf.read(n))
 
 def has_src_path(lines, target):
     start = lines.find(target)
