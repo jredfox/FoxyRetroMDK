@@ -135,13 +135,13 @@ if __name__ == "__main__":
         if os.path.exists(fmlpyf):
             print('Patching Path:' + fmlpyf)
             fml_py_patch = (
-                '## Foxy Retro MDK Start ##'
+                '## Foxy Retro MDK Start ##\n'
                 '            try:\n'
                 '                headers = get_headers(url)\n'
                 '            except:\n'
                 '                url = url.replace(\'https://libraries.minecraft.net\', \'https://repo.maven.apache.org/maven2\', 1)\n'
                 '                headers = get_headers(url)\n'
-                '            ## Foxy Retro MDK End ##\n'
+                '            ## Foxy Retro MDK End ##'
             )
             with open(fmlpyf, 'r') as f:
                 lines = f.read()
