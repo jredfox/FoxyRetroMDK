@@ -79,7 +79,7 @@ def patch_libs(libJSONFile):
                 f.write(line.rstrip() + '\n')
     else:
         print('Skipping Patching: ' + libJSONFile)
-        
+    
 def patch_classpath(file, printSkip=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
@@ -128,6 +128,50 @@ def attatch_src(file, printSkip=False):
                         f.write(lines)
     elif not printSkip:
         print('Skipping Patching: ' + file)
+
+def del_lwjgl_natives(dir_natives):
+    del_dir(os.path.join(dir_natives, 'META-INF'))
+    names = set([
+        'liblwjgl.so',
+        'liblwjgl32.so',
+        'liblwjgl64.so',
+        'libopenal.so',
+        'libopenal32.so',
+        'libopenal64.so',
+        'lwjgl.dll',
+        'lwjgl32.dll',
+        'lwjgl64.dll',
+        'openal.dll',
+        'openal32.dll', 
+        'openal64.dll',
+        'liblwjgl.dylib',
+        'liblwjgl.jnilib',
+        'openal.dylib',
+        'openal.jnilib'
+    ])
+    for fname in os.listdir(dir_natives):
+        if fname.lower() in names:
+            print('del file: ' + fname)
+            del_file(os.path.join(dir_natives, fname))
+
+def download_natives():
+    if onesix:
+        #delete lwjgl jar natives
+        del_file(lwjgl_natives_windows_natives_jar)
+        del_file(lwjgl_natives_macosx_natives_jar)
+        del_file(lwjgl_natives_linux_natives_jar)
+    #if natives directory doesn't exist re-create the natives from scratch
+    if not os.path.isdir(dir_natives):
+        os.makedirs(dir_natives)
+        #download jinput jar natives
+        
+        
+    #download lwjgl jar natives and extract
+    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
+    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
+    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
+    #if not onesix rebuild jar natives
+    
 
 def has_src_path(lines, target):
     start = lines.find(target)
@@ -243,19 +287,12 @@ if __name__ == "__main__":
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
-
-        #delete lwjgl jar natives
-        del_file(lwjgl_natives_windows_natives_jar)
-        del_file(lwjgl_natives_macosx_natives_jar)
-        del_file(lwjgl_natives_linux_natives_jar)
     
-    #delete previous lwjgl
-    del_dir(dir_natives)
+    #delete previous lwjgl jars
     del_file(lwjgl_jar)
     del_file(lwjgl_util_jar)
     del_file(lwjgl_src_jar)
     del_file(lwjgl_util_src_jar)
-    os.makedirs(dir_natives)
 
     #download & install lwjgl
     lwjgl_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
@@ -269,6 +306,4 @@ if __name__ == "__main__":
     download_file(lwjgl_util_url, lwjgl_util_jar, lwjgl_util_sha1)
     download_file((lwjgl_url[:-4] + "-sources.jar"), lwjgl_src_jar, lwjgl_src_sha1)
     download_file((lwjgl_util_url[:-4] + "-sources.jar"), lwjgl_util_src_jar, lwjgl_util_src_sha1)
-    download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
-    download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
-    download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
+    download_natives()
