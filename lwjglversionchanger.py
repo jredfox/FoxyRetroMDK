@@ -200,7 +200,8 @@ def merge_zips(*zips):
             with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
                 for n in zf.namelist():
                     # Skip dirs and duplicates
-                    if n.endswith('/') or (n in existing_files) or (n.lower() in names_lwjgl):
+                    name_low = n.lower()
+                    if n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl):
                         continue
                     print('adding: ' + n)
                     existing_files.add(n)
