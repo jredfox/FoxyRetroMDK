@@ -17,18 +17,18 @@ def del_dir(d):
     if os.path.isdir(d):
         shutil.rmtree(d)
 
-def get_sha1(file):
-    if not os.path.isfile(file):
-        return None
-    with closing(open(file, 'rb')) as fh:
-        return sha1(fh.read()).hexdigest().lower()
-
 def has_wifi(url='http://www.google.com', timeout=5):
     try:
         urlopen(url, timeout=timeout)
         return True
     except Exception:
         return False
+
+def get_sha1(file):
+    if not os.path.isfile(file):
+        return None
+    with closing(open(file, 'rb')) as fh:
+        return sha1(fh.read()).hexdigest().lower()
 
 names_lwjgl = set([
     'liblwjgl.so',
