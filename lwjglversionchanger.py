@@ -194,7 +194,7 @@ def download_natives():
         os.rename((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
         os.rename((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
         os.rename((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
-    
+
 def merge_zips(*zips):
     with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
         existing_files = set(z1.namelist())
