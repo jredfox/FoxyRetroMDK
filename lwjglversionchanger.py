@@ -170,7 +170,6 @@ def download_natives():
         download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, None, True)
     else:
         del_lwjgl_natives(dir_natives)
-        
     #download lwjgl jar natives and extract
     download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar + '.tmp', lwjgl_windows_sha1, True)
     download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar + '.tmp', lwjgl_macosx_sha1, True)
@@ -181,10 +180,10 @@ def download_natives():
     merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
     
 def merge_zips(*zips):
-    with z.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
+    with zipfile.ZipFile(zips[0], 'a') as z1:  # Open the first zip in append mode
         existing_files = set(z1.namelist())
         for fname in zips[1:]:
-            with z.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
+            with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
                 for n in zf.namelist():
                     # Skip dirs and duplicates
                     if n.endswith('/') or n in existing_files:
