@@ -175,9 +175,9 @@ def download_natives():
             os.makedirs(dir_natives)
             #download jinput jar natives
             jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
-            download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, None, True)
-            download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, None, True)
-            download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, None, True)
+            download_file(jinput_base_url + 'windows.jar', lwjgl_natives_windows_natives_jar, '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
+            download_file(jinput_base_url + 'osx.jar', lwjgl_natives_macosx_natives_jar, '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
+            download_file(jinput_base_url + 'linux.jar', lwjgl_natives_linux_natives_jar, '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
         else:
             del_lwjgl_natives(dir_natives)
         #download lwjgl jar natives and extract
@@ -204,7 +204,6 @@ def merge_zips(*zips):
                     # Skip dirs and duplicates
                     if n.endswith('/') or n in existing_files:
                         continue
-                    print('adding: ' + n)
                     existing_files.add(n)
                     # Read the file and write to the first zip
                     z1.writestr(n, zf.read(n))
