@@ -242,4 +242,4 @@ if __name__ == "__main__":
             attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
             attatch_src(os.path.join(mcp, 'eclipse', 'Server', '.classpath'))
         print('LWJGL Sources Attatched!')
-        
+    
