@@ -634,6 +634,11 @@ if [[ "$lwjgl_ver" == "2.9.2" ]]; then
     natives_mac_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
     natives_linux_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
     natives_windows_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
+    lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2-sources.jar"
+    lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2-sources.jar"
+elif [[ "$lwjgl_ver" == "2.9.1" ]]; then
+    lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1-sources.jar"
+    lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1-sources.jar"
 fi
 
 legacy_assets_url="https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
@@ -912,6 +917,8 @@ Download "$mdk_dir/jars/bin/jinput.jar" "$jinput_url"
 Download "$mdk_dir/jars/bin/jutil.jar" "$jutil_url"
 python2.7 "$SCRIPTPATH/merge-zips.py" "$mdk_dir/jars/bin/jinput.jar" "$mdk_dir/jars/bin/jutil.jar"
 rm -f "$mdk_dir/jars/bin/jutil.jar"
+Download "$mdk_dir/lib/lwjgl-sources.zip" "$lwjgl_src_url"
+Download "$mdk_dir/lib/lwjgl_util-sources.zip" "$lwjgl_util_src_url"
 
 #Download & Install the natives
 DL-Natives "$natives_windows_url" "$natives_windows_url2" "windows_natives.jar"

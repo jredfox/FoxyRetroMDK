@@ -225,6 +225,16 @@ if __name__ == "__main__":
     onesix = False
     mc_ver = ""
     dir_mcp = os.path.dirname(os.path.realpath(__file__))
+    #Only Attatch Source don't change lwjgl version
+    if lwjgl_ver === 'attatch_src':
+        #MC 1.1 - 1.2.5
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
+        #MC 1.3.2 - 1.5.2
+        attatch_src(os.path.join(dir_mcp, 'forge', 'fml', 'eclipse', 'Minecraft', '.classpath'))
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
+        print('lwjgl sources attatched!')
+        sys.exit(0)
     if os.path.isdir(os.path.join(dir_mcp, 'jars', 'versions')) and os.path.isdir(os.path.join(dir_mcp, 'jars', 'libraries')):
         onesix = True
         for f in os.listdir(os.path.join(dir_mcp, 'jars')):
