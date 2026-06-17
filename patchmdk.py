@@ -236,7 +236,7 @@ if __name__ == "__main__":
         if os.path.exists(forge_classpath):
             #MC 1.3.2 - 1.5.2
             attatch_src(forge_classpath)
-            attatch_src(os.path.join(mcp, 'eclipse', 'Minecraft', '.classpath'))
+            attatch_src(os.path.join(mcp, 'eclipse', 'Minecraft', '.classpath'), True)
         else:
             #MC 1.1 - 1.2.5
             attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
