@@ -80,12 +80,6 @@ if __name__ == "__main__":
     mcpInForge = sys.argv[2][0].lower() == 't'
     mcp = (mdk + "/mcp") if mcpInForge else mdk
     
-    #Copy lwjglversionchanger into MCP
-    with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
-        f.write(lwjgl_version_changer_sh)
-    with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
-        f.write(lwjgl_version_changer_cmd)
-    
     # Patch MCP commands.py to use java & javac found in PATH
     commandspy = os.path.normpath(mcp + "/runtime/commands.py")
     print("Patching Path:" + commandspy)
@@ -242,4 +236,9 @@ if __name__ == "__main__":
             attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
             attatch_src(os.path.join(mcp, 'eclipse', 'Server', '.classpath'))
         print('LWJGL Sources Attatched!')
+    #Copy lwjglversionchanger into MCP
+    with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
+        f.write(lwjgl_version_changer_sh)
+    with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
+        f.write(lwjgl_version_changer_cmd)
     
