@@ -554,7 +554,7 @@ if ($lwjgl_ver -eq "2.9.2")
     $natives_linux_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
     $natives_windows_url2 = "https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
 }
-if ($lwjgl_ver == "2.9.1")
+if ($lwjgl_ver -eq "2.9.1")
 {
     $lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1-sources.jar"
     $lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1-sources.jar"
@@ -852,8 +852,8 @@ Download -Uri "$jinput_url" -OutFile "$mdk_dir\jars\bin\jinput.jar"
 Download -Uri "$jutil_url" -OutFile "$mdk_dir\jars\bin\jutil.jar"
 & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\merge-zips.py" "$mdk_dir\jars\bin\jinput.jar" "$mdk_dir\jars\bin\jutil.jar"
 Remove-Item -Path "$mdk_dir\jars\bin\jutil.jar" -Force -ErrorAction SilentlyContinue
-Download -Uri "$mdk_dir/lib/lwjgl-sources.zip" -OutFile "$lwjgl_src_url"
-Download -Uri "$mdk_dir/lib/lwjgl_util-sources.zip" -OutFile "$lwjgl_util_src_url"
+Download -Uri "$lwjgl_src_url" -OutFile "$mdk_dir/lib/lwjgl-sources.zip"
+Download -Uri "$lwjgl_util_src_url" -OutFile "$mdk_dir/lib/lwjgl_util-sources.zip"
 
 #Download Windows Natives & Extract then Install
 DL-Natives -URL "$natives_windows_url" -URL2 "$natives_windows_url2" -FileName "windows_natives"

@@ -80,6 +80,12 @@ if __name__ == "__main__":
     mcpInForge = sys.argv[2][0].lower() == 't'
     mcp = (mdk + "/mcp") if mcpInForge else mdk
     
+    #Copy lwjglversionchanger into MCP
+    with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
+        f.write(lwjgl_version_changer_sh)
+    with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
+        f.write(lwjgl_version_changer_cmd)
+    
     # Patch MCP commands.py to use java & javac found in PATH
     commandspy = os.path.normpath(mcp + "/runtime/commands.py")
     print("Patching Path:" + commandspy)
@@ -223,8 +229,17 @@ if __name__ == "__main__":
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-    #Copy lwjglversionchanger into MCP
-    with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
-        f.write(lwjgl_version_changer_sh)
-    with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
-        f.write(lwjgl_version_changer_cmd)
+        
+        #Attatch lwjgl sources
+        from lwjglversionchanger import attatch_src
+        forge_classpath = os.path.join(mcp, 'forge', 'fml', 'eclipse', 'Minecraft', '.classpath')
+        if os.path.exists(forge_classpath):
+            #MC 1.3.2 - 1.5.2
+            attatch_src(forge_classpath)
+            attatch_src(os.path.join(mcp, 'eclipse', 'Minecraft', '.classpath'))
+        else:
+            #MC 1.1 - 1.2.5
+            attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
+            attatch_src(os.path.join(mcp, 'eclipse', 'Server', '.classpath'))
+        print('lwjgl sources attatched!')
+        
