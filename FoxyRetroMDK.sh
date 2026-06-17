@@ -622,6 +622,8 @@ jinput_url="https://libraries.minecraft.net/net/java/jinput/jinput/2.0.5/jinput-
 jutil_url="https://libraries.minecraft.net/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar"
 lwjgl_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/${lwjgl_ver}/lwjgl-${lwjgl_ver}.jar"
 lwjgl_util_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/${lwjgl_ver}/lwjgl_util-${lwjgl_ver}.jar"
+lwjgl_src_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/${lwjgl_ver}/lwjgl-${lwjgl_ver}-sources.jar"
+lwjgl_util_src_url="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/${lwjgl_ver}/lwjgl_util-${lwjgl_ver}-sources.jar"
 natives_mac_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"
 natives_mac_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/${lwjgl_ver}/lwjgl-platform-${lwjgl_ver}-natives-osx.jar"
 natives_linux_url="https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"
@@ -631,11 +633,11 @@ natives_windows_url2="https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-plat
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
     lwjgl_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar"
     lwjgl_util_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar"
+    lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2-sources.jar"
+    lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2-sources.jar"
     natives_mac_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar"
     natives_linux_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar"
     natives_windows_url2="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar"
-    lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2-sources.jar"
-    lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2-sources.jar"
 elif [[ "$lwjgl_ver" == "2.9.1" ]]; then
     lwjgl_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1-sources.jar"
     lwjgl_util_src_url="https://repo.maven.apache.org/maven2/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1-sources.jar"
