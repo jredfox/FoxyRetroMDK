@@ -333,6 +333,7 @@ if __name__ == "__main__":
             with zipfile.ZipFile(dir_eclipse_zip, 'r') as zip_ref:
                 zip_ref.extractall(dir_eclipse)
         elif os.path.isdir(os.path.join(dir_fml, 'eclipse')):
+            print('Copying eclipse directory')
             del_dir(dir_eclipse)
             shutil.copytree(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
         else:
