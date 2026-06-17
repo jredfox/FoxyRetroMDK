@@ -324,10 +324,19 @@ if __name__ == "__main__":
         jinput_linux = os.path.join(dir_jinput, 'jinput-platform-2.0.5-natives-linux.jar')
         #reset eclipse's metadata to work around race condition bug that corrupts the MDK (Users would have to do Project+Refresh fallowed by Project+Clean manually without this)
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
-        if os.path.isdir(dir_fml):
-            dir_eclipse = os.path.join(dir_mcp, 'eclipse')
+        dir_eclipse = os.path.join(dir_mcp, 'eclipse')
+        dir_eclipse_zip = os.path.join(dir_mcp, 'runtime', 'eclipse.zip')
+        if os.path.isfile(dir_eclipse_zip):
+            print('Extracting eclipse.zip')
+            del_dir(dir_eclipse)
+            os.makedirs(dir_eclipse)
+            with zipfile.ZipFile(dir_eclipse_zip, 'r') as zip_ref:
+                zip_ref.extractall(dir_eclipse)
+        elif os.path.isdir(dir_fml):
             del_dir(dir_eclipse)
             shutil.copytree(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
+        else:
+            print('ERROR: Unable to reset eclipse\'s metadata. Please Run Project+Refresh fallowed by Project+Clean when you open up eclipse!')
         #patch lwjgl version strings
         patch_libs(os.path.join(dir_fml, 'fml.json'))
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
@@ -335,7 +344,7 @@ if __name__ == "__main__":
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
-
+    
     #download & install lwjgl
     lwjgl_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl/' + lwjgl_ver + '/lwjgl-' + lwjgl_ver + '.jar'
     lwjgl_util_url = 'https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl_util/' + lwjgl_ver + '/lwjgl_util-' + lwjgl_ver + '.jar'

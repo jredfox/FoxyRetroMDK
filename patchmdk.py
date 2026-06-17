@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     mdk = os.path.normpath(sys.argv[1])
     mcpInForge = sys.argv[2][0].lower() == 't'
-    mcp = (mdk + "/mcp") if mcpInForge else mdk
+    mcp = os.path.normpath((mdk + "/mcp")) if mcpInForge else mdk
     
     # Patch MCP commands.py to use java & javac found in PATH
     commandspy = os.path.normpath(mcp + "/runtime/commands.py")
@@ -106,6 +106,8 @@ if __name__ == "__main__":
                 f.write(lines)
             
     if mcpInForge:
+        import shutil
+        shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', os.path.join(mdk, 'fml', 'eclipse'))
         useMojang = os.getenv("useFMLMaven") != 'T'
         import json
         from collections import OrderedDict
