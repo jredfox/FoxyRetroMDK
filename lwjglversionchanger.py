@@ -326,7 +326,7 @@ if __name__ == "__main__":
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         dir_eclipse = os.path.join(dir_mcp, 'eclipse')
         del_dir(dir_eclipse)
-        shutil.move(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
+        shutil.copytree(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
         #patch lwjgl version strings
         patch_libs(os.path.join(dir_fml, 'fml.json'))
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
