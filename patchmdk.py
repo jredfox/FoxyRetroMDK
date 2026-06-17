@@ -241,5 +241,5 @@ if __name__ == "__main__":
             #MC 1.1 - 1.2.5
             attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
             attatch_src(os.path.join(mcp, 'eclipse', 'Server', '.classpath'))
-        print('lwjgl sources attatched!')
+        print('LWJGL Sources Attatched!')
         
