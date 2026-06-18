@@ -4,7 +4,7 @@ import tarfile
 import zipfile
         
 if __name__ == "__main__":
-    mcp = sys.argv[1].lower().replace('"', '').replace("'", '')
+    mcp = sys.argv[1].replace('"', '').replace("'", '')
     asm_tarball = os.path.join(mcp, 'lib', 'asm-4.1.tar.gz')
     if os.path.exists(asm_tarball):
         print('Extracting asm-4.1.tar.gz')
