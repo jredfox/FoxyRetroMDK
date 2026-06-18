@@ -868,6 +868,7 @@ Patch-MDKPY "$mdk_dir"
 #Download Forge lib Folder and Install it
 Download "$temp/forge_lib.zip" "$forge_lib_url"
 unzip -q -o "$temp/forge_lib.zip" -d "$mdk_dir/lib"
+python2.7 "$SCRIPTPATH/asm_src_extract.py" "$mdk_dir"
 if [[ "$bcprov_dev" == "T" ]]; then
     Download "${mdk_dir}/lib/$(basename "$bcprov_url")" "$bcprov_url"
 fi

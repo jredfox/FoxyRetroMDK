@@ -802,6 +802,7 @@ Enforce-JDK8 -mcp_dir "$mdk_dir" "F"
 #Download Forge lib Folder and Install it
 Download -Uri "$forge_lib_url" -OutFile "$temp\forge_lib.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge_lib.zip", "$mdk_dir\lib")
+& "$pydir\python.exe" "$PSScriptRoot\asm_src_extract.py" "$mdk_dir"
 if ($bcprov_dev -eq "T")
 {
     Download -Uri "$bcprov_url" -OutFile ("$mdk_dir\lib\" + [System.IO.Path]::GetFileName("$bcprov_url"))

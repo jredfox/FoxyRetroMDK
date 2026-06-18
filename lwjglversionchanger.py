@@ -166,6 +166,10 @@ def attatch_src(file, printSkip=False):
             lines = lines.replace('path="jars/bin/lwjgl.jar"', 'path="jars/bin/lwjgl.jar" sourcepath="lib/lwjgl-sources.zip"')
         if not has_src_path(lines, 'path="jars/bin/lwjgl_util.jar"'):
             lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"')
+        #Patch MC 1.5x ASM missing source
+        if 'sourcepath="lib/asm-4.1-bin.zip"' in lines:
+            print('Attatched ASM sources: ' + file)
+            lines = lines.replace('sourcepath="lib/asm-4.1-bin.zip"', 'sourcepath="lib/asm-all-4.1-source.zip"')
         with open(file, 'wb') as f:
             f.write(lines)
         project_file = os.path.join(os.path.dirname(file), '.project')
