@@ -214,9 +214,12 @@ def download_natives():
         download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
         download_file(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1, True)
         #rebuild the jar natives
-        merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
-        merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
-        merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
+        if os.path.isfile(lwjgl_natives_windows_natives_jar):
+            merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
+        if os.path.isfile(lwjgl_natives_macosx_natives_jar):
+            merge_zips((lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_natives_macosx_natives_jar)
+        if os.path.isfile(lwjgl_natives_linux_natives_jar):
+            merge_zips((lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_natives_linux_natives_jar)
         del_file(lwjgl_natives_windows_natives_jar)
         del_file(lwjgl_natives_macosx_natives_jar)
         del_file(lwjgl_natives_linux_natives_jar)
