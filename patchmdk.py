@@ -90,6 +90,12 @@ if __name__ == "__main__":
         start = data.find('def packbin(') + 5
         index = data.find('def ', start)
         data = data[:index] + mcp_commands_py_patch + data[index:]
+    #Hook commands.py to copy MinecraftAppletStub.java
+    if os.getenv("patch_applet") == "T":
+        applet_py_patch = "\n    normaliselines(os.path.join(self.fixesclient, 'MinecraftAppletStub.java'), os.path.join(pathsrclk[side], 'MinecraftAppletStub.java'))"
+        start = data.find('def copysrc(')
+        index = data.find('\n', data.find('if side == CLIENT:'))
+        data = data[:index] + applet_py_patch + data[index:]
     with open(commandspy, 'wb') as f:
         f.write(data)
     
@@ -244,7 +250,6 @@ if __name__ == "__main__":
             lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
             targ = lines.rfind('}')
             lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
-            print(lines)
             with open(start_forge, 'wb') as f:
                 f.write(lines)
         
