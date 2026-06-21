@@ -241,9 +241,10 @@ if __name__ == "__main__":
                 lines_start_patch = f.read()
             with open(start_forge, 'r') as f:
                 lines = f.read()
-            lines = lines.replace('Minecraft.main(args);', '//Minecraft.main(args);\n        start(args);', 1)
+            lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
             targ = lines.rfind('}')
             lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
+            print(lines)
             with open(start_forge, 'wb') as f:
                 f.write(lines)
         
