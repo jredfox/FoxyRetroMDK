@@ -9,17 +9,20 @@ if __name__ == "__main__":
     
     #Patch Start.java
     start_patch = os.path.join(dir_resources, 'Start.java.patch')
-    start_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
+    start_file = os.path.join(mdk, 'src', 'minecraft', 'Start.java')
+    #MC 1.1 support
+    if not os.path.exists(start_file):
+        start_file = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
     with open(start_patch, 'r') as f:
         lines_start_patch = f.read()
-    with open(start_forge, 'r') as f:
+    with open(start_file, 'r') as f:
         lines = f.read()
     if 'FoxyRetroMDK.noapplet' not in lines:
         print('Patching Start.java')
         lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
         targ = lines.rfind('}')
         lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
-        with open(start_forge, 'wb') as f:
+        with open(start_file, 'wb') as f:
             f.write(lines)
     
     #Copy MinecraftAppletStub.java

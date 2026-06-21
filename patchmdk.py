@@ -207,9 +207,7 @@ if __name__ == "__main__":
         str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
-        if os.getenv("patch_applet") == "T":
-            str_forge_sh = str_forge_sh + '\npython2.7 patch_applet.py "$mcp"'
-            str_fml_cmd = str_fml_cmd.replace('pause', '..\runtime\bin\python\python_mcp patch_applet.py ".."\npause')
+        applet_patch = os.getenv("patch_applet") == "T"
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
@@ -218,6 +216,11 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_forge_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_forge_cmd, 1)
+                if applet_patch:
+                    if isSh:
+                        lines = lines + '\npython2.7 patch_applet.py "$mcp"'
+                    else:
+                        lines = lines.replace('pause', '..\\runtime\\bin\\python\\python_mcp patch_applet.py ".."\npause')
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
