@@ -236,9 +236,9 @@ if __name__ == "__main__":
                 lines_start_patch = f.read()
             with open(start_forge, 'r') as f:
                 lines = f.read()
-            lines = lines.replace('Minecraft.main(args);', '//Minecraft.main(args);', 1)
+            lines = lines.replace('Minecraft.main(args);', '//Minecraft.main(args);\n    start(args);', 1)
             targ = lines.rfind('}')
-            lines = lines[:targ+1] + lines_start_patch + '\n'
+            lines = lines[:targ] + lines_start_patch + '\n}\n'
             with open(start_forge, 'wb') as f:
                 f.write(lines)
         
