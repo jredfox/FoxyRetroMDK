@@ -88,7 +88,7 @@ $ErrorActionPreference = 'Continue'
 $env:patchoneone = "F"
 $env:patch_21 = "F"
 $env:patch_portability = "F"
-$env:useFMLMaven="F"
+$env:useFMLMaven= "F"
 $env:patch_applet = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
@@ -371,6 +371,10 @@ function Enforce-JDK8 {
     }
     if($env:patch_21 -eq "T") {
         Copy-Item -Path "$PSScriptRoot\PatchRenderPlayer.jar" -Destination "$mcp_dir\forge\PatchRenderPlayer.jar" -Force | out-null
+    }
+    if ($env:patch_applet -eq "T") {
+        Copy-Item -Path "$PSScriptRoot\patch_applet.py" -Destination "$mcp_dir\forge\patch_applet.py" -Force | out-null
+        Copy-Item -Path "$PSScriptRoot\resources" -Destination "$mcp_dir\forge\resources" -Recurse -Force | out-null
     }
 }
 

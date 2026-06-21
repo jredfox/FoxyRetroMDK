@@ -90,13 +90,6 @@ if __name__ == "__main__":
         start = data.find('def packbin(') + 5
         index = data.find('def ', start)
         data = data[:index] + mcp_commands_py_patch + data[index:]
-    #Hook commands.py to copy MinecraftAppletStub.java
-    if os.getenv("patch_applet") == "T":
-        applet_py_patch = "\n            normaliselines(os.path.join(self.fixesclient, 'MinecraftAppletStub.java'), os.path.join(pathsrclk[side], 'MinecraftAppletStub.java'))"
-        start = data.find('def copysrc(')
-        index = data.find('\n', data.find('if side == CLIENT:', start))
-        if index != -1 and index < data.find('def ', start + 10):
-            data = data[:index] + applet_py_patch + data[index:]
     with open(commandspy, 'wb') as f:
         f.write(data)
     
@@ -213,6 +206,11 @@ if __name__ == "__main__":
         str_fml_sh = str_forge_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
         str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
         
+        #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
+        if os.getenv("patch_applet") == "T":
+            str_forge_sh = str_forge_sh + '\npython2.7 patch_applet.py "$mcp"'
+            str_fml_cmd = str_fml_cmd.replace('pause', '..\runtime\bin\python\python_mcp patch_applet.py ".."\npause')
+        
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
@@ -232,27 +230,6 @@ if __name__ == "__main__":
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
                 with open(file, 'wb') as f:
                     f.write(lines)
-        
-        #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
-        if os.getenv("patch_applet") == "T":
-            dir_resources = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'resources')
-            #Copy MinecraftAppletSub.java over
-            with open(os.path.join(dir_resources, 'MinecraftAppletStub.java'), 'r') as f:
-                lines_applet_stub = f.read()
-            with open(os.path.join(mdk, 'forge', 'conf', 'patches', 'MinecraftAppletStub.java'), 'wb') as f:
-                f.write(lines_applet_stub)
-            #Patch Start.java
-            start_patch = os.path.join(dir_resources, 'Start.java.patch')
-            start_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
-            with open(start_patch, 'r') as f:
-                lines_start_patch = f.read()
-            with open(start_forge, 'r') as f:
-                lines = f.read()
-            lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
-            targ = lines.rfind('}')
-            lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
-            with open(start_forge, 'wb') as f:
-                f.write(lines)
         
         #Attatch lwjgl sources
         from lwjglversionchanger import attatch_src
