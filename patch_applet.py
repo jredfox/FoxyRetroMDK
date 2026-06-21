@@ -49,10 +49,22 @@ if __name__ == "__main__":
             f.write(lines)
     
     #Update MCP
-    from runtime.updatenames import updatenames
-    from runtime.updatemd5 import updatemd5
+    os.chdir(mdk)
+    sys.path.insert(0, os.path.join(mdk, 'runtime'))
+    from updatenames import updatenames
+    from updatemd5 import updatemd5
     print('Updating Names')
-    updatenames(None, True)
+    try:
+        updatenames(None, True)
+    except TypeError:
+        print('MC 1.1 Detected!')
+        from commands import Commands, CLIENT, SERVER
+        commands = Commands(None)
+        commands.logger.info('== Client ==')
+        commands.logger.info('> Renaming sources')
+        commands.process_rename(CLIENT)
+        commands.logger.info('> Creating reobfuscation tables')
+        commands.renamereobsrg(CLIENT)
     print('Updating MD5')
     updatemd5(None, True)
     print('FoxyRetroMDK Added Applet Launcher to fix graphical issues on macOS!')
