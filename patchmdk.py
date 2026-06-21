@@ -209,8 +209,8 @@ if __name__ == "__main__":
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         applet_patch = os.getenv("patch_applet") == "T"
         if applet_patch:
-            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'cp -f "conf/patches//Start.java.bck" "conf/patches/Start.java"\n## Foxy Retro MDK END ##\n')
-            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'copy /B /V /Y "conf\\patches\\Start.java.bck" "conf\\patches\\Start.java"\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'cp -f "conf/patches//Start.java.bck" "conf/patches/Start.java" >/dev/null 2>&1\n## Foxy Retro MDK END ##\n')
+            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'copy /B /V /Y "conf\\patches\\Start.java.bck" "conf\\patches\\Start.java" >nul 2>&1\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
