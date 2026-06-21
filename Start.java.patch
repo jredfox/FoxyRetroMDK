@@ -1,0 +1,94 @@
+    /**
+     * FoxyRetroMDK start Replaces Minecraft's main(String[] args) method to fix graphical glitches on macOS with Java 8
+     */
+    public static void start(String[] par0ArrayOfStr)
+    {
+        java.util.HashMap var1 = new java.util.HashMap();
+        boolean var2 = false;
+        boolean var3 = true;
+        boolean var4 = false;
+        String var5 = "Player" + (org.lwjgl.Sys.getTime() * 1000L / org.lwjgl.Sys.getTimerResolution()) % 1000L;
+
+        if (par0ArrayOfStr.length > 0)
+        {
+            var5 = par0ArrayOfStr[0];
+        }
+
+        String var6 = "-";
+
+        if (par0ArrayOfStr.length > 1)
+        {
+            var6 = par0ArrayOfStr[1];
+        }
+
+        for (int var7 = 2; var7 < par0ArrayOfStr.length; ++var7)
+        {
+            String var8 = par0ArrayOfStr[var7];
+            String var10000;
+
+            if (var7 == par0ArrayOfStr.length - 1)
+            {
+                var10000 = null;
+            }
+            else
+            {
+                var10000 = par0ArrayOfStr[var7 + 1];
+            }
+
+            boolean var10 = false;
+
+            if (!var8.equals("-demo") && !var8.equals("--demo"))
+            {
+                if (var8.equals("--applet"))
+                {
+                    var3 = false;
+                }
+            }
+            else
+            {
+                var2 = true;
+            }
+
+            if (var10)
+            {
+                ++var7;
+            }
+        }
+
+        var1.put("demo", "" + var2);
+        var1.put("stand-alone", "" + var3);
+        var1.put("username", var5);
+        var1.put("fullscreen", "" + var4);
+        var1.put("sessionid", var6);
+        java.awt.Frame var11 = new java.awt.Frame();
+        var11.setTitle("Minecraft");
+        var11.setBackground(java.awt.Color.BLACK);
+        javax.swing.JPanel var12 = new javax.swing.JPanel();
+        var11.setLayout(new java.awt.BorderLayout());
+        var12.setPreferredSize(new java.awt.Dimension(854, 480));
+        var11.add(var12, "Center");
+        var11.pack();
+        var11.setLocationRelativeTo((java.awt.Component)null);
+        var11.setVisible(true);
+        final net.minecraft.client.MinecraftApplet var13 = new net.minecraft.client.MinecraftApplet();
+        var11.addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent par1WindowEvent)
+            {
+                System.out.println("MDK Closing Event");
+                var13.shutdown();
+            }
+        });
+        MinecraftFakeLauncher var9 = new MinecraftFakeLauncher(var1);
+        var13.setStub(var9);
+        var9.setLayout(new java.awt.BorderLayout());
+        var9.add(var13, "Center");
+        var9.validate();
+        var11.removeAll();
+        var11.setLayout(new java.awt.BorderLayout());
+        var11.add(var9, "Center");
+        var11.validate();
+        var13.init();
+        var13.start();
+    }

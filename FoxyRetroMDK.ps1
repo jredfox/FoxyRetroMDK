@@ -89,6 +89,7 @@ $env:patchoneone = "F"
 $env:patch_21 = "F"
 $env:patch_portability = "F"
 $env:useFMLMaven="F"
+$env:patch_applet = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
@@ -741,6 +742,7 @@ elseif ($mc_ver.StartsWith("1.2"))
     $fernflower_dl = "T"  #Enable Fernflower Download From newer MCP
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
     $env:patch_portability = "T"
+    $env:patch_applet = "T"
 }
 elseif ($mc_ver -eq "1.1")
 {
@@ -765,6 +767,7 @@ elseif ($mc_ver -eq "1.1")
     $server_skip = "T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
     $env:patchoneone = "T" #patch portability for all of mcp's scripts not just forge/install.sh
     $env:patch_portability = "T"
+    $env:patch_applet = "T"
 }
 else
 {

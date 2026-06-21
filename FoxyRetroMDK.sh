@@ -44,6 +44,7 @@ export patch_21="F"
 export patch_portability="F"
 export patchoneone="F"
 export useFMLMaven="F"
+export patch_applet="F"
 
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
     export useFMLMaven="T"
@@ -803,6 +804,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     fernflower_dl="T"  #Enable Fernflower Download From newer MCP
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
     export patch_portability="T"
+    export patch_applet="T"
 
 elif [[ "$mc_ver" == "1.1" ]]; then
     if [[ "$isMac" == "true" ]]; then
@@ -834,6 +836,7 @@ elif [[ "$mc_ver" == "1.1" ]]; then
     server_skip="T" #Skip Forge Servers in versions less then 1.3 as forge never fully supported servers until 1.3 when they were forced to support it
     export patchoneone="T" #patch portability for all of mcp's scripts not just forge/install.sh
     export patch_portability="T"
+    export patch_applet="T"
 else
     Unsupported-Version
 fi
