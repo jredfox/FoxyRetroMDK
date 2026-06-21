@@ -49,6 +49,7 @@ if __name__ == "__main__":
             f.write(lines)
     
     #Update MCP
+    oneone = False
     os.chdir(mdk)
     sys.path.insert(0, os.path.join(mdk, 'runtime'))
     from updatenames import updatenames
@@ -57,6 +58,7 @@ if __name__ == "__main__":
     try:
         updatenames(None, True)
     except TypeError:
+        oneone = True
         print('MC 1.1 Detected!')
         from commands import Commands, CLIENT, SERVER
         commands = Commands(None)
@@ -66,5 +68,8 @@ if __name__ == "__main__":
         commands.logger.info('> Creating reobfuscation tables')
         commands.renamereobsrg(CLIENT)
     print('Updating MD5')
-    updatemd5(None, True)
+    if not oneone:
+        updatemd5(None, True)
+    else:
+        updatemd5(None)
     print('FoxyRetroMDK Added Applet Launcher to fix graphical issues on macOS!')
