@@ -235,14 +235,14 @@ if __name__ == "__main__":
         
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         if os.getenv("patch_applet") == "T":
-            dir_script = os.path.dirname(os.path.realpath(__file__))
+            dir_resources = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'resources')
             #Copy MinecraftAppletSub.java over
-            with open(os.path.join(dir_script, 'MinecraftAppletStub.java'), 'r') as f:
+            with open(os.path.join(dir_resources, 'MinecraftAppletStub.java'), 'r') as f:
                 lines_applet_stub = f.read()
             with open(os.path.join(mdk, 'forge', 'conf', 'patches', 'MinecraftAppletStub.java'), 'wb') as f:
                 f.write(lines_applet_stub)
             #Patch Start.java
-            start_patch = os.path.join(dir_script, 'Start.java.patch')
+            start_patch = os.path.join(dir_resources, 'Start.java.patch')
             start_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
             with open(start_patch, 'r') as f:
                 lines_start_patch = f.read()
