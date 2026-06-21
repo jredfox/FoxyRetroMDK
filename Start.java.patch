@@ -1,7 +1,7 @@
     /**
-     * FoxyRetroMDK start Replaces Minecraft's main(String[] args) method to fix graphical glitches on macOS with Java 8
+     * FoxyRetroMDK start replaces Minecraft.main(String[] args) method to fix graphical glitches on macOS with Java 8
      */
-    public static void start(String[] par0ArrayOfStr)
+    public static void start(String[] args)
     {
         java.util.HashMap var1 = new java.util.HashMap();
         boolean var2 = false;
@@ -9,30 +9,30 @@
         boolean var4 = false;
         String var5 = "Player" + (org.lwjgl.Sys.getTime() * 1000L / org.lwjgl.Sys.getTimerResolution()) % 1000L;
 
-        if (par0ArrayOfStr.length > 0)
+        if (args.length > 0)
         {
-            var5 = par0ArrayOfStr[0];
+            var5 = args[0];
         }
 
         String var6 = "-";
 
-        if (par0ArrayOfStr.length > 1)
+        if (args.length > 1)
         {
-            var6 = par0ArrayOfStr[1];
+            var6 = args[1];
         }
 
-        for (int var7 = 2; var7 < par0ArrayOfStr.length; ++var7)
+        for (int var7 = 2; var7 < args.length; ++var7)
         {
-            String var8 = par0ArrayOfStr[var7];
+            String var8 = args[var7];
             String var10000;
 
-            if (var7 == par0ArrayOfStr.length - 1)
+            if (var7 == args.length - 1)
             {
                 var10000 = null;
             }
             else
             {
-                var10000 = par0ArrayOfStr[var7 + 1];
+                var10000 = args[var7 + 1];
             }
 
             boolean var10 = false;
@@ -80,7 +80,7 @@
                 var13.shutdown();
             }
         });
-        MinecraftFakeLauncher var9 = new MinecraftFakeLauncher(var1);
+        MinecraftAppletStub var9 = new MinecraftAppletStub(var1);
         var13.setStub(var9);
         var9.setLayout(new java.awt.BorderLayout());
         var9.add(var13, "Center");

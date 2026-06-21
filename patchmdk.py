@@ -229,16 +229,21 @@ if __name__ == "__main__":
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8
         if os.getenv("patch_applet") == "T":
             dir_script = os.path.dirname(os.path.realpath(__file__))
+            #Copy MinecraftAppletSub.java over
+            with open(os.path.join(dir_script, 'MinecraftAppletStub.java'), 'r') as f:
+                lines_applet_stub = f.read()
+            with open(os.path.join(mdk, 'conf', 'patches', 'MinecraftAppletStub.java'), 'wb') as f:
+                f.write(lines_applet_stub)
+            #Patch Start.java
             start_patch = os.path.join(dir_script, 'Start.java.patch')
             start_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
-            start_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
             with open(start_patch, 'r') as f:
                 lines_start_patch = f.read()
             with open(start_forge, 'r') as f:
                 lines = f.read()
-            lines = lines.replace('Minecraft.main(args);', '//Minecraft.main(args);\n    start(args);', 1)
+            lines = lines.replace('Minecraft.main(args);', '//Minecraft.main(args);\n        start(args);', 1)
             targ = lines.rfind('}')
-            lines = lines[:targ] + lines_start_patch + '\n}\n'
+            lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
             with open(start_forge, 'wb') as f:
                 f.write(lines)
         
