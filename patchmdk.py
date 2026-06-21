@@ -238,7 +238,7 @@ if __name__ == "__main__":
             #Copy MinecraftAppletSub.java over
             with open(os.path.join(dir_script, 'MinecraftAppletStub.java'), 'r') as f:
                 lines_applet_stub = f.read()
-            with open(os.path.join(mdk, 'conf', 'patches', 'MinecraftAppletStub.java'), 'wb') as f:
+            with open(os.path.join(mdk, 'forge', 'conf', 'patches', 'MinecraftAppletStub.java'), 'wb') as f:
                 f.write(lines_applet_stub)
             #Patch Start.java
             start_patch = os.path.join(dir_script, 'Start.java.patch')
