@@ -11,14 +11,23 @@ if __name__ == "__main__":
     start_patch = os.path.join(dir_resources, 'Start.java.patch')
     start_file = os.path.join(mdk, 'src', 'minecraft', 'Start.java')
     start_file_mcp = None
+    start_file_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
+    #Create backup of Start.java
+    start_file_forge_bck = start_file_forge + '.bck'
+    if not os.path.exists(start_file_forge_bck):
+        with open(start_file_forge, 'r') as f:
+            lines = f.read().replace('\r\n', '\n')
+        with open(start_file_forge_bck, 'wb') as f:
+            f.write(lines)
     #MC 1.1 support
     if not os.path.exists(start_file):
-        start_file = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
+        print('are we oneone?')
+        start_file = start_file_forge
         start_file_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
     with open(start_patch, 'r') as f:
-        lines_start_patch = f.read()
+        lines_start_patch = f.read().replace('\r\n', '\n')
     with open(start_file, 'r') as f:
-        lines = f.read()
+        lines = f.read().replace('\r\n', '\n')
     if 'FoxyRetroMDK.noapplet' not in lines:
         print('Patching Start.java')
         lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
@@ -33,7 +42,7 @@ if __name__ == "__main__":
     #Copy MinecraftAppletStub.java
     print('Copying MinecraftAppletStub.java')
     with open(os.path.join(dir_resources, 'MinecraftAppletStub.java'), 'r') as f:
-        lines = f.read()
+        lines = f.read().replace('\r\n', '\n')
     with open(os.path.join(mdk, 'src', 'minecraft', 'MinecraftAppletStub.java'), 'wb') as f:
         f.write(lines)
     
@@ -41,9 +50,10 @@ if __name__ == "__main__":
     print('Patching MinecraftApplet.java')
     mcapplet = os.path.join(mdk, 'src', 'minecraft', 'net', 'minecraft', 'client', 'MinecraftApplet.java')
     with open(mcapplet, 'r') as f:
-        lines = f.read()
+        lines = f.read().replace('\r\n', '\n')
     lines = lines.replace('private ', 'public ').replace('protected ', 'public ')
     if 'this.mcThread.setPriority(10);' not in lines:
+        print('Actually Patching: ' + mcapplet)
         lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n            this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new')
         with open(mcapplet, 'wb') as f:
             f.write(lines)
