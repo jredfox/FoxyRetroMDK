@@ -232,7 +232,7 @@ if __name__ == "__main__":
                 with open(file, 'wb') as f:
                     f.write(lines)
         
-        #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8
+        #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         if os.getenv("patch_applet") == "T":
             dir_script = os.path.dirname(os.path.realpath(__file__))
             #Copy MinecraftAppletSub.java over
