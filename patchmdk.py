@@ -220,7 +220,7 @@ if __name__ == "__main__":
                     if isSh:
                         lines = lines + '\npython2.7 patch_applet.py "$mcp"'
                     else:
-                        lines = lines.replace('pause', '..\\runtime\\bin\\python\\python_mcp patch_applet.py ".."\npause')
+                        lines = lines.replace('pause', 'runtime\\bin\\python\\python_mcp forge/patch_applet.py "."\npause')
                 with open(file, 'wb') as f:
                     f.write(lines)
                 

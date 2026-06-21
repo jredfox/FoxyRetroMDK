@@ -10,9 +10,11 @@ if __name__ == "__main__":
     #Patch Start.java
     start_patch = os.path.join(dir_resources, 'Start.java.patch')
     start_file = os.path.join(mdk, 'src', 'minecraft', 'Start.java')
+    start_file_mcp = None
     #MC 1.1 support
     if not os.path.exists(start_file):
         start_file = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
+        start_file_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
     with open(start_patch, 'r') as f:
         lines_start_patch = f.read()
     with open(start_file, 'r') as f:
@@ -24,6 +26,9 @@ if __name__ == "__main__":
         lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
         with open(start_file, 'wb') as f:
             f.write(lines)
+        if start_file_mcp is not None:
+            with open(start_file_mcp, 'wb') as f:
+                f.write(lines)
     
     #Copy MinecraftAppletStub.java
     print('Copying MinecraftAppletStub.java')
@@ -34,11 +39,14 @@ if __name__ == "__main__":
     
     #Patch MinecraftApplet.java
     print('Patching MinecraftApplet.java')
-    with open(os.path.join(mdk, 'src', 'minecraft', 'MinecraftApplet.java'), 'r') as f:
+    mcapplet = os.path.join(mdk, 'src', 'minecraft', 'net', 'minecraft', 'client', 'MinecraftApplet.java')
+    with open(mcapplet, 'r') as f:
         lines = f.read()
     lines = lines.replace('private ', 'public ').replace('protected ', 'public ')
     if 'this.mcThread.setPriority(10);' not in lines:
-        lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n        this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new')
+        lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n            this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new')
+        with open(mcapplet, 'wb') as f:
+            f.write(lines)
     
     #Update MCP
     from runtime.updatenames import updatenames
