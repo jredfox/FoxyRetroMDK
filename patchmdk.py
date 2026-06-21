@@ -92,9 +92,9 @@ if __name__ == "__main__":
         data = data[:index] + mcp_commands_py_patch + data[index:]
     #Hook commands.py to copy MinecraftAppletStub.java
     if os.getenv("patch_applet") == "T":
-        applet_py_patch = "\n    normaliselines(os.path.join(self.fixesclient, 'MinecraftAppletStub.java'), os.path.join(pathsrclk[side], 'MinecraftAppletStub.java'))"
+        applet_py_patch = "\n            normaliselines(os.path.join(self.fixesclient, 'MinecraftAppletStub.java'), os.path.join(pathsrclk[side], 'MinecraftAppletStub.java'))"
         start = data.find('def copysrc(')
-        index = data.find('\n', data.find('if side == CLIENT:'))
+        index = data.find('\n', data.find('if side == CLIENT:', start))
         data = data[:index] + applet_py_patch + data[index:]
     with open(commandspy, 'wb') as f:
         f.write(data)
