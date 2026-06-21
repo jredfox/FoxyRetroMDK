@@ -95,6 +95,11 @@ if __name__ == "__main__":
         applet_py_patch = "\n            normaliselines(os.path.join(self.fixesclient, 'MinecraftAppletStub.java'), os.path.join(pathsrclk[side], 'MinecraftAppletStub.java'))"
         start = data.find('def copysrc(')
         index = data.find('\n', data.find('if side == CLIENT:', start))
+        #Handle MC 1.1 and or Missing Target
+        if index == -1 or index >= data.find('def ', start + 10):
+            print('patch_applet: MC 1.1 detected!')
+            index = data.find('\n', start + 12)
+            applet_py_patch = '\n        if side == CLIENT:\n            if not os.path.exists(self.srcclient):\n                os.makedirs(self.srcclient)' + applet_py_patch.replace('pathsrclk[side]', 'self.srcclient', 1) + '\n'
         data = data[:index] + applet_py_patch + data[index:]
     with open(commandspy, 'wb') as f:
         f.write(data)
