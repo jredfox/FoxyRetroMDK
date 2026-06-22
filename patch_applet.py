@@ -67,7 +67,6 @@ if __name__ == "__main__":
         updatenames(None, True)
     except TypeError:
         oneone = True
-        print('MC 1.1 Detected!')
         from commands import Commands, CLIENT, SERVER
         commands = Commands(None)
         commands.logger.info('== Client ==')
