@@ -426,7 +426,7 @@ function Patch-MDKPY {
     fi
     
     #Copy patch_applet.py over with applicable resources
-    if [[  $env:patch_applet == "T" ]]; then
+    if [[  $patch_applet == "T" ]]; then
         mkdir -p "$mcp_dir/forge/resources"
         cp -f "$PSScriptRoot/patch_applet.py" "$mcp_dir/forge/patch_applet.py"
         cp -rf "$PSScriptRoot/resources" "$mcp_dir/forge"
