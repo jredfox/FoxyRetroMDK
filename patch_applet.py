@@ -21,7 +21,6 @@ if __name__ == "__main__":
             f.write(lines)
     #MC 1.1 support
     if not os.path.exists(start_file):
-        print('are we oneone?')
         start_file = start_file_forge
         start_file_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
     with open(start_file, 'r') as f:
@@ -53,7 +52,6 @@ if __name__ == "__main__":
         lines = f.read().replace('\r\n', '\n')
     lines = lines.replace('private ', 'public ').replace('protected ', 'public ')
     if 'this.mcThread.setPriority(10);' not in lines:
-        print('Actually Patching: ' + mcapplet)
         lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n            this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new').replace('this.this.', 'this.')
         with open(mcapplet, 'wb') as f:
             f.write(lines)
