@@ -24,12 +24,12 @@ if __name__ == "__main__":
         print('are we oneone?')
         start_file = start_file_forge
         start_file_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
-    with open(start_patch, 'r') as f:
-        lines_start_patch = f.read().replace('\r\n', '\n')
     with open(start_file, 'r') as f:
         lines = f.read().replace('\r\n', '\n')
     if 'FoxyRetroMDK.noapplet' not in lines:
         print('Patching Start.java')
+        with open(start_patch, 'r') as f:
+            lines_start_patch = f.read().replace('\r\n', '\n')
         lines = lines.replace('Minecraft.main(args);', 'if(Character.toUpperCase(System.getProperty("FoxyRetroMDK.noapplet", "false").charAt(0)) == \'T\')\n            Minecraft.main(args);\n        else\n            start(args);', 1)
         targ = lines.rfind('}')
         lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
