@@ -424,6 +424,13 @@ function Patch-MDKPY {
     if [[ "$patch_portability" == "T" ]]; then
         cp -f "$SCRIPTPATH/patchportability.py" "$mcp_dir/patchportability.py"
     fi
+    
+    #Copy patch_applet.py over with applicable resources
+    if [[  $env:patch_applet == "T" ]]; then
+        mkdir -p "$mcp_dir/forge/resources"
+        cp -f "$PSScriptRoot/patch_applet.py" "$mcp_dir/forge/patch_applet.py"
+        cp -rf "$PSScriptRoot/resources" "$mcp_dir/forge"
+    fi
 
     ## Copy Linux Binaries over to the MDK
     if [[ "$isLinux" == "true" ]]; then
