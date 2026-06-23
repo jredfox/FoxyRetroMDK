@@ -45,7 +45,8 @@ def chk_eclipse(d):
         except:
             return False
     try:
-        exit_code = subprocess.call(['lsof', lck_file])
+        with open(os.devnull, 'w') as devnull:
+            exit_code = subprocess.call(['lsof', lck_file], stdout=devnull, stderr=devnull)
         return exit_code != 0
     except:
         return True
