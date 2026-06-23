@@ -181,6 +181,10 @@ function Check-LinuxDeps () {
         echo "g++ command not found"
         missing="T"
     fi
+    if ! output=$(lsof "--help" > /dev/null 2>&1); then
+        echo "lsof command not found"
+        missing="T"
+    fi
     
     if [[ "$mc_ver" == "1.1" ]] && ! output=$(wine "--help" > /dev/null 2>&1); then
         echo "wine command not found"
@@ -189,7 +193,7 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl zip"
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl zip lsof"
         OnExit 1
     fi
 
@@ -390,8 +394,10 @@ local user_input
 if [ -d "$mdk_dir" ]; then
     read -p "The Folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
     if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
-        rm -f "$mdk_dir\eclipse\.metadata\.lock" > /dev/null 2>&1
-        if [ -f "$mdk_dir\eclipse\.metadata\.lock" ]; then
+        if ! lsof "$mdk_dir/eclipse/.metadata/.lock" > /dev/null 2>&1; then
+            rm -f "$mdk_dir/eclipse/.metadata/.lock"
+        fi
+        if [ -f "$mdk_dir/eclipse/.metadata/.lock" ]; then
             echo "Eclipse is Open on the current workspace! Cannot Delete $mdk_dir"
             OnExit 1
         fi
