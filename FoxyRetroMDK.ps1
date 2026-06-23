@@ -295,8 +295,14 @@ function MDK-Cleanup {
 if ([System.IO.Directory]::Exists("$mdk_dir")) {
     $shouldStop = Read-Host "The Folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N)"
     if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
-        Remove-Item -Path "$mdk_dir\eclipse\.metadata\.lock" -Force -ErrorAction SilentlyContinue | out-null
-        if ([System.IO.File]::Exists("$mdk_dir\eclipse\.metadata\.lock")) {
+        if ($mc_ver.StartsWith('1.6')) {
+            $eclipse_lck="$mdk_dir\mcp\eclipse\.metadata\.lock"
+        }
+        else {
+            $eclipse_lck="$mdk_dir\eclipse\.metadata\.lock"
+        }
+        Remove-Item -Path "$eclipse_lck" -Force -ErrorAction SilentlyContinue | out-null
+        if ([System.IO.File]::Exists("$eclipse_lck")) {
             Write-Warning "Eclipse is Open on the current workspace! Cannot Delete $mdk_dir"
             OnExit "T" 1
         }
