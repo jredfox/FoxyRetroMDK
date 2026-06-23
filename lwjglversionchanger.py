@@ -30,6 +30,25 @@ def get_sha1(file):
     with closing(open(file, 'rb')) as fh:
         return sha1(fh.read()).hexdigest().lower()
 
+import subprocess
+#Check returns True if it's safe to delete the eclipse folder
+def chk_eclipse(d):
+    lck_file = os.path.join(d, '.metadata', '.lock')
+    if not os.path.isfile(lck_file):
+        return True
+    #Support Windows if deletion fails assumed eclipse's lock file is locked
+    if os.name == 'nt':
+        try:
+            os.remove(lck_file)
+            return (not os.path.isfile(lck_file))
+        except:
+            return False
+    try:
+        exit_code = subprocess.call(['lsof', lck_file])
+        return exit_code != 0
+    except:
+        return True
+
 names_lwjgl = set([
     'liblwjgl.so',
     'liblwjgl32.so',
@@ -335,6 +354,9 @@ if __name__ == "__main__":
         #reset eclipse's metadata to work around race condition bug that corrupts the MDK (Users would have to do Project+Refresh fallowed by Project+Clean manually without this)
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         dir_eclipse = os.path.join(dir_mcp, 'eclipse')
+        if not chk_eclipse(dir_eclipse):
+            print('Eclipse has workspace already opened! Close Eclipse and try again')
+            sys.exit(1)
         dir_eclipse_zip = os.path.join(dir_mcp, 'runtime', 'eclipse.zip')
         if os.path.isfile(dir_eclipse_zip):
             print('Extracting eclipse.zip')
