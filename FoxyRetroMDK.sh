@@ -181,7 +181,7 @@ function Check-LinuxDeps () {
         echo "g++ command not found"
         missing="T"
     fi
-    if ! output=$(lsof "--help" > /dev/null 2>&1); then
+    if ! output=$(lsof "-h" > /dev/null 2>&1); then
         echo "lsof command not found"
         missing="T"
     fi
