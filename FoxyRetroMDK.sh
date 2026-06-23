@@ -193,7 +193,7 @@ function Check-LinuxDeps () {
     fi
 
     if [[ "$missing" == "T" ]]; then
-        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl zip lsof"
+        echo "Try running bash Install-Linux-Deps.sh or manually installing these required packages: build-essential libssl-dev zlib1g-dev libncurses-dev libgdbm-dev liblzma-dev curl zip unzip lsof"
         OnExit 1
     fi
 
