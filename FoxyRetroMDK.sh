@@ -390,14 +390,20 @@ function Unsupported-Version {
 function MDK-Check {
 
 local user_input
+local eclipse_lck
 
 if [ -d "$mdk_dir" ]; then
     read -p "The Folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
     if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
-        if ! lsof "$mdk_dir/eclipse/.metadata/.lock" > /dev/null 2>&1; then
-            rm -f "$mdk_dir/eclipse/.metadata/.lock"
+        if [[ "$mc_ver" == 1.6* ]]; then
+            eclipse_lck="$mdk_dir/mcp/eclipse/.metadata/.lock"
+        else
+            eclipse_lck="$mdk_dir/eclipse/.metadata/.lock"
         fi
-        if [ -f "$mdk_dir/eclipse/.metadata/.lock" ]; then
+        if ! lsof "$eclipse_lck" > /dev/null 2>&1; then
+            rm -f "$eclipse_lck"
+        fi
+        if [ -f "$eclipse_lck" ]; then
             echo "Eclipse is Open on the current workspace! Cannot Delete $mdk_dir"
             OnExit 1
         fi
