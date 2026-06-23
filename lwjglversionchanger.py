@@ -32,6 +32,7 @@ def get_sha1(file):
 
 import subprocess
 #Check returns True if it's safe to delete the eclipse folder
+#NOTE: deletes eclipse's lock file on windows
 def chk_eclipse(d):
     lck_file = os.path.join(d, '.metadata', '.lock')
     if not os.path.isfile(lck_file):
@@ -355,7 +356,7 @@ if __name__ == "__main__":
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         dir_eclipse = os.path.join(dir_mcp, 'eclipse')
         if not chk_eclipse(dir_eclipse):
-            print('Eclipse has workspace already opened! Close Eclipse and try again')
+            print('Eclipse has the workspace already opened! Close Eclipse and try again')
             sys.exit(1)
         dir_eclipse_zip = os.path.join(dir_mcp, 'runtime', 'eclipse.zip')
         if os.path.isfile(dir_eclipse_zip):
