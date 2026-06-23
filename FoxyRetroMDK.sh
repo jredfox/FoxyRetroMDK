@@ -390,6 +390,11 @@ local user_input
 if [ -d "$mdk_dir" ]; then
     read -p "The Folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N) " user_input
     if [[ "$user_input" == Y* || "$user_input" == y* ]]; then
+        rm -f "$mdk_dir\eclipse\.metadata\.lock" > /dev/null 2>&1
+        if [ -f "$mdk_dir\eclipse\.metadata\.lock" ]; then
+            echo "Eclipse is Open on the current workspace! Cannot Delete $mdk_dir"
+            OnExit 1
+        fi
         rm -rf "$mdk_dir"
         if [ -d "$mdk_dir" ]; then
             echo "Unable to Delete '$mdk_dir'"
