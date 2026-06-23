@@ -295,6 +295,11 @@ function MDK-Cleanup {
 if ([System.IO.Directory]::Exists("$mdk_dir")) {
     $shouldStop = Read-Host "The folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N)"
     if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
+        Remove-Item -Path "$mdk_dir\eclipse\.metadata\.lock" -Force -ErrorAction SilentlyContinue | out-null
+        if ([System.IO.File]::Exists("$mdk_dir\eclipse\.metadata\.lock")) {
+            Write-Warning "Eclipse is Open on the current workspace! Cannot Delete $mdk_dir"
+            OnExit "T" 1
+        }
         [System.IO.Directory]::Delete("$mdk_dir", $true)
         if ([System.IO.Directory]::Exists("$mdk_dir")) {
             $host.ui.WriteErrorLine("Unable to Delete $mdk_dir")
