@@ -295,7 +295,7 @@ function MDK-Cleanup {
 if ([System.IO.Directory]::Exists("$mdk_dir")) {
     $shouldStop = Read-Host "The Folder '$mdk_dir' already exists. Do you want to delete it and continue? (Y/N)"
     if ($shouldStop.StartsWith('Y') -or $shouldStop.StartsWith('y')) {
-        if ($mc_ver.StartsWith('1.6')) {
+        if ($mc_ver.StartsWith("1.6")) {
             $eclipse_lck="$mdk_dir\mcp\eclipse\.metadata\.lock"
         }
         else {
