@@ -58,7 +58,7 @@ lwjgl_version_changer_cmd = (
     'IF /I "%lwjgl_ver%" == "" (\r\n'
         'set /p lwjgl_ver="Enter LWJGL Version: "\r\n'
     ')\r\n'
-    'call "%APPDATA%\FoxyRetroMDK\python2.7\python.exe" "lwjglversionchanger.py" "%lwjgl_ver%"\r\n'
+    'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "lwjglversionchanger.py" "%lwjgl_ver%"\r\n'
     'pause\r\n'
     'REM ## Foxy Retro MDK END ##\r\n'
 )
@@ -193,6 +193,10 @@ if __name__ == "__main__":
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n', 1)
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
         
+        #Modify Forge's Install Scripts
+        str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'python2.7 forge_install_prompt.py\n## Foxy Retro MDK END ##\n')
+        str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "forge_install_prompt.py"\nREM ## Foxy Retro MDK END ##\r\n')
+        
         #Modify Patches for MC 1.4x
         if os.getenv("patch_21") == "T":
             str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'java -jar "$mcp/forge/PatchRenderPlayer.jar" "$mcp/forge"\n## Foxy Retro MDK END ##\n', 1)
@@ -211,9 +215,6 @@ if __name__ == "__main__":
         
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         applet_patch = os.getenv("patch_applet") == "T"
-        if applet_patch:
-            str_forge_sh = str_forge_sh.replace('## Foxy Retro MDK END ##\n', 'cp -f "conf/patches//Start.java.bck" "conf/patches/Start.java" >/dev/null 2>&1\n## Foxy Retro MDK END ##\n')
-            str_forge_cmd = str_forge_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'copy /B /V /Y "conf\\patches\\Start.java.bck" "conf\\patches\\Start.java" >nul 2>&1\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
