@@ -71,6 +71,7 @@ trap 'OnExit 1' EXIT SIGINT SIGQUIT SIGTERM 1 4 5 6 7 8 11 13 14 16 24 25 26 27 
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 #NOTE: for macOS before mavericks GFLAGS is set to " --tlsv1.2"
 #Mozilla="Mozilla"
+#Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15
 Mozilla="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 ExitOnDLFail="true"
 GFLAGS=""
