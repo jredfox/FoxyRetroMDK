@@ -48,3 +48,4 @@ if __name__ == "__main__":
             lines = f.read().replace('\r\n', '\n')
         with open(start_file_forge, 'wb') as f:
             f.write(lines)
+    
