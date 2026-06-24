@@ -71,11 +71,7 @@ trap 'OnExit 1' EXIT SIGINT SIGQUIT SIGTERM 1 4 5 6 7 8 11 13 14 16 24 25 26 27 
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 #NOTE: for macOS before mavericks GFLAGS is set to " --tlsv1.2"
 #Mozilla="Mozilla"
-if [[ "$isMac" == "true" ]]; then
-    Mozilla="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15"
-else
-    Mozilla="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
-fi
+Mozilla="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 ExitOnDLFail="true"
 GFLAGS=""
 #IF YOUR READING THIS CURL PLEASE MAKE 1 EXIT CODE FOR ENCYRPTION(SSL,TLS, TLS Encyrption Extensions) AND ONE FOR CERT ONLY! The user shouldnt have to check lots of sub error codes. the sub error should be printed last before the exit if they need it
