@@ -212,6 +212,24 @@ def attatch_src(file, printSkip=False):
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
+def reset_eclipse(dir_fml, dir_eclipse)
+    if not chk_eclipse(dir_eclipse):
+        print('Eclipse has the workspace already opened! Close Eclipse and try again')
+        sys.exit(1)
+    dir_eclipse_zip = os.path.join(dir_mcp, 'runtime', 'eclipse.zip')
+    if os.path.isfile(dir_eclipse_zip):
+        print('Extracting eclipse.zip')
+        del_dir(dir_eclipse)
+        os.makedirs(dir_eclipse)
+        with zipfile.ZipFile(dir_eclipse_zip, 'r') as zip_ref:
+            zip_ref.extractall(dir_eclipse)
+    elif os.path.isdir(os.path.join(dir_fml, 'eclipse')):
+        print('Copying eclipse directory')
+        del_dir(dir_eclipse)
+        shutil.copytree(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
+    else:
+        print('ERROR: Unable to reset eclipse\'s metadata. Please Run Project+Refresh fallowed by Project+Clean when you open up eclipse!')
+
 def download_natives():
     #if natives directory doesn't exist re-create the natives from scratch
     if not os.path.isdir(dir_natives):
@@ -356,22 +374,7 @@ if __name__ == "__main__":
         #reset eclipse's metadata to work around race condition bug that corrupts the MDK (Users would have to do Project+Refresh fallowed by Project+Clean manually without this)
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         dir_eclipse = os.path.join(dir_mcp, 'eclipse')
-        if not chk_eclipse(dir_eclipse):
-            print('Eclipse has the workspace already opened! Close Eclipse and try again')
-            sys.exit(1)
-        dir_eclipse_zip = os.path.join(dir_mcp, 'runtime', 'eclipse.zip')
-        if os.path.isfile(dir_eclipse_zip):
-            print('Extracting eclipse.zip')
-            del_dir(dir_eclipse)
-            os.makedirs(dir_eclipse)
-            with zipfile.ZipFile(dir_eclipse_zip, 'r') as zip_ref:
-                zip_ref.extractall(dir_eclipse)
-        elif os.path.isdir(os.path.join(dir_fml, 'eclipse')):
-            print('Copying eclipse directory')
-            del_dir(dir_eclipse)
-            shutil.copytree(os.path.join(dir_fml, 'eclipse'), dir_eclipse)
-        else:
-            print('ERROR: Unable to reset eclipse\'s metadata. Please Run Project+Refresh fallowed by Project+Clean when you open up eclipse!')
+        reset_eclipse(dir_fml, dir_eclipse)
         #patch lwjgl version strings
         patch_libs(os.path.join(dir_fml, 'fml.json'))
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
