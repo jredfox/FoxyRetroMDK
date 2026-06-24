@@ -5,7 +5,7 @@ import subprocess
 #Forge Installation Startup Prompt Script. Doesn't prompt the first install
 if __name__ == "__main__":
     mcp = os.path.realpath(sys.argv[1])
-    print('DEBUG:' mcp)
+    print('DEBUG:' + mcp)
     installed_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'installed')
     #Prompt User on Forge Re-Install
     if os.path.isfile(installed_file):
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     #Check for Eclipse Lock
     sys.path.insert(0, mcp)
     from lwjglversionchanger import reset_eclipse
-    reset_eclipse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fml'), os.path.join(mcp, 'eclipse')):
+    reset_eclipse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fml'), os.path.join(mcp, 'eclipse'))
     #Create the installed file
     with open(installed_file, 'wb') as f:
         f.write('placeholder')
