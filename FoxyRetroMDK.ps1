@@ -127,7 +127,8 @@ if ($lwjgl_ver -eq "2.9.2") {
 }
 
 #Set UserAgent for Downloads
-$Mozilla = "Mozilla"
+#$Mozilla = "Mozilla"
+$Mozilla = "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 $ExitOnDLFail = "true"
 
 ################# Functions Start #################
