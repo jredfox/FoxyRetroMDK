@@ -1,6 +1,7 @@
 import os
 import sys
 import glob
+import shutil
 
 #global vars
 sh_portability = 'python2.7 patchportability.py "$mcp" "${BASH_SOURCE[0]:-$0}"\n' if ( os.getenv("patchoneone") == "T" ) else ""
@@ -79,6 +80,7 @@ if __name__ == "__main__":
     mdk = os.path.normpath(sys.argv[1])
     mcpInForge = sys.argv[2][0].lower() == 't'
     mcp = os.path.normpath((mdk + "/mcp")) if mcpInForge else mdk
+    script_dir = os.path.dirname(os.path.realpath(__file__)
     
     # Patch MCP commands.py to use java & javac found in PATH
     commandspy = os.path.normpath(mcp + "/runtime/commands.py")
@@ -106,7 +108,7 @@ if __name__ == "__main__":
                 f.write(lines)
             
     if mcpInForge:
-        import shutil
+        shutil.copyfile(script_dir, 'forge_install_prompt.py'), os.path.join(mdk, 'forge_install_prompt.py') )
         shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', os.path.join(mdk, 'fml', 'eclipse'))
         useMojang = os.getenv("useFMLMaven") != 'T'
         import json
@@ -186,6 +188,7 @@ if __name__ == "__main__":
                     f.write(lines)
                 
     else:
+        shutil.copyfile(script_dir, 'forge_install_prompt.py'), os.path.join(mdk, 'forge_install_prompt.py') )
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n', 1)
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"')
