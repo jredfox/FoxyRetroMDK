@@ -33,13 +33,13 @@ if __name__ == "__main__":
         answer = raw_input().lower()
         if not answer.startswith('y'):
             sys.exit(1)
-    #Create the installed file
-    with open(installed_file, 'wb') as f:
-        f.write('placeholder')
     #Check for Eclipse Lock
     if not chk_eclipse(os.path.join(mcp, 'eclipse')):
         print('Eclipse has the workspace already opened! Close Eclipse and try again')
         sys.exit(1)
+    #Create the installed file
+    with open(installed_file, 'wb') as f:
+        f.write('placeholder')
     #Copy Start.java.bck to Start.java
     start_file_forge = os.path.join('conf', 'patches', 'Start.java')
     start_file_forge_bck = start_file_forge + '.bck'
