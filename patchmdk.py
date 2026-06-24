@@ -157,7 +157,7 @@ if __name__ == "__main__":
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n', 1).replace('## Foxy Retro MDK END ##\n', 'python2.7 forge_install_prompt.py "$mcp" || exit 1\n## Foxy Retro MDK END ##\n', 1)
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"').replace('REM ## Foxy Retro MDK END ##\r\n', 'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "forge_install_prompt.py" "mcp" || pause & exit /b 1\r\nREM ## Foxy Retro MDK END ##\r\n', 1)
         str_fml_sh = str_mdk_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
-        str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
+        str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0.."\r\n', 1)
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         
         #Set FML Scripts
         str_fml_sh = str_forge_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
-        str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0\\.."\r\n', 1)
+        str_fml_cmd = str_forge_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0.."\r\n', 1)
         
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         applet_patch = os.getenv("patch_applet") == "T"
