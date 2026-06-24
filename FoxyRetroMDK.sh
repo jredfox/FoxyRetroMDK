@@ -70,6 +70,7 @@ trap 'OnExit 1' EXIT SIGINT SIGQUIT SIGTERM 1 4 5 6 7 8 11 13 14 16 24 25 26 27 
 #Download With Curl & Agent. Returns 0 on success and 1 on Failure if $ExitOnDLFail is false else it calls exit 1.
 #Stops after the second attempt if HTTP Error Code 404 or 410 due to the file not existing on the server
 #NOTE: for macOS before mavericks GFLAGS is set to " --tlsv1.2"
+#Mozilla="Mozilla"
 if [[ "$isMac" == "true" ]]; then
     Mozilla="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15"
 else
