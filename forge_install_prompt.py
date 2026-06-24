@@ -5,6 +5,7 @@ import subprocess
 #Forge Installation Startup Prompt Script. Doesn't prompt the first install
 if __name__ == "__main__":
     mcp = os.path.realpath(sys.argv[1])
+    print('DEBUG:' mcp)
     installed_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'installed')
     #Prompt User on Forge Re-Install
     if os.path.isfile(installed_file):
