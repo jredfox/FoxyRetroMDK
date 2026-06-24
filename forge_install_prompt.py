@@ -10,7 +10,7 @@ if __name__ == "__main__":
     #Prompt User on Forge Re-Install
     if os.path.isfile(installed_file):
         print('WARNING: Re-Installing Forge will DELETE ALL Folders created by MCP including the "src" folder which contains your modifications!')
-        answer = raw_input('Do you wish to Continue Yes or No: ').lower()
+        answer = raw_input('Do you wish to Continue Yes or No? [Y/N]: ').lower()
         if not answer.startswith('y'):
             sys.exit(1)
     #Check for Eclipse Lock
