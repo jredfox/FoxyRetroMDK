@@ -8,7 +8,7 @@ if __name__ == "__main__":
     installed_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'installed')
     #Prompt User on Forge Re-Install
     if os.path.isfile(installed_file):
-        print('WARNING: Re-Installing Forge will DELETE ALL Folders created by MCP including the src folder which contains your modifications!')
+        print('WARNING: Re-Installing Forge will DELETE ALL Folders created by MCP including the "src" folder which contains your modifications!')
         answer = raw_input('Do you wish to Continue Yes or No: ').lower()
         if not answer.startswith('y'):
             sys.exit(1)
@@ -28,3 +28,5 @@ if __name__ == "__main__":
         with open(start_file_forge, 'wb') as f:
             f.write(lines)
     
+    #Exit Normally Enforcing Exit Code 0 to avoid python bugs or "features"
+    sys.exit(0)
