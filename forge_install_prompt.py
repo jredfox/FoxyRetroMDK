@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 
 #Forge Installation Startup Prompt Script. Doesn't prompt the first install
 if __name__ == "__main__":
