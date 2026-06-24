@@ -212,7 +212,7 @@ def attatch_src(file, printSkip=False):
     elif not printSkip:
         print('Skipping Patching: ' + file)
 
-def reset_eclipse(dir_fml, dir_eclipse):
+def reset_eclipse(dir_mcp, dir_fml, dir_eclipse):
     if not chk_eclipse(dir_eclipse):
         print('Eclipse has the workspace already opened! Close Eclipse and try again')
         sys.exit(1)
