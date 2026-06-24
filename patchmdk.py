@@ -189,6 +189,11 @@ if __name__ == "__main__":
                 
     else:
         shutil.copyfile(os.path.join(script_dir, 'forge_install_prompt.py'), os.path.join(mdk, 'forge', 'forge_install_prompt.py') )
+        eclipse_dir = os.path.join(mdk, 'fml', 'eclipse')
+        if not os.path.isfile(eclipse_dir):
+            print('ERR "eclipse" dir not found inside MDK/fml/eclipse!')
+            eclipse_dir = os.path.join(mdk, 'eclipse')
+        shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', eclipse_dir)
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n', 1).replace('## Foxy Retro MDK END ##\n', 'python2.7 forge_install_prompt.py "$mcp" || exit 1\n## Foxy Retro MDK END ##\n', 1)
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"').replace('REM ## Foxy Retro MDK END ##\r\n', 'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "forge_install_prompt.py" ".." || pause & exit /b 1\r\nREM ## Foxy Retro MDK END ##\r\n', 1)
