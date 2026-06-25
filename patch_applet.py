@@ -10,19 +10,9 @@ if __name__ == "__main__":
     #Patch Start.java
     start_patch = os.path.join(dir_resources, 'Start.java.patch')
     start_file = os.path.join(mdk, 'src', 'minecraft', 'Start.java')
-    start_file_mcp = None
-    start_file_forge = os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java')
-    #Create backup of Start.java
-    start_file_forge_bck = start_file_forge + '.bck'
-    if not os.path.exists(start_file_forge_bck):
-        with open(start_file_forge, 'r') as f:
-            lines = f.read().replace('\r\n', '\n')
-        with open(start_file_forge_bck, 'wb') as f:
-            f.write(lines)
     #MC 1.1 support
     if not os.path.exists(start_file):
-        start_file = start_file_forge
-        start_file_mcp = os.path.join(mdk, 'conf', 'patches', 'Start.java')
+        start_file = os.path.join(mdk, 'conf', 'patches', 'Start.java')
     with open(start_file, 'r') as f:
         lines = f.read().replace('\r\n', '\n')
     if 'FoxyRetroMDK.noapplet' not in lines:
@@ -34,9 +24,6 @@ if __name__ == "__main__":
         lines = lines[:targ] + '\n' + lines_start_patch + '\n}\n'
         with open(start_file, 'wb') as f:
             f.write(lines)
-        if start_file_mcp is not None:
-            with open(start_file_mcp, 'wb') as f:
-                f.write(lines)
     
     #Copy MinecraftAppletStub.java
     print('Copying MinecraftAppletStub.java')
