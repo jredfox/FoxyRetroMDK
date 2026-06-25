@@ -75,6 +75,17 @@ lwjgl_version_changer_sh = (
     '## Foxy Retro MDK END ##\n'
 )
 
+def patch_forge_install(lines, fml_script=False):
+    if isSh:
+        lines = lines.replace('./cleanup.sh', './cleanup.sh -f')
+        if applet_patch:
+            lines = lines + '\npython2.7 "$mcp/forge/patch_applet.py" "$mcp"'
+    else:
+        lines = lines.replace('runtime\\cleanup.py', 'runtime\\cleanup.py -f')
+        if applet_patch:
+            lines = lines[:lines.rfind('pause')] + 'cd /D "%~dp0.."\r\nruntime\\bin\\python\\python_mcp forge\\patch_applet.py "."\r\npause'
+    return lines
+
 if __name__ == "__main__":
 
     mdk = os.path.normpath(sys.argv[1])
@@ -237,14 +248,7 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_forge_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_forge_cmd, 1)
-                if isSh:
-                    lines = lines.replace('./cleanup.sh', './cleanup.sh -f')
-                    if applet_patch:
-                        lines = lines + '\npython2.7 "$mcp/forge/patch_applet.py" "$mcp"'
-                else:
-                    lines = lines.replace('runtime\\cleanup.py', 'runtime\\cleanup.py -f')
-                    if applet_patch:
-                        lines = lines[:lines.rfind('pause')] + 'cd /D "%~dp0.."\r\nruntime\\bin\\python\\python_mcp forge\\patch_applet.py "."\r\npause'
+                lines = patch_forge_install(lines)
                 with open(file, 'wb') as f:
                     f.write(lines)
                 
@@ -255,11 +259,7 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
-                if applet_patch:
-                    if isSh:
-                        lines = lines + '\npython2.7 "$mcp/forge/patch_applet.py" "$mcp"'
-                    else:
-                        lines = lines[:lines.rfind('pause')] + 'cd /D "%~dp0.."\r\nruntime\\bin\\python\\python_mcp forge\\patch_applet.py "."\r\npause'
+                lines = patch_forge_install(lines, True)
                 with open(file, 'wb') as f:
                     f.write(lines)
         
