@@ -23,7 +23,7 @@ def main():
     with open(installed_file, 'wb') as f:
         f.write('placeholder')
     #Copy Start.java.bck to Start.java
-    start_file_forge = os.path.join('conf', 'patches', 'Start.java')
+    start_file_forge = os.path.join(dir_forge, 'conf', 'patches', 'Start.java')
     start_file_forge_bck = start_file_forge + '.bck'
     if os.path.isfile(start_file_forge_bck):
         with open(start_file_forge_bck, 'r') as f:
