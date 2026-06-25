@@ -45,6 +45,7 @@ export patch_portability="F"
 export patchoneone="F"
 export useFMLMaven="F"
 export patch_applet="F"
+export patch_conf_fml="F"
 
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
     export useFMLMaven="T"
@@ -800,6 +801,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
         forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.3.8.164/forge-1.2.5-3.3.8.164-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
+        export patch_conf_fml="T"
     elif [[ "$mc_ver" == "1.2.4" ]]; then
         mcp_ver="mcp61"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.4/mcp61.zip"

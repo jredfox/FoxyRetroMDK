@@ -90,6 +90,7 @@ $env:patch_21 = "F"
 $env:patch_portability = "F"
 $env:useFMLMaven= "F"
 $env:patch_applet = "F"
+$env:patch_conf_fml = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
@@ -722,6 +723,7 @@ elseif ($mc_ver.StartsWith("1.2"))
         $forge_url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
         $mc_url = "https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         $mc_server_url = "https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
+        $env:patch_conf_fml = "T"
     }
     elseif ($mc_ver -eq "1.2.4")
     {
