@@ -46,6 +46,7 @@ export patchoneone="F"
 export useFMLMaven="F"
 export patch_applet="F"
 export patch_conf_fml="F"
+export onesix_no_resources="F"
 
 if [[ "$lwjgl_ver" == "2.9.2" ]]; then
     export useFMLMaven="T"
@@ -485,6 +486,11 @@ function Install-1.6x {
     local assets_base_url="https://resources.download.minecraft.net"
     local python_url="https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
     local forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+    
+    #Disables Resource Downloading when Re-Installing Forge
+    if [[ "$dl_rc" != "true" ]]; then
+        export onesix_no_resources="T"
+    fi
 
     if [[ "$mc_ver" == "1.6.4" ]]; then
         mcp_ver="mcp8.11"

@@ -91,6 +91,7 @@ $env:patch_portability = "F"
 $env:useFMLMaven= "F"
 $env:patch_applet = "F"
 $env:patch_conf_fml = "F"
+$env:onesix_no_resources = "F"
 
 #Change this MC Release Version between 1.1 through 1.5.2
 if ([string]::IsNullOrEmpty($mc_ver))
@@ -398,6 +399,11 @@ function Install-1.6x {
     #$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
     $python_url = "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
     $forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
+    
+    #Disables Resource Downloading when Re-Installing Forge
+    if($skip_rc -like "T*") {
+        $env:onesix_no_resources = "T"
+    }
 
     if($mc_ver -eq "1.6.4") {
         $mcp_ver = "mcp8.11"
