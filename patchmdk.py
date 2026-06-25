@@ -221,7 +221,7 @@ if __name__ == "__main__":
             with open(cleanup_file, 'r') as f:
                 lines = f.read()
             targ = lines.find('\n', lines.find('def cleanup('))
-            lines = lines[:targ] + '\n    ## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    shutil.copyfile(os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\'), os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##\n' + lines[targ:]
+            lines = lines[:targ] + '\n    ## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    shutil.copyfile(os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\'), os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##' + lines[targ:]
             with open(cleanup_file, 'wb') as f:
                 f.write(lines)
         
