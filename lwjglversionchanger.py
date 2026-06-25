@@ -374,7 +374,7 @@ if __name__ == "__main__":
         #reset eclipse's metadata to work around race condition bug that corrupts the MDK (Users would have to do Project+Refresh fallowed by Project+Clean manually without this)
         dir_fml = os.path.join(os.path.dirname(dir_mcp), 'fml')
         dir_eclipse = os.path.join(dir_mcp, 'eclipse')
-        reset_eclipse(dir_fml, dir_eclipse)
+        reset_eclipse(dir_mcp, dir_fml, dir_eclipse)
         #patch lwjgl version strings
         patch_libs(os.path.join(dir_fml, 'fml.json'))
         patch_libs(os.path.join(dir_version, (mc_ver + '.json') ))
