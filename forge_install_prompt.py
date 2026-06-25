@@ -45,10 +45,10 @@ if __name__ == "__main__":
             exit_code = e.code if isinstance(e.code, int) else 1
         #Pause if an error happened and we should pause
         if exit_code != 0 and should_pause:
-            v = raw_input('Press Enter to Continue...')
+            v = raw_input('Press Enter to Continue... ')
         sys.exit(exit_code)
     except Exception:
         traceback.print_exc()
         if should_pause:
-            v = raw_input('Press Enter to Continue...')
+            v = raw_input('Press Enter to Continue... ')
         sys.exit(1)
