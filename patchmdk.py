@@ -88,12 +88,13 @@ def patch_forge_install(lines, isSh, fml_script=False):
 
 def patch_forge_cleanup(install_py_file):
     if os.path.isfile(install_py_file):
-        print("Patching Path:" + install_py_file)
         with open(install_py_file, 'r') as f:
             lines = f.read()
-        lines = lines.replace("\r\n", "\n").replace('cleanup(None, False)', 'cleanup(None, True)').replace('cleanup(None, False, False)', 'cleanup(None, True, False)')
-        with open(install_py_file, 'wb') as f:
-            f.write(lines)
+        if 'cleanup(None, False' in lines:
+            print("Patching Path:" + install_py_file)
+            lines = lines.replace("\r\n", "\n").replace('cleanup(None, False)', 'cleanup(None, True)').replace('cleanup(None, False, False)', 'cleanup(None, True, False)')
+            with open(install_py_file, 'wb') as f:
+                f.write(lines)
 
 if __name__ == "__main__":
 
