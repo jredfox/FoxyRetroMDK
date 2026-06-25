@@ -22,14 +22,6 @@ def main():
     #Create the installed file
     with open(installed_file, 'wb') as f:
         f.write('placeholder')
-    #Replace MCP's Start.java with Forge's Start.java
-    start_file_forge = os.path.join(dir_forge, 'conf', 'patches', 'Start.java')
-    if os.path.isfile(start_file_forge):
-        start_file = os.path.join(mcp, 'conf', 'patches', 'Start.java')
-        with open(start_file_forge, 'r') as f:
-            lines = f.read().replace('\r\n', '\n')
-        with open(start_file, 'wb') as f:
-            f.write(lines)
     
     #Exit Normally Enforcing Exit Code 0 to avoid python bugs or "features"
     sys.exit(0)
