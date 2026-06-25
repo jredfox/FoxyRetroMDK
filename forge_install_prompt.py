@@ -36,21 +36,19 @@ def main():
 
 if __name__ == "__main__":
     try:
-        should_pause = True
-        is_windows = os.name == 'nt'
+        should_pause = os.name == 'nt'
         main()
     except SystemExit as e:
         if e.code is None:
-            print('Exit Code is NULL WTF?')
             exit_code = 0
         else:
             exit_code = e.code if isinstance(e.code, int) else 1
-        print('Exit handled' + str(exit_code) )
-        if exit_code != 0 and should_pause and is_windows:
-            v = raw_input('Press Enter to Continue...').lower()
+        #Pause if an error happened and we should pause
+        if exit_code != 0 and should_pause:
+            v = raw_input('Press Enter to Continue...')
         sys.exit(exit_code)
     except Exception:
         traceback.print_exc()
-        if should_pause and is_windows:
-            v = raw_input('Press Enter to Continue...').lower()
+        if should_pause:
+            v = raw_input('Press Enter to Continue...')
         sys.exit(1)
