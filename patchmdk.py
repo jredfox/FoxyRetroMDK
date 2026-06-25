@@ -238,6 +238,11 @@ if __name__ == "__main__":
                 with open(file, 'r') as f:
                     lines = f.read()
                 lines = ( lines.replace("\r\n", "\n").replace("python", "python2.7").replace("\n", "\n" + str_fml_sh, 1) ) if isSh else lines.replace("\r\n", "\n").replace("\n", "\r\n").replace("\n", "\n" + str_fml_cmd, 1)
+                if applet_patch:
+                    if isSh:
+                        lines = lines + '\npython2.7 "$mcp/forge/patch_applet.py" "$mcp"'
+                    else:
+                        lines = lines[:lines.rfind('pause')] + 'cd /D "%~dp0.."\r\nruntime\\bin\\python\\python_mcp forge\\patch_applet.py "."\r\npause'
                 with open(file, 'wb') as f:
                     f.write(lines)
         
