@@ -11,7 +11,7 @@ def main():
     #Prompt User on Forge Re-Install
     if os.path.isfile(installed_file):
         print('WARNING: Re-Installing Forge will DELETE ALL Folders created by MCP including the "src" folder which contains your modifications!')
-        answer = raw_input('Do you wish to Continue Yes or No? [Y/N]: ').lower()
+        answer = raw_input('Do you wish to Continue Yes or No? [Y/N]: ').lower().replace(' ', '')
         if not answer.startswith('y'):
             should_pause = False
             sys.exit(1)
