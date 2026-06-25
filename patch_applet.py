@@ -33,11 +33,11 @@ if __name__ == "__main__":
         f.write(lines)
     
     #Patch MinecraftApplet.java
-    print('Patching MinecraftApplet.java')
     mcapplet = os.path.join(mdk, 'src', 'minecraft', 'net', 'minecraft', 'client', 'MinecraftApplet.java')
     with open(mcapplet, 'r') as f:
         lines = f.read().replace('\r\n', '\n')
     if 'this.mcThread.setPriority(10);' not in lines:
+        print('Patching MinecraftApplet.java')
         lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n            this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new').replace('this.this.', 'this.')
         with open(mcapplet, 'wb') as f:
             f.write(lines)
