@@ -28,7 +28,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        should_pause = os.name == 'nt'
+        should_pause = (os.name == 'nt')
         main()
     except SystemExit as e:
         if e.code is None:
