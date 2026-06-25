@@ -220,7 +220,8 @@ if __name__ == "__main__":
             print("Patching Path:" + cleanup_file)
             with open(cleanup_file, 'r') as f:
                 lines = f.read()
-            lines = lines.replace('\r\n', '\n').replace('commands = Commands(conffile)', '## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    shutil.copyfile(os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\'), os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##\n    commands = Commands(conffile)', 1)
+            targ = lines.find('\n', lines.find('def cleanup('))
+            lines = lines[:targ] + '\n    ## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    shutil.copyfile(os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\'), os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##\n' + lines[targ:]
             with open(cleanup_file, 'wb') as f:
                 f.write(lines)
         
