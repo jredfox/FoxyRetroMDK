@@ -51,7 +51,6 @@ if __name__ == "__main__":
     with open(mcapplet, 'r') as f:
         lines = f.read().replace('\r\n', '\n')
     if 'this.mcThread.setPriority(10);' not in lines:
-        lines = lines.replace('private ', 'public ').replace('protected ', 'public ')
         lines = lines.replace('mcThread.start();', 'this.mcThread.setPriority(10);\n            this.mcThread.start();').replace('mcThread = new', 'this.mcThread = new').replace('this.this.', 'this.')
         with open(mcapplet, 'wb') as f:
             f.write(lines)
