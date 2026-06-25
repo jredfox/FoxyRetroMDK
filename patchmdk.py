@@ -6,8 +6,8 @@ import shutil
 #global vars
 sh_portability = 'python2.7 patchportability.py "$mcp" "${BASH_SOURCE[0]:-$0}"\n' if ( os.getenv("patchoneone") == "T" ) else ""
 sh_portability_forge = 'python2.7 "$mcp/patchportability.py" "$mcp" "${BASH_SOURCE[0]:-$0}"\n'
-batch_portability = 'call "runtime\\bin\\python\\python_mcp.exe" "patchportability.py" "" "%~0"\n' if ( os.getenv("patchoneone") == "T" ) else ""
-batch_portability_forge = 'call "..\\runtime\\bin\\python\\python_mcp.exe" "..\\patchportability.py" ".." "%~0"\n'
+batch_portability = 'call "runtime\\bin\\python\\python_mcp.exe" "patchportability.py" "" "%~0"\r\n' if ( os.getenv("patchoneone") == "T" ) else ""
+batch_portability_forge = 'call "..\\runtime\\bin\\python\\python_mcp.exe" "..\\patchportability.py" ".." "%~0"\r\n'
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
@@ -215,8 +215,8 @@ if __name__ == "__main__":
         
         #Patch MC 1.2.5 FML's Install scripts to replace the conf folder during the install like previous and newer versions
         if os.getenv("patch_conf_fml") == "T":
-            str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', 'pushd .. > /dev/null\nrm -rf conf\nmkdir conf\ncp -r forge/conf/* conf\npopd > /dev/null\n## Foxy Retro MDK END ##\n')
-            str_fml_cmd = str_fml_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'pushd .. >nul\r\nxcopy /Y /E /I forge\\conf\\* conf\r\npopd >nul\r\nREM ## Foxy Retro MDK END ##\r\n')
+            str_fml_sh = str_fml_sh.replace('## Foxy Retro MDK END ##\n', '## patch_conf_fml ##\npushd .. > /dev/null\nrm -rf conf\nmkdir conf\ncp -r forge/conf/* conf\npopd > /dev/null\n## Foxy Retro MDK END ##\n')
+            str_fml_cmd = str_fml_cmd.replace('REM ## Foxy Retro MDK END ##\r\n', 'REM ## patch_conf_fml ##\r\npushd .. >nul\r\nxcopy /Y /E /I forge\\conf\\* conf\r\npopd >nul\r\nREM ## Foxy Retro MDK END ##\r\n')
         
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         applet_patch = os.getenv("patch_applet") == "T"
