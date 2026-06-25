@@ -180,6 +180,9 @@ if __name__ == "__main__":
         str_fml_sh = str_mdk_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
         str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0.."\r\n', 1)
         
+        #Patch Forge's & fml's cleanup so that it doesn't prompt
+        patch_forge_cleanup(os.path.join(mdk, 'fml', 'fml.py'))
+        
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
@@ -207,9 +210,7 @@ if __name__ == "__main__":
                     lines = lines.replace('python_fml install.py', 'python_fml install.py %*')
                 with open(file, 'wb') as f:
                     f.write(lines)
-        #Patch Forge's & fml's cleanup so that it doesn't prompt
-        patch_forge_cleanup(os.path.join(mdk, 'fml', 'fml.py'))
-        
+                
     else:
         shutil.copyfile(os.path.join(script_dir, 'forge_install_prompt.py'), os.path.join(mdk, 'forge', 'forge_install_prompt.py') )
         eclipse_dir = os.path.join(mdk, 'forge', 'fml', 'eclipse')
@@ -253,6 +254,10 @@ if __name__ == "__main__":
             with open(cleanup_file, 'wb') as f:
                 f.write(lines)
         
+        #Patch Forge's & fml's cleanup so that it doesn't prompt
+        patch_forge_cleanup(os.path.join(mdk, 'forge', 'install.py'))
+        patch_forge_cleanup(os.path.join(mdk, 'forge', 'fml', 'fml.py'))
+        
         for file in glob.glob(os.path.normpath(mdk + "/forge/*")):
             isSh = file.endswith(".sh")
             if isSh or file.endswith(".bat") or file.endswith(".cmd"):
@@ -274,10 +279,6 @@ if __name__ == "__main__":
                 lines = patch_forge_install(lines, isSh, True)
                 with open(file, 'wb') as f:
                     f.write(lines)
-        
-        #Patch Forge's & fml's cleanup so that it doesn't prompt
-        patch_forge_cleanup(os.path.join(mdk, 'forge', 'install.py'))
-        patch_forge_cleanup(os.path.join(mdk, 'forge', 'fml', 'fml.py'))
         
         #Attatch lwjgl sources
         from lwjglversionchanger import attatch_src
