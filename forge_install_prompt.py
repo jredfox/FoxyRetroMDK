@@ -8,8 +8,9 @@ def main():
     mcp = os.path.realpath(sys.argv[1])
     dir_forge = os.path.dirname(os.path.realpath(__file__))
     installed_file = os.path.join(dir_forge, 'installed')
+    installed_forge = os.path.isfile(installed_file)
     #Prompt User on Forge Re-Install
-    if os.path.isfile(installed_file):
+    if installed_forge:
         print('WARNING: Re-Installing Forge will DELETE ALL Folders created by MCP including the "src" folder which contains your modifications!')
         answer = raw_input('Do you wish to Continue Yes or No? [Y/N]: ').lower().replace(' ', '')
         if not answer.startswith('y'):
@@ -17,8 +18,10 @@ def main():
             sys.exit(1)
     #Check for Eclipse Lock
     sys.path.insert(0, mcp)
-    from lwjglversionchanger import reset_eclipse
-    reset_eclipse(mcp, os.path.join(dir_forge, 'fml'), os.path.join(mcp, 'eclipse'))
+    from lwjglversionchanger import reset_eclipse, chk_eclipse
+    if installed_forge or os.path.isfile(os.path.join(mcp, 'eclipse', 'Client', '.classpath')):
+        print('resetting eclipse...')
+        reset_eclipse(mcp, os.path.join(dir_forge, 'fml'), os.path.join(mcp, 'eclipse'))
     #Create the installed file
     with open(installed_file, 'wb') as f:
         f.write('placeholder')
