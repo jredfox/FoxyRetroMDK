@@ -19,7 +19,8 @@ def main():
     #Check for Eclipse Lock
     sys.path.insert(0, mcp)
     from lwjglversionchanger import reset_eclipse
-    if installed_forge or (not os.path.isfile(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))):
+    eclipse_client = os.path.join(mcp, 'eclipse', 'Client')
+    if installed_forge or (not os.path.isfile(eclipse_client, '.classpath')) or os.path.isdir(os.path.join(eclipse_client, 'bin')):
         print('resetting eclipse...')
         reset_eclipse(mcp, os.path.join(dir_forge, 'fml'), os.path.join(mcp, 'eclipse'))
     #Create the installed file
