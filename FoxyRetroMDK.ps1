@@ -481,8 +481,7 @@ function Install-1.6x {
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
     Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
-    Download -Uri "$python_url" -OutFile "$temp\python_fml_2.7.9.zip"
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\python_fml_2.7.9.zip", "$mdk_dir\fml\python")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$mdk_dir\fml\python")
 
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
     DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
@@ -526,14 +525,13 @@ function DL-Natives
 
 #Install Python on Windows
 $pydir = "$env:APPDATA\FoxyRetroMDK\python2.7"
+$pyzip = "$pydir\python_fml_2.7.9.zip"
 if ( -Not ([System.IO.Directory]::Exists("$pydir")) )
 {
     Write-Host "Installing Python to $pydir"
     New-Item -Path "$pydir" -ItemType "directory" -Force | out-null
-    $pyzip = "$env:APPDATA\python_fml_2.7.9.zip"
     Download -Uri "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip" -OutFile "$pyzip"
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$pydir")
-    Remove-Item -Path "$pyzip" -Force | out-null
     Copy-Item -Path "$pydir\python_fml.exe" -Destination "$pydir\python.exe" -Force | out-null
 }
 
