@@ -130,7 +130,7 @@ if __name__ == "__main__":
             
     if mcpInForge:
         shutil.copyfile(os.path.join(script_dir, 'forge_install_prompt.py'), os.path.join(mdk, 'forge_install_prompt.py') )
-        shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', os.path.join(mdk, 'fml', 'eclipse'))
+        eclipse_dir = os.path.join(mdk, 'fml', 'eclipse')
         useMojang = os.getenv("useFMLMaven") != 'T'
         import json
         from collections import OrderedDict
@@ -218,7 +218,6 @@ if __name__ == "__main__":
         eclipse_dir = os.path.join(mdk, 'forge', 'fml', 'eclipse')
         if not os.path.isdir(eclipse_dir):
             eclipse_dir = os.path.join(mdk, 'eclipse')
-        shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', eclipse_dir)
         #Modify Patches based on Directory
         str_forge_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="$(dirname "$mcp")"\n', 1).replace('## Foxy Retro MDK END ##\n', 'python2.7 forge_install_prompt.py "$mcp" || exit 1\n## Foxy Retro MDK END ##\n', 1)
         str_forge_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"..\\runtime\\bin\\python\\python_mcp.exe" "..\\jdk-finder.py"').replace('REM ## Foxy Retro MDK END ##\r\n', 'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "forge_install_prompt.py" ".." || exit /b 1\r\nREM ## Foxy Retro MDK END ##\r\n', 1)
@@ -299,4 +298,6 @@ if __name__ == "__main__":
         f.write(lwjgl_version_changer_sh)
     with open(os.path.join(mcp, 'lwjglversionchanger.cmd'), 'wb') as f:
         f.write(lwjgl_version_changer_cmd)
+    #Create eclipse.zip
+    shutil.make_archive(os.path.join(mcp, 'runtime', 'eclipse'), 'zip', eclipse_dir)
     
