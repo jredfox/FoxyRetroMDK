@@ -361,35 +361,30 @@ $ProgressPreference = $prog_org
 
 }
 
-#Enforce JDK-8 during MDK installation after forge has
-function Enforce-JDK8 {
+#Patch MDK
+function PATCH-MDKPY {
     param (
         [string]$mcp_dir,
         [string]$onesix
     )
-
-    $JDK8 = (& "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\jdk-finder.py")
-    if([string]::IsNullOrWhiteSpace($JDK8)) {
-        Write-Error "JDK-8 or lower isn't found in the PATH!"
-        OnExit "T" 1
-    }
-    $JDK8 = $JDK8.Trim()
-    $env:PATH = "$JDK8;$env:PATH"
-    $env:JAVA_HOME = Split-Path "$JDK8" -Parent
-    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
+    
     Copy-Item -Path "$PSScriptRoot\jdk-finder.py" -Destination "$mcp_dir\jdk-finder.py" -Force | out-null
-    Copy-Item -Path "$PSScriptRoot\lwjglversionchanger.py" -Destination "$mcp_dir\lwjglversionchanger.py" -Force | out-null 
     Copy-Item -Path "$PSScriptRoot\cache" -Destination "$mcp_dir\cache" -Recurse -Force | out-null
-    if($env:patch_portability -eq "T") {
-        Copy-Item -Path "$PSScriptRoot\patchportability.py" -Destination "$mcp_dir\patchportability.py" -Force | out-null
-    }
+    Copy-Item -Path "$PSScriptRoot\lwjglversionchanger.py" -Destination "$mcp_dir\lwjglversionchanger.py" -Force | out-null
     if($env:patch_21 -eq "T") {
         Copy-Item -Path "$PSScriptRoot\PatchRenderPlayer.jar" -Destination "$mcp_dir\forge\PatchRenderPlayer.jar" -Force | out-null
+    }
+    if($env:patch_portability -eq "T") {
+        Copy-Item -Path "$PSScriptRoot\patchportability.py" -Destination "$mcp_dir\patchportability.py" -Force | out-null
     }
     if ($env:patch_applet -eq "T") {
         Copy-Item -Path "$PSScriptRoot\patch_applet.py" -Destination "$mcp_dir\forge\patch_applet.py" -Force | out-null
         Copy-Item -Path "$PSScriptRoot\resources" -Destination "$mcp_dir\forge\resources" -Recurse -Force | out-null
     }
+    
+    #Patch MDK
+    & "$mcp_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\patchmdk.py" "$mdk_dir" "$onesix"
+    
 }
 
 function Install-1.6x {
@@ -469,9 +464,6 @@ function Install-1.6x {
     Download -Uri "$mc_client_url" -OutFile "$mdk_dir\mcp\jars\versions\$mc_ver\$mc_ver.jar"
     Download -Uri "$mc_server_url" -OutFile "$mdk_dir\mcp\jars\minecraft_server.$mc_ver.jar"
 
-    #Enforce JDK-8
-    Enforce-JDK8 -mcp_dir "$mdk_dir\mcp" "T"
-
     #Patch fml.json
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.json" "http:" "https:" "2.9.0" "$lwjgl_ver"
 
@@ -482,7 +474,10 @@ function Install-1.6x {
     
     #Patch fml.py
     & "$mdk_dir\mcp\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mdk_dir\fml\fml.py" "http://resources.download.minecraft.net" "$assets_base_url" "https://s3.amazonaws.com/Minecraft.Download/indexes/legacy.json" "$assets_json_url"
-
+    
+    #Patch MDK
+    PATCH-MDKPY -mcp_dir "$mdk_dir\mcp" "T"
+    
     #Upgrade python to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
     Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
@@ -541,6 +536,16 @@ if ( -Not ([System.IO.Directory]::Exists("$pydir")) )
     Remove-Item -Path "$pyzip" -Force | out-null
     Copy-Item -Path "$pydir\python_fml.exe" -Destination "$pydir\python.exe" -Force | out-null
 }
+
+#Enforce JDK-8
+$JDK8 = (& "$pydir\python.exe" "$PSScriptRoot\jdk-finder.py")
+if([string]::IsNullOrWhiteSpace($JDK8)) {
+    Write-Error "JDK-8 or lower isn't found in the PATH!"
+    OnExit "T" 1
+}
+$JDK8 = $JDK8.Trim()
+$env:PATH = "$JDK8;$env:PATH"
+$env:JAVA_HOME = Split-Path "$JDK8" -Parent
 
 if ($mc_ver.StartsWith("1.6"))
 {
@@ -823,8 +828,8 @@ if ($fernflower_dl -eq "T")
 Download -Uri "$forge_url" -OutFile "$temp\forge.zip"
 [System.IO.Compression.ZipFile]::ExtractToDirectory("$temp\forge.zip", "$mdk_dir")
 
-#Enforce JDK-8 in Path during setup for legacy versions
-Enforce-JDK8 -mcp_dir "$mdk_dir" "F"
+#Patch MDK
+PATCH-MDKPY -mcp_dir "$mdk_dir" "F"
 
 #Download Forge lib Folder and Install it
 Download -Uri "$forge_lib_url" -OutFile "$temp\forge_lib.zip"
