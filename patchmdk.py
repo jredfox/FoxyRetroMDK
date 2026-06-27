@@ -170,7 +170,7 @@ if __name__ == "__main__":
             )
             with open(fmlpyf, 'r') as f:
                 lines = f.read()
-            lines = lines.replace('headers = get_headers(url)', fml_py_patch, 1)
+            lines = lines.replace("\r\n", "\n").replace('headers = get_headers(url)', fml_py_patch, 1)
             if os.getenv("onesix_no_resources") == 'T':
                 lines = lines.replace('def download_assets(mcp_dir):\n', 'def download_assets(mcp_dir):\n    FOXY_RETRO_MDK_DISABLED = True\n    if FOXY_RETRO_MDK_DISABLED:\n        return\n', 1)
             with open(fmlpyf, 'wb') as f:
