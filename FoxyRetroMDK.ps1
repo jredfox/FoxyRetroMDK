@@ -392,7 +392,7 @@ function Install-1.6x {
     #Start URL's
     $assets_base_url="https://resources.download.minecraft.net"
     #$python_url="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
-    $python_url = "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
+    #$python_url = "https://archive.org/download/python_fml2.7.9/python_fml2.7.9.zip"
     $forge_164_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-src.zip"
     
     #Disables Resource Downloading when Re-Installing Forge
