@@ -246,12 +246,13 @@ if __name__ == "__main__":
         #Patch MC 1.1 - 1.2.5 macOS graphical glitches on java 8!
         applet_patch = os.getenv("patch_applet") == "T"
         if applet_patch:
+            shutil.copyfile(os.path.join(mdk, 'forge', 'conf', 'patches', 'Start.java'), os.path.join(mdk, 'runtime', 'Start.java.bck'))
             cleanup_file = os.path.join(mdk, 'runtime', 'cleanup.py')
             print("Patching Path:" + cleanup_file)
             with open(cleanup_file, 'r') as f:
                 lines = f.read().replace("\r\n", "\n")
             targ = lines.find('\n', lines.find('def cleanup('))
-            lines = lines[:targ] + '\n    ## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    shutil.copyfile(os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\'), os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##' + lines[targ:]
+            lines = lines[:targ] + '\n    ## Foxy Retro MDK Start ##\n    import shutil\n    dir_mdk = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))\n    start_bck = os.path.join(dir_mdk, \'runtime\', \'Start.java.bck\')\n    if not os.path.isfile(start_bck):\n        start_bck = os.path.join(dir_mdk, \'forge\', \'conf\', \'patches\', \'Start.java\')\n    shutil.copyfile(start_bck, os.path.join(dir_mdk, \'conf\', \'patches\', \'Start.java\'))\n    ## Foxy Retro MDK End ##' + lines[targ:]
             with open(cleanup_file, 'wb') as f:
                 f.write(lines)
         
