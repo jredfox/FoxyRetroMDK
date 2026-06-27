@@ -20,7 +20,7 @@ def main():
     sys.path.insert(0, mcp)
     from lwjglversionchanger import reset_eclipse
     eclipse_client = os.path.join(mcp, 'eclipse', 'Client')
-    if installed_forge or (not os.path.exists(os.path.join(eclipse_client, '.classpath'))) or os.path.exists(os.path.join(eclipse_client, 'bin')):
+    if installed_forge or (not os.path.isfile(os.path.join(eclipse_client, '.classpath'))) or os.path.isdir(os.path.join(eclipse_client, 'bin')):
         reset_eclipse(mcp, os.path.join(dir_forge, 'fml'), os.path.join(mcp, 'eclipse'))
     #Create the installed file
     with open(installed_file, 'wb') as f:
