@@ -11,7 +11,7 @@ batch_portability_forge = 'call "..\\runtime\\bin\\python\\python_mcp.exe" "..\\
 
 mcp_sh_patch = (
     '## Foxy Retro MDK START ##\n'
-    'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+    'mcp="$( cd -- "$(dirname "${BASH_SOURCE[0]:-$0}")" >/dev/null 2>&1 ; pwd -P )"\n'
     'cd "$mcp"\n'
     'if [[ "$(echo "$(uname)" | tr \'[:upper:]\' \'[:lower:]\')" == "darwin" ]]; then\n'
     '    chmod -R 777 "$mcp/runtime/bin"\n'
@@ -66,7 +66,7 @@ lwjgl_version_changer_cmd = (
 lwjgl_version_changer_sh = (
     '#!/bin/bash\n'
     '## Foxy Retro MDK START ##\n'
-    'mcp="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"\n'
+    'mcp="$( cd -- "$(dirname "${BASH_SOURCE[0]:-$0}")" >/dev/null 2>&1 ; pwd -P )"\n'
     'cd "$mcp"\n'
     'isa="$(uname -m)"\n'
     'export PATH="$mcp/bin_linux/$isa/python2.7:$PATH"\n'
