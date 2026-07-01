@@ -384,7 +384,7 @@ if __name__ == "__main__":
         patch_classpath(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
         #rebuild eclipse.zip to store any changes made
         zip_eclipse = os.path.join(dir_mcp, 'runtime', 'eclipse')
-        del_file(zip_eclipse)
+        del_file((zip_eclipse + '.zip'))
         shutil.make_archive(zip_eclipse, 'zip', dir_eclipse)
     
     #download & install lwjgl
