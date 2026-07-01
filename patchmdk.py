@@ -86,12 +86,13 @@ def patch_forge_install(lines, isSh, fml_script=False):
             lines = lines[:lines.rfind('pause')] + 'cd /D "%~dp0.."\r\nruntime\\bin\\python\\python_mcp forge\\patch_applet.py "."\r\npause'
     return lines
 
-def patch_forge_cleanup(install_py_file):
+def patch_forge_cleanup(install_py_file, shouldPrint=True):
     if os.path.isfile(install_py_file):
         with open(install_py_file, 'r') as f:
             lines = f.read()
         if 'cleanup(None, False' in lines:
-            print("Patching Path:" + install_py_file)
+            if shouldPrint:
+                print("Patching Path:" + install_py_file)
             lines = lines.replace("\r\n", "\n").replace('cleanup(None, False)', 'cleanup(None, True)').replace('cleanup(None, False, False)', 'cleanup(None, True, False)')
             with open(install_py_file, 'wb') as f:
                 f.write(lines)
@@ -183,7 +184,7 @@ if __name__ == "__main__":
         str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0.."\r\n', 1)
         
         #Patch Forge's & fml's cleanup so that it doesn't prompt
-        patch_forge_cleanup(os.path.join(mdk, 'fml', 'fml.py'))
+        patch_forge_cleanup(os.path.join(mdk, 'fml', 'fml.py'), False)
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
