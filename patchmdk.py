@@ -177,14 +177,14 @@ if __name__ == "__main__":
             with open(fmlpyf, 'wb') as f:
                 f.write(lines)
         
+        #Patch Forge's & fml's cleanup so that it doesn't prompt
+        patch_forge_cleanup(fmlpyf, False)
+
         #Modify Patches based on Directory
         str_mdk_sh = mcp_sh_patch.replace('cd "$mcp"\n', 'cd "$mcp"\nmcp="${mcp}/mcp"\n', 1).replace('## Foxy Retro MDK END ##\n', 'python2.7 forge_install_prompt.py "$mcp" || exit 1\n## Foxy Retro MDK END ##\n', 1)
         str_mdk_cmd = mcp_batch_patch.replace('"runtime\\bin\\python\\python_mcp.exe" "jdk-finder.py"', '"mcp\\runtime\\bin\\python\\python_mcp.exe" "mcp\\jdk-finder.py"').replace('REM ## Foxy Retro MDK END ##\r\n', 'call "%APPDATA%\\FoxyRetroMDK\\python2.7\\python.exe" "forge_install_prompt.py" "mcp" || exit /b 1\r\nREM ## Foxy Retro MDK END ##\r\n', 1)
         str_fml_sh = str_mdk_sh.replace('cd "$mcp"\n', 'mcp="$(dirname "$mcp")"\ncd "$mcp"\n', 1)
         str_fml_cmd = str_mdk_cmd.replace('cd /D "%~dp0"\r\n', 'cd /D "%~dp0.."\r\n', 1)
-        
-        #Patch Forge's & fml's cleanup so that it doesn't prompt
-        patch_forge_cleanup(os.path.join(mdk, 'fml', 'fml.py'), False)
         
         for file in glob.glob(os.path.normpath(mdk + "/*")):
             isSh = file.endswith(".sh")
