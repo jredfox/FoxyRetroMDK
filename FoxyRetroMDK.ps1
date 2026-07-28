@@ -88,7 +88,7 @@ $ErrorActionPreference = 'Continue'
 $env:patchoneone = "F"
 $env:patch_21 = "F"
 $env:patch_portability = "F"
-$env:useFMLMaven= "F"
+$env:useFMLMaven = "F"
 $env:patch_applet = "F"
 $env:patch_conf_fml = "F"
 $env:onesix_no_resources = "F"
@@ -125,7 +125,7 @@ if ([string]::IsNullOrEmpty($lwjgl_ver)) {
     $lwjgl_ver = "2.9.4-nightly-20150209"
 }
 if ($lwjgl_ver -eq "2.9.2") {
-    $env:useFMLMaven="T"
+    $env:useFMLMaven = "T"
 }
 
 #Set UserAgent for Downloads
