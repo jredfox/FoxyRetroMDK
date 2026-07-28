@@ -100,7 +100,7 @@ def download_file(url, target, sha1, extract=False):
         del_file(target)
         print('downloading: ' + url)
         urllib.urlretrieve(url, target)
-        if (not sha1 is None):
+        if sha1 is not None:
             downloaded_sha1 = get_sha1(target)
             if downloaded_sha1 != sha1:
                 if url.startswith('https://libraries.minecraft.net'):
