@@ -350,8 +350,8 @@ if __name__ == "__main__":
         jinput_linux = lwjgl_natives_linux_natives_jar
         #Attach sources to classpath
         #MC 1.1 - 1.2.5
-        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'))
-        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'))
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
+        attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
         #MC 1.3.2 - 1.5.2
         attatch_src(os.path.join(dir_mcp, 'forge', 'fml', 'eclipse', 'Minecraft', '.classpath'))
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Minecraft', '.classpath'))
