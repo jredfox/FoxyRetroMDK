@@ -148,7 +148,7 @@ def patch_libs(libJSONFile):
     else:
         print('Skipping Patching: ' + libJSONFile)
 
-def patch_classpath(file, printSkip=False):
+def patch_classpath(file, skipPrint=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
         with open(file, 'r') as f:
@@ -167,7 +167,7 @@ def patch_classpath(file, printSkip=False):
         lines = lines.replace((cpp_lwjgl_util[:-4] + "-sources.jar"), (str_lwjgl_util[:-4] + "-sources.jar"))
         with open(file, 'wb') as f:
             f.write(lines)
-    elif not printSkip:
+    elif not skipPrint:
         print('Skipping Patching: ' + file)
 
 def has_src_path(lines, target):
@@ -178,7 +178,7 @@ def has_src_path(lines, target):
     tag_end = lines.find('>', start)
     return (tag_start != -1) and (tag_end != -1) and (lines.find('sourcepath="', tag_start, tag_end) != -1)
 
-def attatch_src(file, printSkip=False):
+def attatch_src(file, skipPrint=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
         with open(file, 'r') as f:
@@ -209,7 +209,7 @@ def attatch_src(file, printSkip=False):
                         f.write(lines)
         if asm_print:
             print('ASM Sources Attatched!')
-    elif not printSkip:
+    elif not skipPrint:
         print('Skipping Patching: ' + file)
 
 def reset_eclipse(dir_mcp, dir_fml, dir_eclipse):
