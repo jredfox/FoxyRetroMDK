@@ -813,7 +813,7 @@ elif [[ "$mc_ver" == 1.2* ]]; then
     if [[ "$mc_ver" == "1.2.5" ]]; then
         mcp_ver="mcp62"
         mcp_url="https://archive.org/download/minecraftcoderpack/minecraftcoderpack.zip/minecraftcoderpack/1.2.5/mcp62.zip"
-        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.3.8.164/forge-1.2.5-3.3.8.164-src.zip"
+        forge_url="https://maven.minecraftforge.net/net/minecraftforge/forge/1.2.5-3.4.9.171/forge-1.2.5-3.4.9.171-src.zip"
         mc_url="https://launcher.mojang.com/v1/objects/4a2fac7504182a97dcbcd7560c6392d7c8139928/client.jar"
         mc_server_url="https://launcher.mojang.com/v1/objects/d8321edc9470e56b8ad5c67bbd16beba25843336/server.jar"
         export patch_conf_fml="T"
