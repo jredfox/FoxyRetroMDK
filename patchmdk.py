@@ -294,7 +294,6 @@ if __name__ == "__main__":
             #MC 1.1 - 1.2.5
             attatch_src(os.path.join(mcp, 'eclipse', 'Client', '.classpath'))
             attatch_src(os.path.join(mcp, 'eclipse', 'Server', '.classpath'))
-        print('LWJGL Sources Attatched!')
     #Copy lwjglversionchanger into MCP
     with open(os.path.join(mcp, 'lwjglversionchanger.sh'), 'wb') as f:
         f.write(lwjgl_version_changer_sh)

@@ -209,6 +209,7 @@ def attatch_src(file, skipPrint=False):
                         f.write(lines)
         if asm_print:
             print('ASM Sources Attatched!')
+        print('LWJGL Sources Attatched!')
     elif not skipPrint:
         print('Skipping Patching: ' + file)
 
