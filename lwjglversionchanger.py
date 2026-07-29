@@ -181,20 +181,15 @@ def has_src_path(lines, target):
 def attatch_src(file, skipPrint=False):
     if os.path.isfile(file):
         print('Patching: ' + file)
-        lwjgl_print = False
         with open(file, 'r') as f:
             lines = f.read().replace('\r\n', '\n').replace('\\', '/')
         if not has_src_path(lines, 'path="jars/bin/lwjgl.jar"'):
             lines = lines.replace('path="jars/bin/lwjgl.jar"', 'path="jars/bin/lwjgl.jar" sourcepath="lib/lwjgl-sources.zip"')
-            lwjgl_print = True
         if not has_src_path(lines, 'path="jars/bin/lwjgl_util.jar"'):
             lines = lines.replace('path="jars/bin/lwjgl_util.jar"', 'path="jars/bin/lwjgl_util.jar" sourcepath="lib/lwjgl_util-sources.zip"')
-            lwjgl_print = True
         #Patch MC 1.5x ASM missing source
-        asm_print = False
         if 'sourcepath="lib/asm-4.1-bin.zip"' in lines:
             lines = lines.replace('sourcepath="lib/asm-4.1-bin.zip"', 'sourcepath="lib/asm-all-4.1-source.zip"')
-            asm_print = True
         with open(file, 'wb') as f:
             f.write(lines)
         project_file = os.path.join(os.path.dirname(file), '.project')
@@ -210,10 +205,6 @@ def attatch_src(file, skipPrint=False):
                     lines = lines.replace('</linkedResources>', (project_patch + '</linkedResources>'), 1)
                     with open(project_file, 'wb') as f:
                         f.write(lines)
-        if asm_print:
-            print('ASM Sources Attatched!')
-        if lwjgl_print:
-            print('LWJGL Sources Attatched!')
     elif not skipPrint:
         print('Skipping Patching: ' + file)
 
