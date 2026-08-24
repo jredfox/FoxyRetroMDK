@@ -345,6 +345,9 @@ if __name__ == "__main__":
         jinput_mac = lwjgl_natives_macosx_natives_jar
         jinput_linux = lwjgl_natives_linux_natives_jar
         #Attach sources to classpath
+        if not chk_eclipse(os.path.join(dir_mcp, 'eclipse')):
+            print('Eclipse has the workspace already opened! Close Eclipse and try again')
+            sys.exit(1)
         #MC 1.1 - 1.2.5
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Client', '.classpath'), True)
         attatch_src(os.path.join(dir_mcp, 'eclipse', 'Server', '.classpath'), True)
