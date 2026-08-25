@@ -12,3 +12,4 @@ FoxyRetroMDK.cmd
 lwjglversionchanger.pyc
 *.rar
 *.zip
+mac-utils/dylibs
