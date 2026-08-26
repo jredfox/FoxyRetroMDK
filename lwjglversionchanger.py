@@ -134,7 +134,6 @@ def download_native(url, target, sha1, isMac=False, extract=True):
                     info = copy(item)
                     if info.filename.lower().endswith('.dylib'):
                         info.filename = info.filename[:-6] + '.jnilib'
-                        print(info.filename)
                     zout.writestr(info, data)
         del_file(zarchive)
         os.rename(osx_tmp, zarchive)
