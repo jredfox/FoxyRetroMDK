@@ -8,6 +8,7 @@ from collections import OrderedDict
 from contextlib import closing
 from hashlib import sha1
 from urllib2 import urlopen
+from copy import copy
 
 def del_file(file):
     if(os.path.isfile(file)):
@@ -92,7 +93,7 @@ def merge_zips(*zips):
                     # Read the file and write to the first zip
                     z1.writestr(n, zf.read(n))
 
-def download_file(url, target, sha1, extract=False):
+def download_file(url, target, sha1):
     pdir = os.path.dirname(target)
     if onesix and (not os.path.isdir(pdir)):
         os.makedirs(pdir)
@@ -104,7 +105,7 @@ def download_file(url, target, sha1, extract=False):
             downloaded_sha1 = get_sha1(target)
             if downloaded_sha1 != sha1:
                 if url.startswith('https://libraries.minecraft.net'):
-                    download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+                    download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1)
                     return
                 else:
                     del_file(target)
@@ -113,12 +114,30 @@ def download_file(url, target, sha1, extract=False):
     except Exception as e:
         print('Download Failed With Exception: ' + str(e))
         if url.startswith('https://libraries.minecraft.net'):
-            download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1, extract)
+            download_file(url.replace('https://libraries.minecraft.net', 'https://repo.maven.apache.org/maven2', 1), target, sha1)
             return
         else:
             del_file(target)
             print('Download Failed Removed: ' + target)
             sys.exit(1)
+
+def download_native(url, target, sha1, isMac=False, extract=True):
+    download_file(url, target, sha1)
+    #Changes .dylib files to .jnilib files for compatability reasons
+    if isMac:
+        zarchive = target
+        osx_tmp = zarchive + '.tmp'
+        with zipfile.ZipFile(zarchive, 'r') as zin:
+            with zipfile.ZipFile(osx_tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
+                for item in zin.infolist():
+                    data = zin.read(item.filename)
+                    info = copy(item)
+                    if info.filename.lower().endswith('.dylib'):
+                        info.filename = info.filename[:-6] + '.jnilib'
+                        print(info.filename)
+                    zout.writestr(info, data)
+        del_file(zarchive)
+        os.rename(osx_tmp, zarchive)
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
@@ -232,22 +251,22 @@ def download_natives():
         os.makedirs(dir_natives)
         #download jinput jar natives
         jinput_base_url = 'https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-'
-        download_file(jinput_base_url + 'windows.jar', jinput_win, '385ee093e01f587f30ee1c8a2ee7d408fd732e16', True)
-        download_file(jinput_base_url + 'osx.jar', jinput_mac, '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
-        download_file(jinput_base_url + 'linux.jar', jinput_linux, '7ff832a6eb9ab6a767f1ade2b548092d0fa64795', True)
+        download_native(jinput_base_url + 'windows.jar', jinput_win, '385ee093e01f587f30ee1c8a2ee7d408fd732e16')
+        download_native(jinput_base_url + 'osx.jar', jinput_mac, '53f9c919f34d2ca9de8c51fc4e1e8282029a9232', True)
+        download_native(jinput_base_url + 'linux.jar', jinput_linux, '7ff832a6eb9ab6a767f1ade2b548092d0fa64795')
     else:
         del_lwjgl_natives(dir_natives)
     
     if onesix:
         #download lwjgl jar natives and extract
-        download_file(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1, True)
-        download_file(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
-        download_file(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1, True)
+        download_native(lwjgl_natives_base + "windows.jar", lwjgl_natives_windows_natives_jar, lwjgl_windows_sha1)
+        download_native(lwjgl_natives_base + "osx.jar", lwjgl_natives_macosx_natives_jar, lwjgl_macosx_sha1, True)
+        download_native(lwjgl_natives_base + "linux.jar", lwjgl_natives_linux_natives_jar, lwjgl_linux_sha1)
     else:
         #download lwjgl jar natives and extract
-        download_file(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1, True)
-        download_file(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
-        download_file(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1, True)
+        download_native(lwjgl_natives_base + "windows.jar", (lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_windows_sha1)
+        download_native(lwjgl_natives_base + "osx.jar", (lwjgl_natives_macosx_natives_jar + '.tmp'), lwjgl_macosx_sha1, True)
+        download_native(lwjgl_natives_base + "linux.jar", (lwjgl_natives_linux_natives_jar + '.tmp'), lwjgl_linux_sha1)
         #rebuild the jar natives
         if os.path.isfile(lwjgl_natives_windows_natives_jar):
             merge_zips((lwjgl_natives_windows_natives_jar + '.tmp'), lwjgl_natives_windows_natives_jar)
