@@ -9,6 +9,7 @@ from contextlib import closing
 from hashlib import sha1
 from urllib2 import urlopen
 from copy import copy
+from time import mktime
 
 def del_file(file):
     if(os.path.isfile(file)):
@@ -142,6 +143,15 @@ def download_native(url, target, sha1, isMac=False, extract=True):
     if extract:
         with zipfile.ZipFile(target, 'r') as zip_ref:
             zip_ref.extractall(dir_natives)
+        with zipfile.ZipFile(target, 'r') as zin:
+            for info in zin.infolist():
+                n = info.filename
+                if n.endswith('/'):
+                    continue
+                if n.startswith('/'):
+                    n = n[1:]
+                date_time = mktime(info.date_time + (0, 0, -1))
+                os.utime(os.path.join(dir_natives, n), (date_time, date_time))
 
 def patch_libs(libJSONFile):
     if os.path.exists(libJSONFile):
