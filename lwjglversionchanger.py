@@ -84,14 +84,16 @@ def merge_zips(*zips):
         existing_files = set(z1.namelist())
         for fname in zips[1:]:
             with zipfile.ZipFile(fname, 'r') as zf:  # Open each subsequent zip
-                for n in zf.namelist():
+                for item in zf.infolist():
+                    info = copy(item)
+                    n = info.filename
                     # Skip dirs and duplicates
                     name_low = n.lower()
                     if (n.endswith('/') or (n in existing_files) or (name_low in names_lwjgl)):
                         continue
                     existing_files.add(n)
                     # Read the file and write to the first zip
-                    z1.writestr(n, zf.read(n))
+                    z1.writestr(info, zf.read(n))
 
 def download_file(url, target, sha1):
     pdir = os.path.dirname(target)
