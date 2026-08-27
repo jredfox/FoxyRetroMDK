@@ -23,4 +23,4 @@ def merge_zips(*zips):
 if __name__ == "__main__":
 
     zips = sys.argv[1:]
-    merge_zips(zips)
+    merge_zips(*zips)
