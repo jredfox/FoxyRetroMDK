@@ -527,14 +527,14 @@ function Install-1.6x {
         Unsupported-Version
     fi
 
+    #Notify the User of Starting Forge MDK Installation
+    echo "Creating Forge MDK for $mc_ver"
+    
     #Cleanup Previous MDK installation
     MDK-Check
     
     #Download Resources
     DL-Resources "$assets_json_url" "$APPDATA/assets" "$mdk_dir/mcp/jars/assets"
-
-    #Notify the User of Starting Forge MDK Installation
-    echo "Creating Forge MDK for $mc_ver"
 
     #Create Dirs
     mkdir -p "$temp/forge164"

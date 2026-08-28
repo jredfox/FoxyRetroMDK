@@ -438,14 +438,14 @@ function Install-1.6x {
         Unsupported-Version
     }
 
+    #Notify the User of Starting Forge MDK Installation
+    Write-Host "Creating Forge MDK for $mc_ver"
+
     #Cleanup Previous MDK installation
     MDK-Cleanup
     
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
     DL-Resources -JsonURL "$assets_json_url" -ResourcesCache "$app_data\assets" -Resources "$mdk_dir\mcp\jars\assets"
-
-    #Notify the User of Starting Forge MDK Installation
-    Write-Host "Creating Forge MDK for $mc_ver"
 
     #Create Dirs
     New-Item -Path "$temp\forge164" -ItemType "directory" -Force | out-null
