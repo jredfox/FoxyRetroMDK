@@ -369,6 +369,7 @@ function DL-Resources () {
     local ResourcesMDK="$3"
     
     if [[ "$dl_rc" == "true" ]]; then
+        mkdir -p "$temp"
         ExitOnDLFail="false"
         jsonFile="$temp/assets.json"
         Download "$jsonFile" "$JsonUrl" "true" "10"
@@ -640,7 +641,6 @@ fi
 
 #Temp Files
 temp="$mdk_dir/tmp"
-mkdir -p "$temp"
 
 #Enforce JDK-8 is being used
 JDK8=$("python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)

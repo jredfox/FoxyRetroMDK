@@ -114,7 +114,6 @@ $host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
 
 #Temp Files
 $temp = "$mdk_dir\tmp"
-New-Item -Path "$temp" -ItemType "directory" -Force | out-null
 
 #Resource URLS
 $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
@@ -340,6 +339,7 @@ if($skip_rc -like "T*") {
 $ProgressPreference = 'SilentlyContinue'
 try
 {
+    New-Item -Path "$temp" -ItemType "directory" -Force | out-null
     $jsonFile = "$temp\assets.json"
     Download -Uri "$JsonURL" -OutFile "$jsonFile" -Exit "false" -MaxTries 10
     $jsonData = Get-Content -Path "$jsonFile" -Raw | ConvertFrom-Json
