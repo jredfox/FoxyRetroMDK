@@ -327,7 +327,7 @@ function DL-Resources {
     param (
         [string]$JsonURL,
         [string]$ResourcesCache,
-		[string]$Resources
+        [string]$Resources
     )
 
 #Skip Resource Downloading if it's enabled
@@ -348,15 +348,15 @@ try
         $hash = $objects.$key.hash
         $resource = $resources_url + $hash.Substring(0, 2) + "/$hash"
         $resource_file = "$ResourcesCache\$key"
-		if ( -Not ([System.IO.File]::Exists("$resource_file")) )
-		{
-			Write-Output "Downloading Resource URL:$resource"
-			$rd = Split-Path "$resource_file" -Parent #build resource directory path
-			New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-			Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
-		}
+        if ( -Not ([System.IO.File]::Exists("$resource_file")) )
+        {
+            Write-Output "Downloading Resource URL:$resource"
+            $rd = Split-Path "$resource_file" -Parent #build resource directory path
+            New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
+            Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
+        }
     }
-	Copy-Item -Path "$ResourcesCache" -Destination "$Resources" -Recurse -Force | out-null
+    Copy-Item -Path "$ResourcesCache" -Destination "$Resources" -Recurse -Force | out-null
 }
 catch
 {
@@ -439,8 +439,8 @@ function Install-1.6x {
 
     #Cleanup Previous MDK installation
     MDK-Cleanup
-	
-	#Download Resources to as powershell does it 3-5x faster then 1.6x's method
+    
+    #Download Resources to as powershell does it 3-5x faster then 1.6x's method
     DL-Resources -JsonURL "$assets_json_url" -ResourcesCache "$app_data\assets" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Notify the User of Starting Forge MDK Installation
