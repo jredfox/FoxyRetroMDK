@@ -356,6 +356,7 @@ try
 			Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
 		}
     }
+	Copy-Item -Path "$ResourcesCache" -Destination "$Resources" -Recurse -Force | out-null
 }
 catch
 {
