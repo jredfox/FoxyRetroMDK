@@ -366,6 +366,7 @@ function DL-Resources () {
 
     local JsonUrl="$1"
     local Resources="$2"
+    local ResourcesMDK="$3"
     
     if [[ "$dl_rc" == "true" ]]; then
         ExitOnDLFail="false"
@@ -380,6 +381,9 @@ function DL-Resources () {
             Download "$resource_file" "$resource" "true" "4"
         done < "${jsonFile}.txt"
         ExitOnDLFail="true"
+        #Copy The Downloaded Resources into your MDK If applicable
+        mkdir -p "$ResourcesMDK"
+        cp -rf "$Resources/." "$ResourcesMDK"
     else
         echo "Skipping Resource Downloading"
     fi
@@ -583,7 +587,7 @@ function Install-1.6x {
     fi
     
     #Download Resources
-    DL-Resources "$assets_json_url" "$mdk_dir/mcp/jars/assets"
+    DL-Resources "$assets_json_url" "$APPDATA/assets" "$mdk_dir/mcp/jars/assets"
 
     #Remove Temp Folder
     rm -rf "$temp"
@@ -985,7 +989,7 @@ elif [[ "$patch_mcp72" == "T" ]]; then
 fi
 
 # Download Minecraft Resources
-DL-Resources "$legacy_assets_url" "$mdk_dir/jars/resources"
+DL-Resources "$legacy_assets_url" "$APPDATA/resources" "$mdk_dir/jars/resources"
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
 rm -rf "$temp"

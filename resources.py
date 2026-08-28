@@ -14,7 +14,10 @@ if __name__ == "__main__":
         for name, info in objects.items():
             hash_value = info.get('hash')
             resources_url = base_url + hash_value[:2] + '/' + hash_value
-            pdir = os.path.dirname(os.path.join(dir_resource, name))
+            rfile = os.path.join(dir_resource, name)
+            if os.path.exists(rfile):
+                continue
+            pdir = os.path.dirname(rfile)
             if not os.path.exists(pdir):
                 os.makedirs(pdir)
             out.write(name + ',' + resources_url + '\n')
