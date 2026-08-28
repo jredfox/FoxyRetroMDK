@@ -326,7 +326,8 @@ if ([System.IO.Directory]::Exists("$mdk_dir")) {
 function DL-Resources {
     param (
         [string]$JsonURL,
-        [string]$Resources
+        [string]$ResourcesCache,
+		[string]$Resources
     )
 
 #Skip Resource Downloading if it's enabled
@@ -346,11 +347,14 @@ try
     {
         $hash = $objects.$key.hash
         $resource = $resources_url + $hash.Substring(0, 2) + "/$hash"
-        $resource_file = "$Resources\$key"
-        Write-Output "Downloading Resource URL:$resource"
-        $rd = Split-Path "$resource_file" -Parent #build resource directory path
-        New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
-        Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
+        $resource_file = "$ResourcesCache\$key"
+		if ( -Not ([System.IO.File]::Exists("$resource_file")) )
+		{
+			Write-Output "Downloading Resource URL:$resource"
+			$rd = Split-Path "$resource_file" -Parent #build resource directory path
+			New-Item -Path "$rd" -ItemType "directory" -Force | out-null #create resource directories if required
+			Download -Uri "$resource" -OutFile "$resource_file" -Exit "false" -MaxTries 4
+		}
     }
 }
 catch
@@ -484,7 +488,7 @@ function Install-1.6x {
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$mdk_dir\fml\python")
 
     #Download Resources to as powershell does it 3-5x faster then 1.6x's method
-    DL-Resources -JsonURL "$assets_json_url" -Resources "$mdk_dir\mcp\jars\assets"
+    DL-Resources -JsonURL "$assets_json_url" -ResourcesCache "$app_data\assets" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Clear the Temp Folder
     $ProgressPreference = 'SilentlyContinue'
@@ -524,6 +528,7 @@ function DL-Natives
 ################# End Functions   #################
 
 #Install Python on Windows
+$app_data = "$env:APPDATA\FoxyRetroMDK"
 $pydir = "$env:APPDATA\FoxyRetroMDK\python2.7"
 $pyzip = "$pydir\python_fml_2.7.9.zip"
 if ( -Not ([System.IO.File]::Exists("$pyzip")) )
@@ -908,7 +913,7 @@ elseif ($patch_mcp72 -eq "T") {
 }
 
 #Download Minecraft Resources
-DL-Resources -JsonURL "$resources_json_url" -Resources "$mdk_dir\jars\resources"
+DL-Resources -JsonURL "$resources_json_url" -ResourcesCache "$app_data\resources" -Resources "$mdk_dir\jars\resources"
 
 #Clear the Temp Folder. Comment Out if your encountering a bug and want to know what the tmp folder looks like
 Write-Host "Deleting Temp Folder"
