@@ -640,6 +640,7 @@ fi
 
 #Temp Files
 temp="$mdk_dir/tmp"
+mkdir -p "$temp"
 
 #Enforce JDK-8 is being used
 JDK8=$("python2.7" "$SCRIPTPATH/jdk-finder.py" | xargs)

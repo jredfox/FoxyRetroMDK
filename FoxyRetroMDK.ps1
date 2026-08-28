@@ -114,6 +114,7 @@ $host.ui.RawUI.WindowTitle = "Foxy Retro MDK - $mc_ver"
 
 #Temp Files
 $temp = "$mdk_dir\tmp"
+New-Item -Path "$temp" -ItemType "directory" -Force | out-null
 
 #Resource URLS
 $resources_json_url = "https://launchermeta.mojang.com/v1/packages/3d8e55480977e32acd9844e545177e69a52f594b/pre-1.6.json"
