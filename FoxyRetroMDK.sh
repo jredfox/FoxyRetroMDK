@@ -30,8 +30,10 @@ isMac=false
 isLinux=false
 if [[ "$(echo "$NAME_OS" | tr '[:upper:]' '[:lower:]')" == "darwin" ]]; then
     isMac=true
+    APPDATA="$HOME/Library/Application Support/FoxyRetroMDK"
 else
     isLinux=true
+    APPDATA="${XDG_DATA_HOME:-$HOME/.local/share}/FoxyRetroMDK"
 fi
 
 #Default: "2.9.4-nightly-20150209", Debug technicpack or older LWJGL "2.9.0", Debug Older LWJGL for linux or windows "2.9.1". macOS will bug out with LWJGL 2.9.1 on Java 6-7 and maybe 8u51 to
@@ -567,14 +569,9 @@ function Install-1.6x {
     
     #Upgrade python for windows to 2.7.9 x86(runs on x64 and arm64 windows) to support HTTPS
     echo "Upgrading Forge's embeded python to 2.7.9 ISA: x86"
-    if [[ "$isMac" == "true" ]]; then
-        APPDATA="$HOME/Library/Application Support"
-    else
-        APPDATA="${XDG_DATA_HOME:-$HOME/.local/share}"
-    fi
-    pyzip="$APPDATA/FoxyRetroMDK/python_fml_2.7.9.zip"
+    pyzip="$APPDATA/python_fml_2.7.9.zip"
     if [ ! -f "$pyzip" ]; then
-        mkdir -p "$APPDATA/FoxyRetroMDK"
+        mkdir -p "$APPDATA"
         ExitOnDLFail="false"
         Download "$pyzip" "$python_url" "true" "4"
         ExitOnDLFail="true"
