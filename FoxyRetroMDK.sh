@@ -528,6 +528,9 @@ function Install-1.6x {
 
     #Cleanup Previous MDK installation
     MDK-Check
+	
+    #Download Resources
+    DL-Resources "$assets_json_url" "$APPDATA/assets" "$mdk_dir/mcp/jars/assets"
 
     #Notify the User of Starting Forge MDK Installation
     echo "Creating Forge MDK for $mc_ver"
@@ -585,9 +588,6 @@ function Install-1.6x {
         mkdir "$mdk_dir/fml/python"
         unzip -q -o "$pyzip" -d "$mdk_dir/fml/python"
     fi
-    
-    #Download Resources
-    DL-Resources "$assets_json_url" "$APPDATA/assets" "$mdk_dir/mcp/jars/assets"
 
     #Remove Temp Folder
     rm -rf "$temp"
@@ -890,6 +890,9 @@ echo "Creating Forge MDK for $mc_ver"
 #Cleanup previous installations
 MDK-Check
 
+# Download Minecraft Resources
+DL-Resources "$legacy_assets_url" "$APPDATA/resources" "$mdk_dir/jars/resources"
+
 #Create Directories
 mkdir -p "$temp/natives"
 mkdir -p "$mdk_dir/jars/lib"
@@ -987,9 +990,6 @@ elif [[ "$patch_mcp72" == "T" ]]; then
     python2.7 "$rp" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:\n            return self.checkbins(CLIENT)\n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):"
     python2.7 "$rp" "$mcp_cmds" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
 fi
-
-# Download Minecraft Resources
-DL-Resources "$legacy_assets_url" "$APPDATA/resources" "$mdk_dir/jars/resources"
 
 #Clear the temp folder Comment out if you encounter a bug and want to see what it's done so far
 rm -rf "$temp"

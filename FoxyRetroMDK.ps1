@@ -439,6 +439,9 @@ function Install-1.6x {
 
     #Cleanup Previous MDK installation
     MDK-Cleanup
+	
+	#Download Resources to as powershell does it 3-5x faster then 1.6x's method
+    DL-Resources -JsonURL "$assets_json_url" -ResourcesCache "$app_data\assets" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Notify the User of Starting Forge MDK Installation
     Write-Host "Creating Forge MDK for $mc_ver"
@@ -487,9 +490,6 @@ function Install-1.6x {
     Write-Host "Upgrading Forge's python to 2.7.9 ISA: x86"
     Remove-Item -Path "$mdk_dir\fml\python\*" -Force | out-null
     [System.IO.Compression.ZipFile]::ExtractToDirectory("$pyzip", "$mdk_dir\fml\python")
-
-    #Download Resources to as powershell does it 3-5x faster then 1.6x's method
-    DL-Resources -JsonURL "$assets_json_url" -ResourcesCache "$app_data\assets" -Resources "$mdk_dir\mcp\jars\assets"
 
     #Clear the Temp Folder
     $ProgressPreference = 'SilentlyContinue'
@@ -815,6 +815,9 @@ Write-Host "Creating Forge MDK for $mc_ver"
 #Cleanup previous installations
 MDK-Cleanup
 
+#Download Minecraft Resources
+DL-Resources -JsonURL "$resources_json_url" -ResourcesCache "$app_data\resources" -Resources "$mdk_dir\jars\resources"
+
 #Create Directories
 New-Item -Path "$temp\natives" -ItemType "directory" -Force | out-null
 New-Item -Path "$mdk_dir\jars\lib" -ItemType "directory" -Force | out-null
@@ -912,9 +915,6 @@ elseif ($patch_mcp72 -eq "T") {
     Write-Host "Patching MCP $mc_ver $mcp_cmds"
     & "$mdk_dir\runtime\bin\python\python_mcp.exe" "$PSScriptRoot\replace.py" "$mcp_cmds" "if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "if side == SERVER:`n            return self.checkbins(CLIENT)`n        if not os.path.exists(os.path.join(binlk[side], os.path.normpath(testlk[side] + '.class'))):" "classpath = [self.binclient] + self.cpathclient" "classpath = [self.binclient, self.srcshared] + self.cpathclient" "classpath = [self.binserver] + self.cpathserver" "classpath = [self.binclient, self.srcshared] + self.cpathserver"
 }
-
-#Download Minecraft Resources
-DL-Resources -JsonURL "$resources_json_url" -ResourcesCache "$app_data\resources" -Resources "$mdk_dir\jars\resources"
 
 #Clear the Temp Folder. Comment Out if your encountering a bug and want to know what the tmp folder looks like
 Write-Host "Deleting Temp Folder"
